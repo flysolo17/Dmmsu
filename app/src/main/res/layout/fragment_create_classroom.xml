@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".views.teacher.components.CreateClassroom">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:id="@+id/imageClassBackground"
+        android:src="@drawable/nobackground"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/buttonAddImage"
+        android:drawableLeft="@drawable/ic_baseline_add_photo_alternate_24"
+        android:text="Add Background"
+        android:drawableTint="@color/purple_500"
+        style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:id="@+id/layoutName"
+            android:layout_height="wrap_content"
+            app:errorEnabled="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:id="@+id/inputName"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonCreateClass"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:text="@string/create_class"
+            android:fontFamily="@font/poppins"
+            app:cornerRadius="10dp"
+            android:backgroundTint="#558B2F" />
+    </LinearLayout>
+
+
+</LinearLayout>

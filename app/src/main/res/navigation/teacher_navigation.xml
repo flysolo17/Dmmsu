@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_navigation"
+    app:startDestination="@id/navigation_home">
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.flysolo.myapplication.views.teacher.nav.TeacherHomeNav"
+        android:label="Home"
+        tools:layout="@layout/teacher_home_nav" >
+        <action
+            android:id="@+id/action_navigation_home_to_createClassroom"
+            app:destination="@id/createClassroom" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_scoreboard"
+        android:name="com.flysolo.myapplication.views.teacher.nav.TeacherScoreBoardNav"
+        android:label="Scoreboard"
+        tools:layout="@layout/teacher_score_board_nav" />
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.flysolo.myapplication.views.auth.AccountNav"
+        android:label="Account"
+        tools:layout="@layout/account_nav" />
+    <fragment
+        android:id="@+id/createClassroom"
+        android:name="com.flysolo.myapplication.views.teacher.components.CreateClassroom"
+        android:label="Create Classroom"
+        tools:layout="@layout/fragment_create_classroom" />
+</navigation>

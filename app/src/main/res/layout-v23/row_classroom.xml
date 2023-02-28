@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#80000000">
+        <ImageView
+            android:id="@+id/classroomBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/logo" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circle"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textClassroomName"
+                android:layout_width="match_parent"
+                android:layout_marginVertical="10dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_black"
+                android:text="Data Structure and algorithm"
+                android:textSize="24sp"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start"
+                app:backgroundTint="#2E7D32"
+                app:cornerRadius="20dp" />
+        </LinearLayout>
+
+    </FrameLayout>
+</com.google.android.material.card.MaterialCardView>

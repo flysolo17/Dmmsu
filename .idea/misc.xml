@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/drawable-v24/nav_bg.xml" value="0.2385" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/drawable/circle.xml" value="0.2385" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout-v23/row_classroom.xml" value="0.264" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout-v23/teacher_home_nav.xml" value="0.2210144927536232" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/account_nav.xml" value="0.2210144927536232" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/activity_login.xml" value="0.33852140077821014" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/activity_register.xml" value="0.4" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/activity_studentmain.xml" value="0.2210144927536232" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/activity_teacher_main.xml" value="0.2115036231884058" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/fragment_create_classroom.xml" value="0.2210144927536232" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/loading_dialog.xml" value="0.11041666666666666" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/teacher_home_nav.xml" value="0.4" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/layout/teacher_score_board_nav.xml" value="0.2115036231884058" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp/app/src/main/res/menu/teacher_main_menu.xml" value="0.25052083333333336" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
