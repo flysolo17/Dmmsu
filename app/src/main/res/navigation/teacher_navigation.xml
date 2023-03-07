@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.nav.TeacherHomeNav"
+        android:label="Home"
+        tools:layout="@layout/teacher_home_nav" >
+        <action
+            android:id="@+id/action_navigation_home_to_createClassroomFragment"
+            app:destination="@id/createClassroomFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_teacherClassroomFragment"
+            app:destination="@id/teacherClassroomFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_scoreboard"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.nav.TeacherScoreboardNav"
+        android:label="Scoreboard"
+        tools:layout="@layout/teacher_scoreboard_nav" />
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.flysolo.dmmsugradelevelapp.views.auth.AccountsFragment"
+        android:label="Account"
+        tools:layout="@layout/fragment_accounts" />
+    <fragment
+        android:id="@+id/teacherClassroomFragment"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.nav.TeacherClassroomFragment"
+        android:label="Classroom"
+        tools:layout="@layout/fragment_teacher_classroom" >
+        <argument
+            android:name="classroomID"
+            app:argType="string"
+            app:nullable="true"/>
+        <action
+            android:id="@+id/action_teacherClassroomFragment_to_createLessonFragment"
+            app:destination="@id/createLessonFragment" />
+        <action
+            android:id="@+id/action_teacherClassroomFragment_to_teacherLessonFragment"
+            app:destination="@id/teacherLessonFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createClassroomFragment"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.components.CreateClassroomFragment"
+        android:label="Create Classroom"
+        tools:layout="@layout/fragment_create_classroom" />
+    <fragment
+        android:id="@+id/createLessonFragment"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.components.CreateLessonFragment"
+        android:label="Add new lesson"
+        tools:layout="@layout/fragment_create_lesson" >
+        <argument
+            android:name="classroomID"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/teacherLessonFragment"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.nav.TeacherLessonFragment"
+        android:label=""
+        tools:layout="@layout/fragment_teacher_lesson" >
+        <argument
+            android:name="lesson"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Lesson"
+            app:nullable="true" />
+    </fragment>
+</navigation>
