@@ -19,6 +19,7 @@ import com.flysolo.dmmsugradelevelapp.services.auth.AuthServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.utils.Validation;
+import com.flysolo.dmmsugradelevelapp.views.dialogs.ChooseClassDialog;
 import com.flysolo.dmmsugradelevelapp.views.student.StudentMainActivity;
 import com.flysolo.dmmsugradelevelapp.views.teacher.TeacherMainActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -121,7 +122,10 @@ public class LoginActivity extends AppCompatActivity {
             public void Successful(Accounts data) {
                 loadingDialog.stopLoading();
                 if (data.getType() == UserType.STUDENT) {
-                    startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
+                    ChooseClassDialog classDialog = ChooseClassDialog.newInstance(data.getId());
+                    if (!classDialog.isAdded()){
+                        classDialog.show(getSupportFragmentManager(),"Choose class");
+                    }
                 } else if(data.getType() == UserType.TEACHER) {
                     startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
                 } else {
@@ -133,6 +137,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void Failed(String message) {
                 loadingDialog.stopLoading();
+                new MaterialAlertDialogBuilder(binding.getRoot().getContext())
+                        .setMessage(message)
+                        .show();
                 Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
             }
         });

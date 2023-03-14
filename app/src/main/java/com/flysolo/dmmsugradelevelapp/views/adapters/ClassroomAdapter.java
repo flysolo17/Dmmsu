@@ -1,13 +1,9 @@
-package com.flysolo.dmmsugradelevelapp.views.teacher.adapters;
+package com.flysolo.dmmsugradelevelapp.views.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,11 +15,7 @@ import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.google.android.material.card.MaterialCardView;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassrooomViewHolder> {
     Context context;

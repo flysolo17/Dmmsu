@@ -46,4 +46,12 @@
     <string name="edit">edit</string>
     <string name="lesson">Lesson</string>
     <string name="students">Students</string>
+    <string name="_10_03_2023">10/03/2023</string>
+    <string name="juan_dela_cruz">Juan Dela Cruz</string>
+    <string name="remove">Remove</string>
+    <string name="add">Add</string>
+    <string name="join_class">Join class</string>
+    <string name="join">Join</string>
+    <string name="enter_class_id">enter class id</string>
+    <string name="class_id_is_provided_by_your_teacher">Class id is provided by your teacher.</string>
 </resources>

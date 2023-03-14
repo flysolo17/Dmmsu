@@ -1,4 +1,4 @@
-package com.flysolo.dmmsugradelevelapp.views.teacher.adapters;
+package com.flysolo.dmmsugradelevelapp.views.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.flysolo.dmmsugradelevelapp.R;
-import com.flysolo.dmmsugradelevelapp.model.Content;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,9 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
     ArrayList<Lesson> lessons;
     LessonClickListener lessonClickListener;
     public interface LessonClickListener {
-        void onLessonClick(Lesson lesson);
+        void onCreateActivity(Lesson lesson);
+        void onDeleteLesson(Lesson lesson,int position);
+        void onViewLesson(Lesson lesson);
     }
     public LessonAdapter(Context context, ArrayList<Lesson> lessons,LessonClickListener lessonClickListener) {
         this.context = context;
@@ -42,7 +44,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         Lesson lesson = lessons.get(position);
         holder.textTitle.setText(lesson.getTitle());
         holder.textDesc.setText(lesson.getDescription());
-        holder.itemView.setOnClickListener(view -> lessonClickListener.onLessonClick(lesson));
+        holder.fabCreateActivity.setOnClickListener(view -> lessonClickListener.onCreateActivity(lesson));
+        holder.fabDeleteLesson.setOnClickListener(view -> lessonClickListener.onDeleteLesson(lesson,position));
     }
 
     @Override
@@ -54,12 +57,18 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         TextView textTitle,textDesc;
         MaterialCardView cardLesson;
         LinearLayout layoutActions;
+        ExtendedFloatingActionButton fabCreateActivity,fabDeleteLesson,fabViewLesson;
+
         public LessonViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
             textDesc = itemView.findViewById(R.id.textDesc);
             cardLesson = itemView.findViewById(R.id.cardLesson);
             layoutActions = itemView.findViewById(R.id.layoutActions);
+            fabCreateActivity = itemView.findViewById(R.id.fabCreateActivity);
+            fabDeleteLesson = itemView.findViewById(R.id.fabDeleteLesson);
+            fabViewLesson = itemView.findViewById(R.id.fabViewLesson);
+
             cardLesson.setOnClickListener(view -> {
                 if (layoutActions.getVisibility() == View.VISIBLE) {
                     layoutActions.setVisibility(View.GONE);

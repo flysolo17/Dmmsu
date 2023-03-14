@@ -4,20 +4,23 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.model.UserType;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,10 +94,10 @@ public class ClassroomServiceImpl implements ClassroomService {
     @Override
     public void createActivity(String classroomID ,Quiz quiz, UiState<String> result) {
         result.Loading();
-        quiz.setId(firestore.collection(Constants.CLASSROOM_TABLE).document(classroomID).collection(Constants.ACTIVITIES).document().getId());
+        quiz.setId(firestore.collection(Constants.CLASSROOM_TABLE).document(classroomID).collection(Constants.ACTIVITIES_TABLE).document().getId());
         firestore.collection(Constants.CLASSROOM_TABLE)
                 .document(classroomID)
-                .collection(Constants.ACTIVITIES)
+                .collection(Constants.ACTIVITIES_TABLE)
                 .document(quiz.getId())
                 .set(quiz)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -116,7 +119,7 @@ public class ClassroomServiceImpl implements ClassroomService {
         result.Loading();
         firestore.collection(Constants.CLASSROOM_TABLE)
                 .document(classroomID)
-                .collection(Constants.ACTIVITIES)
+                .collection(Constants.ACTIVITIES_TABLE)
                 .document(activtyID)
                 .delete()
                 .addOnCompleteListener(task -> {
@@ -132,4 +135,132 @@ public class ClassroomServiceImpl implements ClassroomService {
     public void updateActivity(String activityID, Quiz quiz, UiState<String> result) {
 
     }
+
+    @Override
+    public void getStudents(UiState<ArrayList<Accounts>> result) {
+        result.Loading();
+        ArrayList<Accounts> accountsArrayList = new ArrayList<>();
+        firestore.collection(Constants.ACCOUNTS_TABLE)
+                .whereEqualTo("type", UserType.STUDENT)
+                .addSnapshotListener((value, error) -> {
+                    accountsArrayList.clear();
+                    if (error != null){
+                        result.Failed(error.getCode() + ": " + error.getMessage());
+                    }
+                    if (value != null) {
+                        for (QueryDocumentSnapshot snapshot: value) {
+                            Accounts accounts = snapshot.toObject(Accounts.class);
+                            accountsArrayList.add(accounts);
+                        }
+                        result.Successful(accountsArrayList);
+                    }
+                });
+    }
+
+    @Override
+    public void addStudent(String classroomID, String studentID, UiState<String> result) {
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classroomID)
+                .update("students", FieldValue.arrayUnion(studentID))
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        result.Successful("Successfully added!");
+                    } else {
+                        result.Failed("Failed adding student ");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
+
+    @Override
+    public void removeStudent(String classroomID, String studentID, UiState<String> result) {
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classroomID)
+                .update("students", FieldValue.arrayRemove(studentID))
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        result.Successful("Successfully remove!");
+                    } else {
+                        result.Failed("Failed removing student");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
+
+    @Override
+    public void getAllActivities(String uid, UiState<List<Quiz>> result) {
+        result.Loading();
+        ArrayList<Quiz> quizArrayList = new ArrayList<>();
+        Task<QuerySnapshot> classroom = firestore.collection(Constants.CLASSROOM_TABLE)
+                .whereEqualTo("teacherID",uid)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .get();
+        classroom.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot snapshot: task.getResult()) {
+                    firestore.collection(Constants.CLASSROOM_TABLE)
+                            .document(snapshot.getId())
+                            .collection(Constants.ACTIVITIES_TABLE)
+                            .get()
+                            .addOnCompleteListener(doc -> {
+                                if (doc.isSuccessful()) {
+                                    quizArrayList.clear();
+                                    for (QueryDocumentSnapshot snap: doc.getResult()) {
+                                        Quiz quiz = snap.toObject(Quiz.class);
+                                        quizArrayList.add(quiz);
+                                    }
+                                    result.Successful(quizArrayList);
+                                } else {
+                                    result.Failed("Failed getting activities");
+                                }
+                            }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getAllActivities2(List<Classroom> classroomList, UiState<List<Quiz>> result) {
+        result.Loading();
+        ArrayList<Quiz> quizArrayList = new ArrayList<>();
+        for (Classroom classroom : classroomList) {
+            firestore.collection(Constants.CLASSROOM_TABLE)
+                    .document(classroom.getId())
+                    .collection(Constants.ACTIVITIES_TABLE)
+                    .get()
+                    .addOnCompleteListener(doc -> {
+                        if (doc.isSuccessful()) {
+                            for (QueryDocumentSnapshot snap: doc.getResult()) {
+                                Quiz quiz = snap.toObject(Quiz.class);
+                                quizArrayList.add(quiz);
+                            }
+                            result.Successful(quizArrayList);
+                        } else {
+                            result.Failed("Failed getting activities");
+                        }
+                    }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+        }
+    }
+
+    @Override
+    public void getAllClass(UiState<List<Classroom>> result) {
+        ArrayList<Classroom> classroomArrayList = new ArrayList<>();
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        result.Failed(error.getCode() + ":  " + error.getMessage());
+                    }
+                    if (value != null) {
+                        classroomArrayList.clear();
+                        for (DocumentSnapshot snapshot: value.getDocuments()) {
+                            Classroom classroom = snapshot.toObject(Classroom.class);
+                            classroomArrayList.add(classroom);
+                        }
+                        result.Successful(classroomArrayList);
+                    }
+                });
+    }
+
+
+
+
 }

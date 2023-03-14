@@ -16,10 +16,12 @@ import android.widget.Toast;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.TeacherHomeNavBinding;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
+import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
-import com.flysolo.dmmsugradelevelapp.views.teacher.adapters.ClassroomAdapter;
+import com.flysolo.dmmsugradelevelapp.views.adapters.ActivityAdapter;
+import com.flysolo.dmmsugradelevelapp.views.adapters.ClassroomAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,7 +50,6 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         firestore = FirebaseFirestore.getInstance();
         classroomService = new ClassroomServiceImpl(firestore, FirebaseStorage.getInstance());
         binding.recyclerviewClasses.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
@@ -56,12 +57,7 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
         if (user != null) {
             getAllClassroom(user.getUid());
         }
-        binding.buttonCreateClass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_navigation_home_to_createClassroomFragment);
-            }
-        });
+        binding.buttonCreateClass.setOnClickListener(view1 -> Navigation.findNavController(view1).navigate(R.id.action_navigation_home_to_createClassroomFragment));
     }
 
     private void getAllClassroom(String uid) {
@@ -84,6 +80,7 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
                 } else {
                     binding.textNoClass.setVisibility(View.GONE);
                 }
+                getAllActivities(data);
             }
 
             @Override
@@ -96,12 +93,38 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
 
     @Override
     public void onClassroomClick(int position) {
-        TeacherHomeNavDirections.ActionNavigationHomeToTeacherClassroomFragment directions = TeacherHomeNavDirections.actionNavigationHomeToTeacherClassroomFragment(classrooms.get(position).getId());
+        TeacherHomeNavDirections.ActionNavigationHomeToTeacherClassroomFragment directions = TeacherHomeNavDirections.actionNavigationHomeToTeacherClassroomFragment(classrooms.get(position));
         Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 
     @Override
     public void onStartClassroom(int position) {
         Toast.makeText(binding.getRoot().getContext(), "Class starting", Toast.LENGTH_SHORT).show();
+    }
+    private void getAllActivities(List<Classroom> classroomList) {
+        classroomService.getAllActivities2(classroomList, new UiState<List<Quiz>>() {
+            @Override
+            public void Loading() {
+                loadingDialog.showLoadingDialog("Getting all activities");
+            }
+            @Override
+            public void Successful(List<Quiz> data) {
+                loadingDialog.stopLoading();
+                binding.recyclerviewQuiz.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+                ActivityAdapter adapter = new ActivityAdapter(binding.getRoot().getContext(), (ArrayList<Quiz>) data);
+                binding.recyclerviewQuiz.setAdapter(adapter);
+                if (data.isEmpty()) {
+                    binding.textNoActivities.setVisibility(View.VISIBLE);
+                } else {
+                    binding.textNoActivities.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void Failed(String message) {
+                loadingDialog.stopLoading();
+                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

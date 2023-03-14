@@ -33,15 +33,19 @@
         android:label="Classroom"
         tools:layout="@layout/fragment_teacher_classroom" >
         <argument
-            android:name="classroomID"
-            app:argType="string"
-            app:nullable="true"/>
+            android:name="classroom"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Classroom"
+            app:nullable="false" />
         <action
             android:id="@+id/action_teacherClassroomFragment_to_createLessonFragment"
             app:destination="@id/createLessonFragment" />
         <action
             android:id="@+id/action_teacherClassroomFragment_to_teacherLessonFragment"
             app:destination="@id/teacherLessonFragment" />
+        <action
+            android:id="@+id/action_teacherClassroomFragment_to_createActivityFragment"
+            app:destination="@id/createActivityFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/createClassroomFragment"
@@ -67,5 +71,18 @@
             android:name="lesson"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Lesson"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/createActivityFragment"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.components.CreateActivityFragment"
+        android:label="Add Activity"
+        tools:layout="@layout/fragment_create_activity" >
+        <argument
+            android:name="classroomID"
+            app:argType="string" />
+        <argument
+            android:name="lessonID"
+            app:argType="string" />
+
     </fragment>
 </navigation>

@@ -4,25 +4,38 @@ package com.flysolo.dmmsugradelevelapp.model;
 import java.util.List;
 public class Quiz {
     String id;
-
+    String lessonID;
     String name;
     String description;
     List<Question> questions;
     Long createdAt;
-    public Quiz(){}
-    public Quiz(String id, String name, String description, List<Question> questions, Long createdAt) {
+    public Quiz() {}
+
+    public Quiz(String id, String lessonID, String name, String description, List<Question> questions, Long createdAt) {
         this.id = id;
+        this.lessonID = lessonID;
         this.name = name;
         this.description = description;
         this.questions = questions;
         this.createdAt = createdAt;
     }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getLessonID() {
+        return lessonID;
+    }
+
+    public void setLessonID(String lessonID) {
+        this.lessonID = lessonID;
+    }
+
     public String getName() {
         return name;
     }
