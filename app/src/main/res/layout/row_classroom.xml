@@ -1,55 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
+    android:background="#FFFFFF"
     android:id="@+id/card"
     android:clickable="true"
     android:focusable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
-    app:cardElevation="5dp">
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/nobackground">
-        <ImageView
-            android:id="@+id/classroomBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/logo"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/background" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/circle"/>
+    app:cardElevation="0dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="center"
             android:padding="10dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/textClassroomName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@string/data_structure_and_algorithm"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/buttonStart"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:textAllCaps="false"
+                        android:fontFamily="@font/poppins"
+                        android:textColor="#66BB6A"
+                        android:text="Start"/>
 
-            <TextView
-                android:id="@+id/textClassroomName"
-                android:layout_width="0dp"
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#EF5350"
+                        android:id="@+id/buttonEnd"
+                        android:textAllCaps="false"
+                        android:visibility="gone"
+                        android:fontFamily="@font/poppins"
+                        android:text="END" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins_black"
-                android:text="@string/data_structure_and_algorithm"
-                android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:background="@drawable/ic_sched"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:id="@+id/textSched"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="Monday"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_clock"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:id="@+id/textTime"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="@string/_12_00_01_00_am"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageButton
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:id="@+id/imageActive"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ic_baseline_circle_24"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:id="@+id/textActive"
+                    android:layout_marginHorizontal="10dp"
+                    android:text="@string/_12_00_01_00_am"/>
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Students"
+                android:layout_marginVertical="5dp"
+                android:textColor="@color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layoutStudents"
+                android:orientation="horizontal"/>
 
             <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/start"
-                app:backgroundTint="#2E7D32"
+                android:drawableLeft="@drawable/ic_baseline_share_24"
+                android:text="@string/share_code"
+                android:id="@+id/buttonShare"
+                app:backgroundTint="#66BB6A"
                 app:cornerRadius="20dp" />
         </LinearLayout>
-
-    </FrameLayout>
 </com.google.android.material.card.MaterialCardView>

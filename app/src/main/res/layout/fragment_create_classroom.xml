@@ -7,27 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".views.teacher.components.CreateClassroomFragment">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:id="@+id/imageClassBackground"
-        android:src="@drawable/nobackground"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:id="@+id/buttonAddImage"
-        android:drawableLeft="@drawable/ic_baseline_add_photo_alternate_24"
-        android:text="Add Background"
-        android:drawableTint="@color/purple_500"
-        style="@style/Widget.MaterialComponents.Button.TextButton"/>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:padding="10dp"
+        android:layout_weight="1"
         android:orientation="vertical">
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -41,15 +25,87 @@
                 android:layout_height="wrap_content"
                 android:hint="Name"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonCreateClass"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/schedule"
+            android:textSize="18sp"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/black"/>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:text="@string/create_class"
-            android:fontFamily="@font/poppins"
-            app:cornerRadius="10dp"
-            android:backgroundTint="#558B2F" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/start_time"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/black"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/buttonStartTime"
+                    android:text="@string/set_start_time"
+                    android:textColor="@color/black"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+        </LinearLayout>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/checkMonday"
+                android:text="@string/monday"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkTuesday"
+                android:fontFamily="@font/poppins"
+                android:text="@string/tuesday"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/checkWednesday"
+                android:text="@string/wednesday"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/checkThursday"
+                android:text="@string/thursday"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/checkFriday"
+                android:text="@string/friday"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/checkSaturday"
+                android:text="@string/saturday"/>
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:id="@+id/checkSunday"
+                android:fontFamily="@font/poppins"
+                android:text="@string/sunday"/>
+
     </LinearLayout>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonCreateClass"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:backgroundTint="#558B2F"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/poppins"
+        android:text="@string/create_class"
+        app:cornerRadius="10dp" />
 </LinearLayout>

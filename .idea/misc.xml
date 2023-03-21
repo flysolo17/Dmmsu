@@ -4,25 +4,29 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/drawable/account_icon.xml" value="0.256" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/drawable/button_search_bg.xml" value="0.129" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.256" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/drawable/ic_baseline_add_photo_alternate_24.xml" value="0.1215" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1675" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/drawable/score_board_icon.xml" value="0.152" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/drawable/search_bg.xml" value="0.166" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/font/poppins_black.xml" value="0.140625" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/activity_login.xml" value="0.176" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/activity_main.xml" value="0.2115036231884058" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/activity_register.xml" value="0.4" />
-        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/activity_student_main.xml" value="0.11302083333333333" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/activity_student_main.xml" value="0.264" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/activity_teacher_main.xml" value="0.4" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/dialog_forgot_password.xml" value="0.25052083333333336" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/dialog_join_class.xml" value="0.536" />
-        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_accounts.xml" value="0.25052083333333336" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_accounts.xml" value="0.264" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_activity_tab.xml" value="0.13854166666666667" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_add_question.xml" value="0.2" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_change_password.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_choose_class_dialog.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_create_activity.xml" value="0.14545454545454545" />
-        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_create_classroom.xml" value="0.23645833333333333" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_create_classroom.xml" value="0.264" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_create_lesson.xml" value="0.11764705882352941" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_edit_profile.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_lesson_tab.xml" value="0.264" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_settings_tab.xml" value="0.13854166666666667" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_students_tab.xml" value="0.13854166666666667" />
@@ -30,16 +34,21 @@
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/fragment_teacher_lesson.xml" value="0.11851851851851852" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/layout_choice.xml" value="0.264" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/layout_question.xml" value="0.3932038834951456" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/layout_stud.xml" value="0.264" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/loading_dialog.xml" value="0.25052083333333336" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_account_head.xml" value="0.253125" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_accounts.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_activities.xml" value="0.17471264367816092" />
-        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_classroom.xml" value="0.25052083333333336" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_classroom.xml" value="0.420265780730897" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_lessons.xml" value="0.264" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_quiz.xml" value="0.21784420289855072" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_student_classroom.xml" value="0.25416666666666665" />
-        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/teacher_home_nav.xml" value="0.15019762845849802" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/row_student_classroom_2.xml" value="0.4" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/student_classes_nav.xml" value="0.4" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/student_scoreboard_nav.xml" value="0.25416666666666665" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/teacher_home_nav.xml" value="0.1882716049382716" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/layout/teacher_scoreboard_nav.xml" value="0.25052083333333336" />
+        <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/menu/student_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/menu/teacher_activity_menu.xml" value="0.1" />
         <entry key="..\:/Android/DmmsuGradeLevelApp2/app/src/main/res/menu/teacher_menu.xml" value="0.25052083333333336" />
       </map>

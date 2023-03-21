@@ -1,7 +1,10 @@
 package com.flysolo.dmmsugradelevelapp.model;
 
 
-public class Accounts {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Accounts implements Parcelable {
     public String id;
     String profile;
     String name;
@@ -15,6 +18,25 @@ public class Accounts {
         this.type = type;
         this.email = email;
     }
+
+    protected Accounts(Parcel in) {
+        id = in.readString();
+        profile = in.readString();
+        name = in.readString();
+        email = in.readString();
+    }
+
+    public static final Creator<Accounts> CREATOR = new Creator<Accounts>() {
+        @Override
+        public Accounts createFromParcel(Parcel in) {
+            return new Accounts(in);
+        }
+
+        @Override
+        public Accounts[] newArray(int size) {
+            return new Accounts[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -54,5 +76,18 @@ public class Accounts {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(profile);
+        parcel.writeString(name);
+        parcel.writeString(email);
     }
 }

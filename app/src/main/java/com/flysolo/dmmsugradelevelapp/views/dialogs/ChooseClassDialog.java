@@ -82,11 +82,11 @@ public class ChooseClassDialog extends DialogFragment implements StudentClassroo
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getAllClassroom();
-        binding.buttonBack.setOnClickListener(view1 -> {
-            dismiss();
-            startActivity(new Intent(requireActivity(), StudentMainActivity.class));
-        });
+//        getAllClassroom();
+//        binding.buttonBack.setOnClickListener(view1 -> {
+//            dismiss();
+//            startActivity(new Intent(requireActivity(), StudentMainActivity.class));
+//        });
     }
     private void getAllClassroom() {
         classroomService.getAllClass(new UiState<List<Classroom>>() {

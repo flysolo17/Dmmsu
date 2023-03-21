@@ -1,13 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".views.auth.AccountsFragment">
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Logout"
-        android:id="@+id/buttonLogout"/>
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="10dp"
+                android:id="@+id/acountProfile"
+                android:src="@drawable/profile_placeholder" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:id="@+id/textFullname"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="@string/juan_dela_cruz"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/textAccountType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/teacher" />
+            </LinearLayout>
+
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/edit_profile"
+            android:id="@+id/buttonEditProfile"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_medium"
+            android:textAllCaps="false"
+            android:gravity="start"
+
+            android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/change_password"
+            android:id="@+id/buttonChangePassword"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_medium"
+            android:textAllCaps="false"
+            android:gravity="start"
+            android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            />
+
+        <Button
+            android:id="@+id/buttonLogout"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="start"
+            android:text="Logout"
+            android:textAllCaps="false"
+            android:textColor="#EF5350" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins"
+            android:layout_gravity="center"
+            android:text="DMMSU Grade Level App 1.0"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:text="EST 2023"/>
+    </LinearLayout>
+
+</LinearLayout>

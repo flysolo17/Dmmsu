@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_classes"
+        android:icon="@drawable/ic_classes"
+        android:title="@string/classes" />
+
+    <item
+        android:id="@+id/navigation_scoreboard"
+        android:icon="@drawable/score_board_icon"
+        android:title="@string/scoreboard" />
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@drawable/account_icon"
+        android:title="@string/account"/>
+</menu>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -111,7 +112,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void getUserInfo(String uid) {
-
         authService.getAccount(uid, new UiState<Accounts>() {
             @Override
             public void Loading() {
@@ -122,10 +122,11 @@ public class LoginActivity extends AppCompatActivity {
             public void Successful(Accounts data) {
                 loadingDialog.stopLoading();
                 if (data.getType() == UserType.STUDENT) {
-                    ChooseClassDialog classDialog = ChooseClassDialog.newInstance(data.getId());
-                    if (!classDialog.isAdded()){
-                        classDialog.show(getSupportFragmentManager(),"Choose class");
-                    }
+//                    ChooseClassDialog classDialog = ChooseClassDialog.newInstance(data.getId());
+//                    if (!classDialog.isAdded()){
+//                        classDialog.show(getSupportFragmentManager(),"Choose class");
+//
+                    startActivity(new Intent(LoginActivity.this, StudentMainActivity.class));
                 } else if(data.getType() == UserType.TEACHER) {
                     startActivity(new Intent(LoginActivity.this, TeacherMainActivity.class));
                 } else {

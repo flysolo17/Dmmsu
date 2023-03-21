@@ -1,88 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#f7f5f9"
     tools:context=".views.teacher.nav.TeacherHomeNav">
+    <!--    android:background="#E5E5E5"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:textColor="@color/black"
-                android:layout_gravity="center_vertical"
-                android:text="@string/my_classes" />
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:id="@+id/buttonCreateClass"
-                android:drawableTint="#448AFF"
-                android:fontFamily="@font/poppins_bold"
-                android:textAllCaps="false"
-                android:backgroundTint="#BBDEFB"
-                android:drawableLeft="@drawable/ic_baseline_add_24"
-                android:text="Create"
-                app:cornerRadius="20dp"
-                android:paddingHorizontal="20dp"
-                android:textColor="#448AFF" />
-        </FrameLayout>
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="220dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/textNoClass"
-                android:fontFamily="@font/poppins"
-                android:text="@string/no_class_yet"/>
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                tools:listitem="@layout/row_classroom"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                android:layout_height="match_parent"
-                android:id="@+id/recyclerviewClasses"/>
-        </FrameLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:padding="10dp"
-            android:layout_height="wrap_content">
-            <TextView
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edtSearch"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="@string/activities"
-                android:textColor="@color/black"
-                android:fontFamily="@font/poppins_bold"/>
+                android:layout_margin="10dp"
+                android:textColorHint="@color/black"
+                android:background="@drawable/search_bg"
+                android:fontFamily="@font/poppins"
+                android:textSize="12sp"
+                android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:hint="@string/search_class_here"
+                android:padding="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="5dp"
+                    android:src="@drawable/profile_placeholder" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonCreateClass"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:paddingHorizontal="20dp"
+                    android:text="Create"
+                    android:textAllCaps="false"
+                    app:cornerRadius="10dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="?attr/actionBarSize">
+            android:layout_height="match_parent">
+
             <TextView
+                android:id="@+id/textNoClass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:id="@+id/textNoActivities"
                 android:fontFamily="@font/poppins"
-                android:text="@string/no_activities_yet"/>
+                android:text="@string/no_class_yet" />
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewClasses"
                 android:layout_width="match_parent"
-                android:id="@+id/recyclerviewQuiz"
                 android:layout_height="match_parent"
-                tools:listitem="@layout/row_quiz"/>
+                android:orientation="horizontal"
+                tools:listitem="@layout/row_classroom" />
         </FrameLayout>
     </LinearLayout>
-
 </androidx.core.widget.NestedScrollView>

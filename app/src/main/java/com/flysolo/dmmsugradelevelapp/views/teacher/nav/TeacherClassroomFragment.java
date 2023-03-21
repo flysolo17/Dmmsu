@@ -17,8 +17,13 @@ import com.flysolo.dmmsugradelevelapp.transitions.DepthPageTransformer;
 import com.flysolo.dmmsugradelevelapp.views.adapters.ClassroomTabAdapter;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TeacherClassroomFragment extends Fragment {
     private FragmentTeacherClassroomBinding binding;
+    private String[] tabs = {"Lessons", "Activities", "Students", "Settings"};
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class TeacherClassroomFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 binding.viewpager2.setCurrentItem(tab.getPosition());
                 int position = tab.getPosition();
-
+                binding.textPageName.setText(position <= 4 ? tabs[position] : tabs[0]);
             }
 
             @Override

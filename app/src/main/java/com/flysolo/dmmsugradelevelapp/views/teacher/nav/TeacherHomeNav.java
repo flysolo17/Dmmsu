@@ -1,13 +1,18 @@
 package com.flysolo.dmmsugradelevelapp.views.teacher.nav;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +34,8 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 
 public class TeacherHomeNav extends Fragment implements ClassroomAdapter.ClassroomClickListener {
@@ -39,6 +46,32 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
     private LoadingDialog loadingDialog;
     private ArrayList<Classroom> classrooms;
     private ClassroomAdapter classroomAdapter;
+    // implement the TextWatcher callback listener
+    private TextWatcher textWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable != null) {
+                if (!editable.toString().isEmpty()) {
+                    classroomAdapter = new ClassroomAdapter(binding.getRoot().getContext(),classrooms.stream().filter(classroom -> classroom.getName().contains(editable.toString())).collect(Collectors.toList()),TeacherHomeNav.this);
+                    binding.recyclerviewClasses.setAdapter(classroomAdapter);
+                } else {
+
+                }
+            }
+        }
+
+    };
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,26 +84,27 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         firestore = FirebaseFirestore.getInstance();
+        classrooms = new ArrayList<>();
         classroomService = new ClassroomServiceImpl(firestore, FirebaseStorage.getInstance());
-        binding.recyclerviewClasses.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
+        binding.recyclerviewClasses.setLayoutManager(new LinearLayoutManager(view.getContext()));
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             getAllClassroom(user.getUid());
         }
         binding.buttonCreateClass.setOnClickListener(view1 -> Navigation.findNavController(view1).navigate(R.id.action_navigation_home_to_createClassroomFragment));
+        binding.edtSearch.addTextChangedListener(textWatcher);
     }
 
     private void getAllClassroom(String uid) {
         loadingDialog = new LoadingDialog(binding.getRoot().getContext());
-        classrooms = new ArrayList<>();
         classroomService.getAllClassrooms(uid, new UiState<List<Classroom>>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Getting all classrooms");
             }
-
             @Override
             public void Successful(List<Classroom> data) {
+                classrooms.clear();
                 loadingDialog.stopLoading();
                 classrooms.addAll(data);
                 classroomAdapter = new ClassroomAdapter(binding.getRoot().getContext(),classrooms,TeacherHomeNav.this);
@@ -79,8 +113,9 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
                     binding.textNoClass.setVisibility(View.VISIBLE);
                 } else {
                     binding.textNoClass.setVisibility(View.GONE);
+                    //getAllActivities(data);
                 }
-                getAllActivities(data);
+
             }
 
             @Override
@@ -101,23 +136,21 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
     public void onStartClassroom(int position) {
         Toast.makeText(binding.getRoot().getContext(), "Class starting", Toast.LENGTH_SHORT).show();
     }
-    private void getAllActivities(List<Classroom> classroomList) {
-        classroomService.getAllActivities2(classroomList, new UiState<List<Quiz>>() {
+
+    @Override
+    public void startClass(int position) {
+        Classroom classroom = classrooms.get(position);
+        classroomService.startClass(classroom.getId(), new UiState<String>() {
             @Override
             public void Loading() {
-                loadingDialog.showLoadingDialog("Getting all activities");
+                loadingDialog.showLoadingDialog("Loading...");
             }
+
             @Override
-            public void Successful(List<Quiz> data) {
+            public void Successful(String data) {
                 loadingDialog.stopLoading();
-                binding.recyclerviewQuiz.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-                ActivityAdapter adapter = new ActivityAdapter(binding.getRoot().getContext(), (ArrayList<Quiz>) data);
-                binding.recyclerviewQuiz.setAdapter(adapter);
-                if (data.isEmpty()) {
-                    binding.textNoActivities.setVisibility(View.VISIBLE);
-                } else {
-                    binding.textNoActivities.setVisibility(View.GONE);
-                }
+                Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
+                classroomAdapter.notifyItemChanged(position);
             }
 
             @Override
@@ -127,4 +160,64 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
             }
         });
     }
+
+    @Override
+    public void endClass(int position) {
+        Classroom classroom = classrooms.get(position);
+        classroomService.endClass(classroom.getId(), new UiState<String>() {
+            @Override
+            public void Loading() {
+                loadingDialog.showLoadingDialog("Loading...");
+            }
+
+            @Override
+            public void Successful(String data) {
+                loadingDialog.stopLoading();
+                Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
+                classroomAdapter.notifyItemChanged(position);
+            }
+
+            @Override
+            public void Failed(String message) {
+                loadingDialog.stopLoading();
+                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void shareCode(int position) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT,"Share class code");
+        intent.putExtra(Intent.EXTRA_TEXT,classrooms.get(position).getCode());
+        startActivity(Intent.createChooser(intent,"Share to"));
+    }
+//    private void getAllActivities(List<Classroom> classroomList) {
+//        classroomService.getAllActivities2(classroomList, new UiState<List<Quiz>>() {
+//            @Override
+//            public void Loading() {
+//                loadingDialog.showLoadingDialog("Getting all activities");
+//            }
+//            @Override
+//            public void Successful(List<Quiz> data) {
+//                loadingDialog.stopLoading();
+//
+//                if (data.isEmpty()) {
+//                    binding.textNoActivities.setVisibility(View.VISIBLE);
+//                } else {
+//                    binding.textNoActivities.setVisibility(View.GONE);
+//                    binding.recyclerviewQuiz.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+//                    ActivityAdapter adapter = new ActivityAdapter(binding.getRoot().getContext(), (ArrayList<Quiz>) data);
+//                    binding.recyclerviewQuiz.setAdapter(adapter);
+//                }
+//            }
+//
+//            @Override
+//            public void Failed(String message) {
+//                loadingDialog.stopLoading();
+//                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }

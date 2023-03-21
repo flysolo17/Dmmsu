@@ -5,7 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".views.teacher.nav.TeacherClassroomFragment">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lesson"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/black"
+        android:id="@+id/textPageName"/>
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

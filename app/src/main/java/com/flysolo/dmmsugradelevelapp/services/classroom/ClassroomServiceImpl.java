@@ -3,6 +3,7 @@ package com.flysolo.dmmsugradelevelapp.services.classroom;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
@@ -14,8 +15,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -24,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ClassroomServiceImpl implements ClassroomService {
     FirebaseFirestore firestore;
@@ -41,21 +45,20 @@ public class ClassroomServiceImpl implements ClassroomService {
         firestore.collection(Constants.CLASSROOM_TABLE)
                 .whereEqualTo("teacherID",uid)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
                         classroomArrayList.clear();
-                        for (QueryDocumentSnapshot snapshot:
-                             task.getResult()) {
+                        for (DocumentSnapshot snapshot: value.getDocuments()) {
                             Classroom classroom = snapshot.toObject(Classroom.class);
                             classroomArrayList.add(classroom);
 
                         }
                         result.Successful(classroomArrayList);
-                    } else {
-                        result.Failed("Failed getting classroom");
                     }
-                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+                    if (error != null) {
+                        result.Failed(error.getMessage());
+                    }
+                });
 
     }
 
@@ -83,12 +86,7 @@ public class ClassroomServiceImpl implements ClassroomService {
                     } else {
                         result.Failed("Failed creating classroom");
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        result.Failed(e.getMessage());
-                    }
-                });
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
     }
 
     @Override
@@ -218,6 +216,40 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
+    public void startClass(String classID,UiState<String> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classID)
+                .update("status",true,"code",generateClassCode())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        result.Successful("Class is now open!");
+                    } else {
+                        result.Failed("Failed to start class");
+                    }
+                }).addOnFailureListener(e -> {
+                    result.Failed(e.getMessage());
+                });
+    }
+
+    @Override
+    public void endClass(String classID,UiState<String> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classID)
+                .update("status",false,"code","","activeStudents",new ArrayList<String>())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        result.Successful("Class is now closed!");
+                    } else {
+                        result.Failed("Failed to end class");
+                    }
+                }).addOnFailureListener(e -> {
+                    result.Failed(e.getMessage());
+                });
+    }
+
+    @Override
     public void getAllActivities2(List<Classroom> classroomList, UiState<List<Quiz>> result) {
         result.Loading();
         ArrayList<Quiz> quizArrayList = new ArrayList<>();
@@ -260,7 +292,72 @@ public class ClassroomServiceImpl implements ClassroomService {
                 });
     }
 
+    @Override
+    public void getAllMyClass(String studentID, UiState<List<Classroom>> result) {
+        ArrayList<Classroom> classroomArrayList = new ArrayList<>();
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .whereArrayContains("students",studentID)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .addSnapshotListener((value, error) -> {
+                    if (value != null) {
+                        classroomArrayList.clear();
+                        for (DocumentSnapshot snapshot: value.getDocuments()) {
+                            Classroom classroom = snapshot.toObject(Classroom.class);
+                            classroomArrayList.add(classroom);
+                        }
+                        result.Successful(classroomArrayList);
+                    }
+                    if (error != null) {
+                        result.Failed(error.getMessage());
+                    }
+                });
+    }
 
+    @Override
+    public void searchClass(String code, UiState<Classroom> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .whereEqualTo("code",code)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                        result.Successful(task.getResult().toObjects(Classroom.class).get(0));
+                    } else {
+                        result.Failed("No class matching the code: " + code);
+                    }
+                 }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
+
+    @Override
+    public void joinClass(String classID,String studentID, UiState<String> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classID)
+                .update("students",FieldValue.arrayUnion(studentID),"activeStudents",FieldValue.arrayUnion(studentID))
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        result.Successful("You successfully join the class");
+                    } else {
+                        result.Failed("Failed to join the class");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+
+    }
+
+    private String generateClassCode() {
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        int length = 10;
+        for(int i = 0; i < length; i++) {
+            int index = random.nextInt(alphabet.length());
+            char randomChar = alphabet.charAt(index);
+            sb.append(randomChar);
+        }
+        return sb.toString();
+    }
 
 
 }

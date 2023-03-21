@@ -22,10 +22,13 @@ public interface ClassroomService {
     void addStudent(String classroomID,String studentID,UiState<String> result);
     void removeStudent(String classroomID,String studentID,UiState<String> result);
     void getAllActivities(String uid,UiState<List<Quiz>> result);
+    void startClass(String classID,UiState<String> result);
+    void endClass(String classID,UiState<String> result);
     void getAllActivities2(List<Classroom> classroomList,UiState<List<Quiz>> result);
-
     //for students
     void getAllClass(UiState<List<Classroom>> result);
-
+    void getAllMyClass(String studentID,UiState<List<Classroom>> result);
+    void searchClass(String code,UiState<Classroom> result);
+    void joinClass(String classID,String studentID,UiState<String> result);
 
 }

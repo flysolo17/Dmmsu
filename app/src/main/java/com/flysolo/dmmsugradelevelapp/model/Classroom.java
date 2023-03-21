@@ -6,43 +6,42 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-//    val id : String? = null,
-//            val teacherID : String ? = null,
-//            var background : String ?= null,
-//            val name : String? = null,
-//            val status : Boolean ? = null,
-//            val code : String ? = null,
-//            val students : List<String> ? = null,
-//        val createdAt : Long ? = null
-public class Classroom implements Parcelable {
+
+public class Classroom implements Parcelable{
     String id;
     String teacherID;
-    String background;
     String name;
     Boolean status;
     String code;
+    String startTime;
+    List<String> schedule;
     List<String> students;
+    List<String> activeStudents;
     Long createdAt;
     public Classroom(){}
-    public Classroom(String id, String teacherID, String background, String name, Boolean status, String code, List<String> students, Long createdAt) {
+
+    public Classroom(String id, String teacherID, String name, Boolean status, String code, String startTime, List<String> schedule, List<String> students,List<String> activeStudents, Long createdAt) {
         this.id = id;
         this.teacherID = teacherID;
-        this.background = background;
         this.name = name;
         this.status = status;
         this.code = code;
+        this.startTime = startTime;
+        this.schedule = schedule;
         this.students = students;
+        this.activeStudents = activeStudents;
         this.createdAt = createdAt;
     }
 
     protected Classroom(Parcel in) {
         id = in.readString();
         teacherID = in.readString();
-        background = in.readString();
         name = in.readString();
         byte tmpStatus = in.readByte();
         status = tmpStatus == 0 ? null : tmpStatus == 1;
         code = in.readString();
+        startTime = in.readString();
+        schedule = in.createStringArrayList();
         students = in.createStringArrayList();
         if (in.readByte() == 0) {
             createdAt = null;
@@ -79,14 +78,6 @@ public class Classroom implements Parcelable {
         this.teacherID = teacherID;
     }
 
-    public String getBackground() {
-        return background;
-    }
-
-    public void setBackground(String background) {
-        this.background = background;
-    }
-
     public String getName() {
         return name;
     }
@@ -111,12 +102,36 @@ public class Classroom implements Parcelable {
         this.code = code;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public List<String> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(List<String> schedule) {
+        this.schedule = schedule;
+    }
+
     public List<String> getStudents() {
         return students;
     }
 
     public void setStudents(List<String> students) {
         this.students = students;
+    }
+
+    public List<String> getActiveStudents() {
+        return activeStudents;
+    }
+
+    public void setActiveStudents(List<String> activeStudents) {
+        this.activeStudents = activeStudents;
     }
 
     public Long getCreatedAt() {
@@ -136,10 +151,11 @@ public class Classroom implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
         parcel.writeString(teacherID);
-        parcel.writeString(background);
         parcel.writeString(name);
         parcel.writeByte((byte) (status == null ? 0 : status ? 1 : 2));
         parcel.writeString(code);
+        parcel.writeString(startTime);
+        parcel.writeStringList(schedule);
         parcel.writeStringList(students);
         if (createdAt == null) {
             parcel.writeByte((byte) 0);

@@ -68,7 +68,6 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 Accounts accounts = new Accounts("","",name,type,email);
                 signup(email,password,accounts);
-
             }
         });
     }

@@ -155,4 +155,19 @@ public class AuthServiceImpl implements AuthService {
             result.Failed(e.getMessage());
         });
     }
+
+    @Override
+    public void updateProfile(String uid,String name, String profile, UiState<String> result) {
+        result.Loading();
+        firestore.collection(Constants.ACCOUNTS_TABLE)
+                .document(uid)
+                .update("name",name,"profile",profile)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        result.Successful("Account updated Successfully");
+                    } else {
+                        result.Failed("Failed to update account!");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
 }

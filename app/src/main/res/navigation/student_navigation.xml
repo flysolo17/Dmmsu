@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/student_navigation"
+    app:startDestination="@id/navigation_classes">
+
+    <fragment
+        android:id="@+id/navigation_classes"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.nav.StudentClassesNav"
+        android:label="Classes"
+        tools:layout="@layout/student_classes_nav" />
+    <fragment
+        android:id="@+id/navigation_scoreboard"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.nav.StudentScoreboardNav"
+        android:label="Scoreboard   `````"
+        tools:layout="@layout/student_scoreboard_nav" />
+    <fragment
+        android:id="@+id/navigation_account"
+        android:name="com.flysolo.dmmsugradelevelapp.views.auth.AccountsFragment"
+        android:label="Accounts"
+        tools:layout="@layout/fragment_accounts" >
+        <action
+            android:id="@+id/action_navigation_account_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_navigation_account_to_changePassword"
+            app:destination="@id/changePassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.flysolo.dmmsugradelevelapp.views.auth.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <argument
+            android:name="account"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Accounts" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePassword"
+        android:name="com.flysolo.dmmsugradelevelapp.views.auth.ChangePassword"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" >
+        <argument
+            android:name="account"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Accounts" />
+    </fragment>
+
+</navigation>
