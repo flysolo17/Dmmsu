@@ -84,4 +84,7 @@
     <string name="classes">Classes</string>
     <string name="input_code_here">Input code here</string>
     <string name="your_classes">Your classes</string>
+    <string name="cancel">cancel</string>
+    <string name="create">Create</string>
+    <string name="classroom_name">Classroom name</string>
 </resources>

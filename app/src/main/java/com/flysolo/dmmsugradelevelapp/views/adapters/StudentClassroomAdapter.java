@@ -54,7 +54,7 @@ public class StudentClassroomAdapter extends RecyclerView.Adapter<StudentClassro
     @Override
     public void onBindViewHolder(@NonNull StudentClassroomViewHolder holder, int position) {
         Classroom classroom = classroomList.get(position);
-        holder.textTime.setText(classroom.getStartTime() + " " + getTime(classroom.getStartTime()));
+        holder.textTime.setText(classroom.getStartTime());
         holder.textClassroomName.setText(classroom.getName());
         holder.textSched.setText(String.join(", " ,classroom.getSchedule()));
         holder.getStudents(classroom.getStudents());
@@ -181,19 +181,6 @@ public class StudentClassroomAdapter extends RecyclerView.Adapter<StudentClassro
         }
 
     }
-    private String getTime(String time) {
-        int meridian = getChar(time);
-        if (meridian > 12)
-            return "PM";
-        return "AM";
-    }
-    private int getChar(String str)
-    {
-        StringBuilder ch = new StringBuilder();
-        // loop through each element
-        for(int i = 0; i<2; i++) {
-            ch.append(str.charAt(i));
-        }
-        return Integer.parseInt(ch.toString());
-    }
+
+
 }

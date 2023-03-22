@@ -9,103 +9,99 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        <com.google.android.material.textfield.TextInputLayout
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <NumberPicker
+            android:id="@+id/hourPicker"
             android:layout_width="match_parent"
-            android:id="@+id/layoutName"
             android:layout_height="wrap_content"
-            app:errorEnabled="true"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:id="@+id/inputName"
-                android:layout_height="wrap_content"
-                android:hint="Name"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+            android:selectionDividerHeight="0dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/schedule"
-            android:textSize="18sp"
+            android:text=":"
             android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/black"/>
-        <LinearLayout
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:layout_margin="10dp"/>
+        <NumberPicker
+            android:id="@+id/minutePicker"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/start_time"
-                    android:fontFamily="@font/poppins"
-                    android:textColor="@color/black"/>
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/buttonStartTime"
-                    android:text="@string/set_start_time"
-                    android:textColor="@color/black"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
-
-        </LinearLayout>
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:id="@+id/checkMonday"
-                android:text="@string/monday"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkTuesday"
-                android:fontFamily="@font/poppins"
-                android:text="@string/tuesday"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:id="@+id/checkWednesday"
-                android:text="@string/wednesday"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:id="@+id/checkThursday"
-                android:text="@string/thursday"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:id="@+id/checkFriday"
-                android:text="@string/friday"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins"
-                android:id="@+id/checkSaturday"
-                android:text="@string/saturday"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:id="@+id/checkSunday"
-                android:fontFamily="@font/poppins"
-                android:text="@string/sunday"/>
-
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:selectionDividerHeight="0dp"
+            android:layout_height="wrap_content"/>
+        <NumberPicker
+            android:id="@+id/meridiemPicker"
+            android:layout_margin="10dp"
+            android:selectionDividerHeight="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/buttonCreateClass"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:backgroundTint="#558B2F"
-        android:layout_margin="10dp"
-        android:fontFamily="@font/poppins"
-        android:text="@string/create_class"
-        app:cornerRadius="10dp" />
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#C5CAE9"
+        app:cardCornerRadius="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Days"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <LinearLayout
+                android:id="@+id/layoutDays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/classroom_name"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins"
+                android:layout_marginTop="10dp"/>
+            <EditText
+                android:id="@+id/inputName"
+                android:layout_width="match_parent"
+                android:inputType="text"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+        <Button
+            android:id="@+id/buttonCreateClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/create"
+            android:layout_weight="1"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+    </LinearLayout>
 </LinearLayout>
