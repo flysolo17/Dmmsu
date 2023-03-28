@@ -57,15 +57,26 @@ public class StudentClassroomAdapter extends RecyclerView.Adapter<StudentClassro
         holder.textTime.setText(classroom.getStartTime());
         holder.textClassroomName.setText(classroom.getName());
         holder.textSched.setText(String.join(", " ,classroom.getSchedule()));
-        holder.getStudents(classroom.getStudents());
-        if (classroom.getStatus()) {
-            holder.textActive.setText(classroom.getActiveStudents().size() + "/" + classroom.getStudents().size() + " active students");
-            holder.buttonJoinClass.setVisibility(View.VISIBLE);
-        } else {
-            holder.textActive.setText("Class is closed");
-            holder.buttonJoinClass.setVisibility(View.GONE);
-        }
+
+
+            if (classroom.getStatus()) {
+                int active = classroom.getActiveStudents().size();
+                int students = classroom.getStudents().size();
+                holder.textActive.setText(active+ "/" + students + " active students");
+                if (classroom.getActiveStudents().contains(studentID)) {
+                    holder.buttonJoinClass.setVisibility(View.GONE);
+                } else {
+                    holder.buttonJoinClass.setVisibility(View.VISIBLE);
+                }
+
+            } else {
+                holder.textActive.setText("Class is closed");
+                holder.buttonJoinClass.setVisibility(View.GONE);
+            }
+
         holder.getTeacherProfile(classroom.getTeacherID());
+        holder.buttonJoinClass.setOnClickListener(view -> listener.onJoin(classroom));
+        holder.materialCardView.setOnClickListener(view -> listener.onJoin(classroom));
     }
 
     @Override
@@ -73,114 +84,42 @@ public class StudentClassroomAdapter extends RecyclerView.Adapter<StudentClassro
         return classroomList.size();
     }
 
-    public class StudentClassroomViewHolder  extends RecyclerView.ViewHolder{
-        TextView textClassroomName,textSched,textTime;
+    public class StudentClassroomViewHolder  extends RecyclerView.ViewHolder {
+        TextView textClassroomName, textSched, textTime;
         ImageView background;
         MaterialCardView materialCardView;
-        LinearLayout layoutStudents,layout3OrMoreStudent,layoutMoreStudents;
+        LinearLayout layoutStudents;
         FirebaseFirestore firestore;
-        View view;
-        CircleImageView profile1 ,profile2,profile3;
-        TextView textNoStudents,textMoreStudentCount,textActive,textTeacher;
+        TextView  textActive, textTeacher;
         MaterialButton buttonJoinClass;
         public StudentClassroomViewHolder(@NonNull View itemView) {
             super(itemView);
-            textClassroomName= itemView.findViewById(R.id.textClassroomName);
+            textClassroomName = itemView.findViewById(R.id.textClassroomName);
             background = itemView.findViewById(R.id.classroomBackground);
             materialCardView = itemView.findViewById(R.id.card);
             textSched = itemView.findViewById(R.id.textSched);
             textTime = itemView.findViewById(R.id.textTime);
             layoutStudents = itemView.findViewById(R.id.layoutStudents);
             firestore = FirebaseFirestore.getInstance();
-            view = LayoutInflater.from(itemView.getContext()).inflate(R.layout.layout_stud,layoutStudents,false);
-            layout3OrMoreStudent = view.findViewById(R.id.layout3OrMoreStudent);
-            textNoStudents = view.findViewById(R.id.textNoStudents);
-            textMoreStudentCount = view.findViewById(R.id.textMoreStudentCount);
-            profile1 = view.findViewById(R.id.profile1);
-            profile3= view.findViewById(R.id.profile3);
-            profile2 = view.findViewById(R.id.profile2);
-            layoutMoreStudents = view.findViewById(R.id.layoutMoreStudents);
-            layoutStudents.addView(view);
             textActive = itemView.findViewById(R.id.textActive);
             buttonJoinClass = itemView.findViewById(R.id.buttonJoinClass);
             textTeacher = itemView.findViewById(R.id.textTeacher);
         }
 
-        void getStudents(List<String> students){
-            bindStudentLayout(students.size());
-            for (int i = 0; i < students.size(); i++) {
-                if (i <= 3){
-                    getStudentProfile(students.get(i),i);
-                }
-            }
-        }
+
         void getTeacherProfile(String teacherID) {
             firestore.collection(Constants.ACCOUNTS_TABLE)
                     .document(teacherID)
                     .get()
                     .addOnSuccessListener(task -> {
-                        if (task.exists()){
+                        if (task.exists()) {
                             Accounts accounts = task.toObject(Accounts.class);
                             if (accounts != null) textTeacher.setText(accounts.getName());
                             else textTeacher.setText("No name");
-                        } else  {
+                        } else {
                             textTeacher.setText("No name");
                         }
                     });
         }
-        void getStudentProfile(String id,int count) {
-            firestore.collection(Constants.ACCOUNTS_TABLE)
-                    .document(id)
-                    .get()
-                    .addOnSuccessListener(task -> {
-                        if (task.exists()){
-                            Accounts accounts = task.toObject(Accounts.class);
-                            if (accounts != null && !accounts.getProfile().isEmpty()) {
-                                bindProfile(accounts.getProfile(), count);
-                            }
-                        }
-                    });
-        }
-        void bindProfile(String url ,int count) {
-            switch (count) {
-                case 1:
-                    Glide.with(itemView.getContext()).load(url).into(profile2);
-                    break;
-                case 2:
-                    Glide.with(itemView.getContext()).load(url).into(profile3);
-                    break;
-                default:
-                    Glide.with(itemView.getContext()).load(url).into(profile1);
-            }
-        }
-        void bindStudentLayout(int count){
-            switch (count){
-                case 1:
-                    textNoStudents.setVisibility(View.GONE);
-                    profile2.setVisibility(View.GONE);
-                    profile3.setVisibility(View.GONE);
-                    layoutMoreStudents.setVisibility(View.GONE);
-                    break;
-                case 2:
-                    textNoStudents.setVisibility(View.GONE);
-                    profile3.setVisibility(View.GONE);
-                    layoutMoreStudents.setVisibility(View.GONE);
-                    break;
-                case 3:
-                    textNoStudents.setVisibility(View.GONE);
-                    layoutMoreStudents.setVisibility(View.GONE);
-                    break;
-                case 4:
-                    textNoStudents.setVisibility(View.GONE);
-                    textMoreStudentCount.setText((count - 3)+"");
-                    break;
-                default:
-                    textNoStudents.setVisibility(View.VISIBLE);
-                    layout3OrMoreStudent.setVisibility(View.GONE);
-            }
-        }
-
     }
-
-
 }

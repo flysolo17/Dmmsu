@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class LessonTab extends Fragment implements LessonAdapter.LessonClickListener{
@@ -83,13 +85,13 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
     }
     private void getAllLesson(){
         lessons = new ArrayList<>();
-        lessonService.getAllLesson(new UiState<ArrayList<Lesson>>() {
+        lessonService.getAllLesson(new UiState<List<Lesson>>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Getting all lessons");
             }
             @Override
-            public void Successful(ArrayList<Lesson> data) {
+            public void Successful(List<Lesson> data) {
                 loadingDialog.stopLoading();
                 if (data.isEmpty()) {
                     Toast.makeText(binding.getRoot().getContext(), "No lessons yet!", Toast.LENGTH_SHORT).show();
@@ -139,6 +141,7 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
 
     @Override
     public void onViewLesson(Lesson lesson) {
-
+        NavDirections directions = TeacherClassroomFragmentDirections.actionTeacherClassroomFragmentToViewLessonTab(lesson, classroom.getId());
+        Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 }

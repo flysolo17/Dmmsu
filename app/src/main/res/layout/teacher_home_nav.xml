@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:textColorHint="@color/black"
-                android:background="@drawable/search_bg"
+                android:background="@drawable/search_bg_2"
                 android:fontFamily="@font/poppins"
                 android:textSize="12sp"
                 android:drawableLeft="@drawable/ic_baseline_search_24"

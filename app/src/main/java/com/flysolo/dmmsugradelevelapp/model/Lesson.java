@@ -10,22 +10,20 @@ public class Lesson implements Parcelable {
     String id;
     String title;
     String description;
-    ArrayList<Content> contents;
     Long createdAt;
     public Lesson() {}
-    public Lesson(String id, String title, String description, ArrayList<Content> contents, Long createdAt) {
+    public Lesson(String id, String title, String description, Long createdAt) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
-        this.contents = contents;
+
     }
 
     protected Lesson(Parcel in) {
         id = in.readString();
         title = in.readString();
         description = in.readString();
-        contents = in.createTypedArrayList(Content.CREATOR);
         if (in.readByte() == 0) {
             createdAt = null;
         } else {
@@ -77,14 +75,6 @@ public class Lesson implements Parcelable {
         this.createdAt = createdAt;
     }
 
-    public ArrayList<Content> getContents() {
-        return contents;
-    }
-
-    public void setContents(ArrayList<Content> contents) {
-        this.contents = contents;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -95,7 +85,6 @@ public class Lesson implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(title);
         parcel.writeString(description);
-        parcel.writeTypedList(contents);
         if (createdAt == null) {
             parcel.writeByte((byte) 0);
         } else {

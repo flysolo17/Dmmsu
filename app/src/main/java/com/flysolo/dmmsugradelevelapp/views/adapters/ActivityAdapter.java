@@ -11,18 +11,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder> {
     Context context;
-    ArrayList<Quiz> quizzes;
+    List<Quiz> quizzes;
+    ActivityClickListener activityClickListener;
+    public interface ActivityClickListener{
+        void onActivityClicked(String activityID);
+    }
 
-    public ActivityAdapter(Context context, ArrayList<Quiz> quizzes) {
+    public ActivityAdapter(Context context, List<Quiz> quizzes,ActivityClickListener activityClickListener) {
         this.context = context;
         this.quizzes = quizzes;
+        this.activityClickListener = activityClickListener;
     }
 
     @NonNull
@@ -41,6 +48,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
         holder.textDesc.setText(quiz.getDescription());
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
         holder.textCreatedAt.setText(df.format(date));
+        holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(quiz.getId()));
     }
 
     @Override
@@ -50,11 +58,13 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
 
     public class ActivityViewHolder extends RecyclerView.ViewHolder {
         TextView textTitle,textDesc,textCreatedAt;
+        MaterialCardView cardActivity;
         public ActivityViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
             textDesc = itemView.findViewById(R.id.textDesc);
             textCreatedAt = itemView.findViewById(R.id.textCreatedAt);
+            cardActivity = itemView.findViewById(R.id.cardActivity);
         }
     }
 }

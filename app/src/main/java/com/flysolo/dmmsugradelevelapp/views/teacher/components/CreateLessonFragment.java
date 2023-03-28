@@ -51,7 +51,7 @@ public class CreateLessonFragment extends Fragment {
             } else  if (desc.isEmpty()) {
                 binding.layoutDesc.setError("This field is required");
             } else {
-                Lesson lesson = new Lesson("",title,desc, new ArrayList<>(),System.currentTimeMillis());
+                Lesson lesson = new Lesson("",title,desc,System.currentTimeMillis());
                 saveLesson(lesson);
             }
         });

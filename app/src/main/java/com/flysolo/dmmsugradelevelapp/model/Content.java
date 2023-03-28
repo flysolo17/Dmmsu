@@ -3,19 +3,35 @@ package com.flysolo.dmmsugradelevelapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Content implements Parcelable {
-   String content;
+public class Content implements Parcelable{
+   String id;
+   String lessonID;
+   String title;
+   String description;
    String attachment;
-
+   Long createdAt;
    public Content() {}
-   public Content(String content, String attachment) {
-      this.content = content;
+
+   public Content(String id, String lessonID, String title, String description, String attachment, Long createdAt) {
+      this.id = id;
+      this.lessonID = lessonID;
+      this.title = title;
+      this.description = description;
       this.attachment = attachment;
+      this.createdAt = createdAt;
    }
 
    protected Content(Parcel in) {
-      content = in.readString();
+      id = in.readString();
+      lessonID = in.readString();
+      title = in.readString();
+      description = in.readString();
       attachment = in.readString();
+      if (in.readByte() == 0) {
+         createdAt = null;
+      } else {
+         createdAt = in.readLong();
+      }
    }
 
    public static final Creator<Content> CREATOR = new Creator<Content>() {
@@ -30,12 +46,36 @@ public class Content implements Parcelable {
       }
    };
 
-   public String getContent() {
-      return content;
+   public String getId() {
+      return id;
    }
 
-   public void setContent(String content) {
-      this.content = content;
+   public void setId(String id) {
+      this.id = id;
+   }
+
+   public String getLessonID() {
+      return lessonID;
+   }
+
+   public void setLessonID(String lessonID) {
+      this.lessonID = lessonID;
+   }
+
+   public String getTitle() {
+      return title;
+   }
+
+   public void setTitle(String title) {
+      this.title = title;
+   }
+
+   public String getDescription() {
+      return description;
+   }
+
+   public void setDescription(String description) {
+      this.description = description;
    }
 
    public String getAttachment() {
@@ -46,6 +86,14 @@ public class Content implements Parcelable {
       this.attachment = attachment;
    }
 
+   public Long getCreatedAt() {
+      return createdAt;
+   }
+
+   public void setCreatedAt(Long createdAt) {
+      this.createdAt = createdAt;
+   }
+
    @Override
    public int describeContents() {
       return 0;
@@ -53,7 +101,16 @@ public class Content implements Parcelable {
 
    @Override
    public void writeToParcel(Parcel parcel, int i) {
-      parcel.writeString(content);
+      parcel.writeString(id);
+      parcel.writeString(lessonID);
+      parcel.writeString(title);
+      parcel.writeString(description);
       parcel.writeString(attachment);
+      if (createdAt == null) {
+         parcel.writeByte((byte) 0);
+      } else {
+         parcel.writeByte((byte) 1);
+         parcel.writeLong(createdAt);
+      }
    }
 }

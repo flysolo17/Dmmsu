@@ -44,8 +44,9 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         Lesson lesson = lessons.get(position);
         holder.textTitle.setText(lesson.getTitle());
         holder.textDesc.setText(lesson.getDescription());
-        holder.fabCreateActivity.setOnClickListener(view -> lessonClickListener.onCreateActivity(lesson));
-        holder.fabDeleteLesson.setOnClickListener(view -> lessonClickListener.onDeleteLesson(lesson,position));
+        holder.cardLesson.setOnClickListener(view -> {
+            lessonClickListener.onViewLesson(lesson);
+        });
     }
 
     @Override
@@ -57,7 +58,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         TextView textTitle,textDesc;
         MaterialCardView cardLesson;
         LinearLayout layoutActions;
-        ExtendedFloatingActionButton fabCreateActivity,fabDeleteLesson,fabViewLesson;
+
 
         public LessonViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,17 +66,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
             textDesc = itemView.findViewById(R.id.textDesc);
             cardLesson = itemView.findViewById(R.id.cardLesson);
             layoutActions = itemView.findViewById(R.id.layoutActions);
-            fabCreateActivity = itemView.findViewById(R.id.fabCreateActivity);
-            fabDeleteLesson = itemView.findViewById(R.id.fabDeleteLesson);
-            fabViewLesson = itemView.findViewById(R.id.fabViewLesson);
 
-            cardLesson.setOnClickListener(view -> {
-                if (layoutActions.getVisibility() == View.VISIBLE) {
-                    layoutActions.setVisibility(View.GONE);
-                } else {
-                    layoutActions.setVisibility(View.VISIBLE);
-                }
-            });
+
 
         }
     }

@@ -62,16 +62,6 @@ public class ClassroomServiceImpl implements ClassroomService {
 
     }
 
-    @Override
-    public void uploadBackground(String uid, Uri uri, UiState<String> result) {
-        StorageReference reference = storage.getReference(Constants.CLASSROOM_TABLE)
-                .child(uid)
-                .child(String.valueOf(System.currentTimeMillis()));
-        result.Loading();
-        reference.putFile(uri).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri1 -> result.Successful(uri1.toString()))).addOnFailureListener(e -> {
-            result.Failed(e.getMessage());
-        });
-    }
 
     @Override
     public void createClassroom(Classroom classroom, UiState<String> result) {
@@ -294,19 +284,13 @@ public class ClassroomServiceImpl implements ClassroomService {
 
     @Override
     public void getAllMyClass(String studentID, UiState<List<Classroom>> result) {
-        ArrayList<Classroom> classroomArrayList = new ArrayList<>();
         result.Loading();
         firestore.collection(Constants.CLASSROOM_TABLE)
                 .whereArrayContains("students",studentID)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
                     if (value != null) {
-                        classroomArrayList.clear();
-                        for (DocumentSnapshot snapshot: value.getDocuments()) {
-                            Classroom classroom = snapshot.toObject(Classroom.class);
-                            classroomArrayList.add(classroom);
-                        }
-                        result.Successful(classroomArrayList);
+                        result.Successful(value.toObjects(Classroom.class));
                     }
                     if (error != null) {
                         result.Failed(error.getMessage());
@@ -335,7 +319,7 @@ public class ClassroomServiceImpl implements ClassroomService {
         result.Loading();
         firestore.collection(Constants.CLASSROOM_TABLE)
                 .document(classID)
-                .update("students",FieldValue.arrayUnion(studentID),"activeStudents",FieldValue.arrayUnion(studentID))
+                .update("students",FieldValue.arrayUnion(studentID))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         result.Successful("You successfully join the class");
@@ -344,6 +328,21 @@ public class ClassroomServiceImpl implements ClassroomService {
                     }
                 }).addOnFailureListener(e -> result.Failed(e.getMessage()));
 
+    }
+
+    @Override
+    public void addAttendance(String classID, String studentID, UiState<String> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classID)
+                .update("activeStudents",FieldValue.arrayUnion(studentID))
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        result.Successful("You successfully join the class");
+                    } else {
+                        result.Failed("Failed to join the class");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
     }
 
     private String generateClassCode() {

@@ -17,6 +17,6 @@ public interface AuthService {
         void reAuthenticateAccount( FirebaseUser user,String email ,String password,UiState<FirebaseUser> result);
         void resetPassword(String email,UiState<String> result);
         void changePassword(FirebaseUser user,String password,UiState<String> result);
-        void uploadProfile(String uid , Uri uri, UiState<String> result);
+        void uploadProfile(String uid , Uri uri,String type, UiState<String> result);
         void updateProfile(String uid,String name ,String profile,UiState<String> result);
 }

@@ -1,6 +1,8 @@
 package com.flysolo.dmmsugradelevelapp.views.auth;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -102,6 +105,7 @@ public class AccountsFragment extends Fragment {
     }
     private void displayInfo(Accounts accounts) {
         if (!accounts.getProfile().isEmpty()) {
+
             Glide.with(binding.getRoot().getContext()).load(accounts.getProfile()).into(binding.acountProfile);
         }
         binding.textFullname.setText(accounts.getName());

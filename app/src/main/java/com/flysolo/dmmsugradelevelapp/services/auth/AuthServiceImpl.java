@@ -1,7 +1,9 @@
 package com.flysolo.dmmsugradelevelapp.services.auth;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 
@@ -146,10 +148,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void uploadProfile(String uid, Uri uri, UiState<String> result) {
+    public void uploadProfile(String uid, Uri uri, String type, UiState<String> result) {
         StorageReference reference = storage.getReference(Constants.ACCOUNTS_TABLE)
                 .child(uid)
-                .child(String.valueOf(System.currentTimeMillis()));
+                .child(System.currentTimeMillis() + "." + type);
         result.Loading();
         reference.putFile(uri).addOnSuccessListener(taskSnapshot -> reference.getDownloadUrl().addOnSuccessListener(uri1 -> result.Successful(uri1.toString()))).addOnFailureListener(e -> {
             result.Failed(e.getMessage());
@@ -170,4 +172,6 @@ public class AuthServiceImpl implements AuthService {
                     }
                 }).addOnFailureListener(e -> result.Failed(e.getMessage()));
     }
+
+
 }

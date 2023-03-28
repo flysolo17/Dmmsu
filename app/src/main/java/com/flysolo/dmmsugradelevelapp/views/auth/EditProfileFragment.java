@@ -1,5 +1,6 @@
 package com.flysolo.dmmsugradelevelapp.views.auth;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -22,6 +24,7 @@ import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentEditProfileBinding;
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.services.auth.AuthServiceImpl;
+import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,6 +65,7 @@ public class EditProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         authService = new AuthServiceImpl(FirebaseAuth.getInstance(), FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         if (accounts!= null) {
+
             displayInfo(accounts);
         }
         galleryLauncher =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -78,35 +82,34 @@ public class EditProfileFragment extends Fragment {
         binding.buttonAddImage.setOnClickListener(view1 -> {
             Intent intent =new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             galleryLauncher.launch(intent);
+
         });
-        binding.buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name = binding.inputFullname.getText().toString();
-                if (name.isEmpty()) {
-                    binding.layoutFullname.setError("This field is required");
-                } else {
-                    if (accounts != null) {
-                        if (imageUri != null) uploadProfile(accounts.getId(), imageUri, name);
-                        else saveAccount(accounts.getId(), name, accounts.getProfile());
-                    }
+        binding.buttonSave.setOnClickListener(view12 -> {
+            String name = binding.inputFullname.getText().toString();
+            if (name.isEmpty()) {
+                binding.layoutFullname.setError("This field is required");
+            } else {
+                if (accounts != null) {
+                    if (imageUri != null) uploadProfile(accounts.getId(), imageUri, name);
+                    else saveAccount(accounts.getId(), name, accounts.getProfile());
                 }
             }
         });
     }
 
     private void displayInfo(Accounts accounts) {
+
         if(!accounts.getProfile().isEmpty()) {
+
             Glide.with(binding.getRoot().getContext()).load(accounts.getProfile()).into(binding.accountProfile);
         }
         binding.inputFullname.setText(accounts.getName());
     }
     private void uploadProfile(String uid,Uri uri,String name) {
-        authService.uploadProfile(uid,uri, new UiState<String>() {
+        authService.uploadProfile(uid,uri, Constants.getFileExtension(requireActivity(),uri), new UiState<String>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Uploading profile....");
-
             }
             @Override
             public void Successful(String data) {
@@ -141,4 +144,5 @@ public class EditProfileFragment extends Fragment {
             }
         });
     }
+
 }

@@ -157,29 +157,28 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             }
         }
         void bindStudentLayout(int count){
-            switch (count){
-                case 1:
-                    textNoStudents.setVisibility(View.GONE);
-                    profile2.setVisibility(View.GONE);
-                    profile3.setVisibility(View.GONE);
-                    layoutMoreStudents.setVisibility(View.GONE);
-                    break;
-                case 2:
-                    textNoStudents.setVisibility(View.GONE);
-                    profile3.setVisibility(View.GONE);
-                    layoutMoreStudents.setVisibility(View.GONE);
-                    break;
-                case 3:
-                    textNoStudents.setVisibility(View.GONE);
-                    layoutMoreStudents.setVisibility(View.GONE);
-                    break;
-                case 4:
-                    textNoStudents.setVisibility(View.GONE);
-                    textMoreStudentCount.setText((count - 3)+"");
-                    break;
-                default:
-                    textNoStudents.setVisibility(View.VISIBLE);
-                    layout3OrMoreStudent.setVisibility(View.GONE);
+            if (count == 1) {
+                textNoStudents.setVisibility(View.GONE);
+                profile2.setVisibility(View.GONE);
+                profile3.setVisibility(View.GONE);
+                layoutMoreStudents.setVisibility(View.GONE);
+            } else if (count == 2) {
+                textNoStudents.setVisibility(View.GONE);
+                profile3.setVisibility(View.GONE);
+                layoutMoreStudents.setVisibility(View.GONE);
+            }
+             else if (count == 3) {
+
+                textNoStudents.setVisibility(View.GONE);
+                layoutMoreStudents.setVisibility(View.GONE);
+            }
+            else if (count >= 4) {
+
+                textNoStudents.setVisibility(View.GONE);
+                textMoreStudentCount.setText((count - 3) + "");
+            }else {
+                textNoStudents.setVisibility(View.VISIBLE);
+                layout3OrMoreStudent.setVisibility(View.GONE);
             }
         }
     }

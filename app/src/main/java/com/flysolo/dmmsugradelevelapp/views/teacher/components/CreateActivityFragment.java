@@ -53,6 +53,7 @@ public class CreateActivityFragment extends Fragment {
     private String classroomID;
     private LessonServiceImpl lessonService;
     private LoadingDialog loadingDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,8 +133,8 @@ public class CreateActivityFragment extends Fragment {
         } else if (questions.isEmpty()) {
             Toast.makeText(binding.getRoot().getContext(), "Questions can't be empty", Toast.LENGTH_SHORT).show();
         } else {
-            Quiz quiz = new Quiz("",lessonID,name,desc,questions,System.currentTimeMillis());
-            saveQuiz(quiz);
+            //Quiz quiz = new Quiz("",lessonID,name,desc,questions,System.currentTimeMillis());
+            //saveQuiz(quiz);
         }
     }
     private void saveQuiz(Quiz quiz) {

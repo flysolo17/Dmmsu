@@ -16,6 +16,7 @@ import com.flysolo.dmmsugradelevelapp.databinding.ActivityRegisterBinding;
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.UserType;
 import com.flysolo.dmmsugradelevelapp.services.auth.AuthServiceImpl;
+import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.utils.Validation;
@@ -126,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
         return user;
     }
     private void uploadProfile(String uid,Uri uri,Accounts accounts) {
-        authService.uploadProfile(uid,uri, new UiState<String>() {
+        authService.uploadProfile(uid,uri, Constants.getFileExtension(this,uri), new UiState<String>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Uploading profile....");

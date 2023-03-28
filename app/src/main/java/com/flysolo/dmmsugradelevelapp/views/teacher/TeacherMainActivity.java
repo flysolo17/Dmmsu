@@ -23,12 +23,16 @@ import com.google.firebase.auth.FirebaseAuth;
 public class TeacherMainActivity extends AppCompatActivity {
     private ActivityTeacherMainBinding binding;
     private NavController navController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityTeacherMainBinding.inflate(getLayoutInflater());
+
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
+
         binding.toolbar.setElevation(1f);
         NavHostFragment navHostFragment =(NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_container);
         if (navHostFragment != null) {

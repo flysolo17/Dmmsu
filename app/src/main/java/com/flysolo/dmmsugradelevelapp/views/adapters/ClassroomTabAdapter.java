@@ -31,12 +31,9 @@ public class ClassroomTabAdapter extends FragmentStateAdapter {
         Fragment fragment;
         switch (position) {
             case 1:
-                fragment = new ActivityTab();
-                break;
-            case 2:
                 fragment = new StudentsTab();
                 break;
-            case 3:
+            case 2:
                 fragment = new SettingsTab();
                 break;
             default:
@@ -51,6 +48,6 @@ public class ClassroomTabAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 3;
     }
 }

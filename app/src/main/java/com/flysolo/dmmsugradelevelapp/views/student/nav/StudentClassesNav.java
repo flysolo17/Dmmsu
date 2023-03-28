@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -51,9 +53,8 @@ public class StudentClassesNav extends Fragment implements StudentClassroomAdapt
             searchClassByCode(code);
         });
         binding.recyclerviewStudentClass.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        if (user != null) {
-            getAllClasses(user.getUid());
-        }
+        getAllClasses(user.getUid());
+
     }
     private void getAllClasses(String studentID) {
         classroomService.getAllMyClass(studentID, new UiState<List<Classroom>>() {
@@ -126,6 +127,31 @@ public class StudentClassesNav extends Fragment implements StudentClassroomAdapt
 
     @Override
     public void onJoin(Classroom classroom) {
+        if (classroom.getActiveStudents().contains(user.getUid())) {
+            NavDirections directions = StudentClassesNavDirections.actionNavigationClassesToStudentLessonFragment(classroom);
+            Navigation.findNavController(binding.getRoot()).navigate(directions);
+        } else {
+            classroomService.addAttendance(classroom.getId(), user.getUid(), new UiState<String>() {
+                @Override
+                public void Loading() {
+                    loadingDialog.showLoadingDialog("Joining class...");
+                }
+
+                @Override
+                public void Successful(String data) {
+                    loadingDialog.stopLoading();
+                    Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
+                    NavDirections directions = StudentClassesNavDirections.actionNavigationClassesToStudentLessonFragment(classroom);
+                    Navigation.findNavController(binding.getRoot()).navigate(directions);
+                }
+
+                @Override
+                public void Failed(String message) {
+                    loadingDialog.stopLoading();
+                    Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
     }
 }
