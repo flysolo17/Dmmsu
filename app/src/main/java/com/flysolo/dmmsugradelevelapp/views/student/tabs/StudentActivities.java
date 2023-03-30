@@ -19,6 +19,7 @@ import com.flysolo.dmmsugradelevelapp.databinding.FragmentStudentActivitiesBindi
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.model.Respond;
 import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
@@ -100,6 +101,12 @@ public class StudentActivities extends Fragment implements StudentActivityAdapte
     @Override
     public void onActivityClicked(Quiz quiz) {
         NavDirections  directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToStartActivity(classroom.getId(),lesson.getId(),quiz);
+        Navigation.findNavController(binding.getRoot()).navigate(directions);
+    }
+
+    @Override
+    public void viewScore(Quiz quiz, Respond respond) {
+        NavDirections  directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToViewRespond(quiz,respond, classroom.getId());
         Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 }

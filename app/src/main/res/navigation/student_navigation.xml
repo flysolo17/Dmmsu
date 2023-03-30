@@ -18,8 +18,14 @@
     <fragment
         android:id="@+id/navigation_scoreboard"
         android:name="com.flysolo.dmmsugradelevelapp.views.student.nav.StudentScoreboardNav"
-        android:label="Scoreboard   `````"
-        tools:layout="@layout/student_scoreboard_nav" />
+        android:label="Scoreboard"
+        tools:layout="@layout/student_scoreboard_nav" >
+
+
+        <action
+            android:id="@+id/action_navigation_scoreboard_to_viewScore"
+            app:destination="@id/viewScore" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_account"
         android:name="com.flysolo.dmmsugradelevelapp.views.auth.AccountsFragment"
@@ -65,7 +71,7 @@
     <fragment
         android:id="@+id/studentViewLessonFragment"
         android:name="com.flysolo.dmmsugradelevelapp.views.student.components.StudentViewLessonFragment"
-        android:label="fragment_student_view_lesson"
+        android:label="View Lessons"
         tools:layout="@layout/fragment_student_view_lesson" >
         <argument
             android:name="classroom"
@@ -76,6 +82,9 @@
         <action
             android:id="@+id/action_studentViewLessonFragment_to_startActivity"
             app:destination="@id/startActivity" />
+        <action
+            android:id="@+id/action_studentViewLessonFragment_to_viewRespond"
+            app:destination="@id/viewRespond" />
 
     </fragment>
     <fragment
@@ -93,5 +102,33 @@
             android:name="activity"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
     </fragment>
+    <fragment
+        android:id="@+id/viewRespond"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.components.ViewRespond"
+        android:label="View"
+        tools:layout="@layout/fragment_view_respond" >
+        <argument
+            android:name="quiz"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+        <argument
+            android:name="respond"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Respond" />
+        <argument
+            android:name="classroomID"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewScore"
+        android:name="com.flysolo.dmmsugradelevelapp.views.shared.ViewScore"
+        android:label="fragment_view_score"
+        tools:layout="@layout/fragment_view_score" >
+        <argument
+            android:name="respond"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Respond" />
+        <argument
+            android:name="quiz"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+    </fragment>
+
 
 </navigation>

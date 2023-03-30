@@ -10,16 +10,22 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentViewActivityBinding;
+import com.flysolo.dmmsugradelevelapp.model.Classroom;
+import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
+import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.LessonTabAdapter;
 import com.flysolo.dmmsugradelevelapp.views.adapters.QuestionTabAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.List;
 
 
 public class ViewActivityFragment extends Fragment {
@@ -27,9 +33,11 @@ public class ViewActivityFragment extends Fragment {
     private static final String ARG_ACTVITY_ID = "activityID";
     private String classroomID;
     private String activityID;
+    private ClassroomServiceImpl classroomService;
     private FragmentViewActivityBinding binding;
     private LoadingDialog loadingDialog;
     private LessonServiceImpl lessonService;
+    private Classroom classroom;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +45,7 @@ public class ViewActivityFragment extends Fragment {
             classroomID = getArguments().getString(ARG_CLASSROOM_ID);
             activityID = getArguments().getString(ARG_ACTVITY_ID);
             lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
+            classroomService = new ClassroomServiceImpl(FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
         }
     }
 
@@ -52,6 +61,10 @@ public class ViewActivityFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setUpViewPager();
+    }
+
+    private void setUpViewPager() {
         QuestionTabAdapter adapter = new QuestionTabAdapter(getChildFragmentManager(),getLifecycle(), classroomID,activityID);
         binding.viewpager2.setAdapter(adapter);
         binding.tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -75,6 +88,6 @@ public class ViewActivityFragment extends Fragment {
                 binding.tablayout.getTabAt(position).select();
             }
         });
-
     }
+
 }

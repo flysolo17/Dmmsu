@@ -13,21 +13,27 @@ import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.ContentTab;
 import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.QuestionsTab;
 import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.RespondentsTab;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class QuestionTabAdapter extends FragmentStateAdapter {
     FragmentManager fragment;
     Lifecycle lifecycle;
     String activityID;
     String classroomID;
+
     public QuestionTabAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, String classroomID, String activityID) {
         super(fragmentManager, lifecycle);
         this.classroomID = classroomID;
         this.activityID = activityID;
+
     }
 
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+
         Fragment fragment;
         if (position == 1) {
             fragment = new RespondentsTab();
@@ -37,6 +43,7 @@ public class QuestionTabAdapter extends FragmentStateAdapter {
         Bundle bundle = new Bundle();
         bundle.putString("activityID",activityID);
         bundle.putString("classroomID",classroomID);
+
         fragment.setArguments(bundle);
         return fragment;
     }

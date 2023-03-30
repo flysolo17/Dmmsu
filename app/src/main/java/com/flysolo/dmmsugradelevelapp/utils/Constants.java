@@ -9,8 +9,15 @@ import android.provider.OpenableColumns;
 import android.webkit.MimeTypeMap;
 
 import com.flysolo.dmmsugradelevelapp.R;
+import com.flysolo.dmmsugradelevelapp.model.Answer;
+import com.flysolo.dmmsugradelevelapp.model.Days;
+import com.flysolo.dmmsugradelevelapp.model.Question;
+import com.flysolo.dmmsugradelevelapp.model.Respond;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 
 public interface Constants {
@@ -53,5 +60,28 @@ public interface Constants {
         String name = returnCursor.getString(nameIndex);
         returnCursor.close();
         return name;
+    }
+    static String formatDate(Long timestamp) {
+        Date date = new Date(timestamp);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yyyy hh:mm aa");
+        return dateFormat.format(date);
+    }
+    static int getMaxScore(List<Question> questions){
+        int count = 0;
+        for (Question question : questions) {
+            count += question.getPoints();
+        }
+        return count;
+    }
+    static int getMyScore(List<Question> questions, Respond respond) {
+        int score = 0;
+        for (Question question: questions) {
+            for (Answer answer: respond.getAnswers()) {
+                if (question.getId().equals(answer.getQuestionID()) && question.getAnswer().equals(answer.getAnswer())) {
+                    score+= question.getPoints();
+                }
+            }
+        }
+        return score;
     }
 }

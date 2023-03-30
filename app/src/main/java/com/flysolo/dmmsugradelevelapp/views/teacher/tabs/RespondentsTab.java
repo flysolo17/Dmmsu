@@ -2,58 +2,50 @@ package com.flysolo.dmmsugradelevelapp.views.teacher.tabs;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.R;
+import com.flysolo.dmmsugradelevelapp.databinding.FragmentRespondentsTabBinding;
+import com.flysolo.dmmsugradelevelapp.model.Question;
+import com.flysolo.dmmsugradelevelapp.model.Respond;
+import com.flysolo.dmmsugradelevelapp.services.leaderboard.LeaderBoardServiceImpl;
+import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
+import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
+import com.flysolo.dmmsugradelevelapp.utils.UiState;
+import com.flysolo.dmmsugradelevelapp.views.adapters.RespondentsAdapter;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RespondentsTab#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
+
 public class RespondentsTab extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String ARG_CLASSROOM_ID = "classroomID";
+    private static final String ARG_ACTIVITY_ID = "activityID";
 
-    public RespondentsTab() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RespondentsTab.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RespondentsTab newInstance(String param1, String param2) {
-        RespondentsTab fragment = new RespondentsTab();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    private String classroomID;
+    private String activityID;
+    private List<String> students;
+    private FragmentRespondentsTabBinding binding;
+    private LeaderBoardServiceImpl leaderBoardService;
+    private LoadingDialog loadingDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            classroomID = getArguments().getString(ARG_CLASSROOM_ID);
+            activityID = getArguments().getString(ARG_ACTIVITY_ID);
+
         }
     }
 
@@ -61,6 +53,57 @@ public class RespondentsTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_respondents_tab, container, false);
+        binding = FragmentRespondentsTabBinding.inflate(inflater,container,false);
+        loadingDialog = new LoadingDialog(binding.getRoot().getContext()) ;
+        binding.recyclerviewResponses.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        leaderBoardService = new LeaderBoardServiceImpl(FirebaseFirestore.getInstance());
+        getResponses(activityID);
+    }
+    private void getResponses(String activityID) {
+        leaderBoardService.getRespondents(classroomID, activityID, new UiState<List<Respond>>() {
+            @Override
+            public void Loading() {
+                loadingDialog.showLoadingDialog("Getting Respondents...");
+            }
+
+            @Override
+            public void Successful(List<Respond> data) {
+                loadingDialog.stopLoading();
+               getQuestions(data);
+            }
+
+            @Override
+            public void Failed(String message) {
+                loadingDialog.stopLoading();
+                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void getQuestions(List<Respond> respondList) {
+        leaderBoardService.getQuestions(classroomID, activityID, new UiState<List<Question>>() {
+            @Override
+            public void Loading() {
+                loadingDialog.showLoadingDialog("Getting Questions...");
+            }
+
+            @Override
+            public void Successful(List<Question> data) {
+                loadingDialog.stopLoading();
+                RespondentsAdapter adapter = new RespondentsAdapter(binding.getRoot().getContext(),respondList,data);
+                binding.recyclerviewResponses.setAdapter(adapter);
+            }
+
+            @Override
+            public void Failed(String message) {
+                loadingDialog.stopLoading();
+                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

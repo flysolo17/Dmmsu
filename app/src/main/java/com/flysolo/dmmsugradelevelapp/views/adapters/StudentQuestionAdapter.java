@@ -122,7 +122,7 @@ public class StudentQuestionAdapter extends RecyclerView.Adapter<StudentQuestion
             }
         }
         String getAnswer(int position) {
-           return rb[position].getText().toString();
+           return rb[position].getText().toString().substring(1);
         }
     }
     public List<Answer> getAnswer() {

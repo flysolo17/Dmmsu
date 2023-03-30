@@ -12,8 +12,6 @@ import java.util.List;
 
 public interface ClassroomService {
     void getAllClassrooms(String uid , UiState<List<Classroom>> result);
-
-
     void createClassroom(Classroom classroom,UiState<String> result);
     void createActivity(String classroomID,Quiz quiz,UiState<String> result);
     void deleteActivity(String classroomID,String activtyID, UiState<String> result);
@@ -31,6 +29,7 @@ public interface ClassroomService {
     void searchClass(String code,UiState<Classroom> result);
     void joinClass(String classID,String studentID,UiState<String> result);
     void addAttendance(String classID,String studentID,UiState<String> result);
+    void getClassroom(String classroomID,UiState<Classroom> result);
 
 
 }

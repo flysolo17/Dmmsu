@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginVertical="5dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_margin="5dp"
+    android:layout_height="wrap_content">
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -108,12 +109,7 @@
                     android:gravity="center"
                     android:text="@string/description"/>
             </LinearLayout>
-            <Button
-                android:id="@+id/buttonStartActivity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/start_activity"/>
+
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
 </LinearLayout>

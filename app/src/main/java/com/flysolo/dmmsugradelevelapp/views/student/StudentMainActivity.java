@@ -21,11 +21,6 @@ public class StudentMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityStudentMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-/*        binding.buttonLogout.setOnClickListener(view -> {
-            FirebaseAuth.getInstance().signOut();
-            finish();
-        });*/
-
         setSupportActionBar(binding.toolbar);
         binding.toolbar.setElevation(1f);
         NavHostFragment navHostFragment =(NavHostFragment)getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_container);

@@ -13,6 +13,7 @@ import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -341,6 +342,21 @@ public class ClassroomServiceImpl implements ClassroomService {
                         result.Successful("You successfully join the class");
                     } else {
                         result.Failed("Failed to join the class");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
+
+    @Override
+    public void getClassroom(String classroomID, UiState<Classroom> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classroomID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        result.Successful(documentSnapshot.toObject(Classroom.class));
+                    } else  {
+                        result.Failed("Failed getting classroom...");
                     }
                 }).addOnFailureListener(e -> result.Failed(e.getMessage()));
     }

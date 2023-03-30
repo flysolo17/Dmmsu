@@ -2,13 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="#f7f5f9"
     android:layout_height="match_parent"
     tools:context=".views.student.nav.StudentScoreboardNav">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
+        tools:listitem="@layout/row_responses"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        android:id="@+id/recyclerviewScoreboard"/>
 </FrameLayout>
