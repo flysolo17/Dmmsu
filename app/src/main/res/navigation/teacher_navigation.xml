@@ -135,10 +135,27 @@
         android:name="com.flysolo.dmmsugradelevelapp.views.teacher.nav.ViewActivityFragment"
         android:label="View Activity"
         tools:layout="@layout/fragment_view_activity" >
-        <argument android:name="activityID"
-            app:argType="string" />
+
         <argument
             android:name="classroomID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_viewActivityFragment_to_viewScore"
+            app:destination="@id/viewScore" />
+        <argument
+            android:name="activity"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewScore"
+        android:name="com.flysolo.dmmsugradelevelapp.views.shared.ViewScore"
+        android:label="View Score"
+        tools:layout="@layout/fragment_view_score" >
+        <argument
+            android:name="respond"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Respond" />
+        <argument
+            android:name="quiz"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
     </fragment>
 </navigation>

@@ -32,7 +32,7 @@ public class QuestionsTab extends Fragment implements TeacherQuestionAdapter.Que
     private static final String ARG_CLASSROOM_ID = "classroomID";
     private static final String ARG_ACTIVITY_ID = "activityID";
     private String classroomID;
-    private String activityID;
+    private Quiz quiz;
     private LessonServiceImpl lessonService;
     private LoadingDialog loadingDialog;
     private FragmentQuestionsTabBinding binding;
@@ -41,7 +41,7 @@ public class QuestionsTab extends Fragment implements TeacherQuestionAdapter.Que
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classroomID = getArguments().getString(ARG_CLASSROOM_ID);
-            activityID = getArguments().getString(ARG_ACTIVITY_ID);
+            quiz = getArguments().getParcelable(ARG_ACTIVITY_ID);
             lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
         }
     }
@@ -60,13 +60,13 @@ public class QuestionsTab extends Fragment implements TeacherQuestionAdapter.Que
         super.onViewCreated(view, savedInstanceState);
         binding.recyclerviewQuestions.setLayoutManager(new LinearLayoutManager(view.getContext()));
         binding.buttonCreateQuestion.setOnClickListener(view1 -> {
-            AddQuestionFragment questionFragment = AddQuestionFragment.newInstance(activityID,classroomID);
+            AddQuestionFragment questionFragment = AddQuestionFragment.newInstance(quiz.getId(),classroomID);
             if (!questionFragment.isAdded()) {
                 questionFragment.show(getChildFragmentManager(),"Add Question");
             }
         });
-        if (activityID != null) {
-            getActivity(activityID);
+        if (quiz.getId() != null) {
+            getActivity(quiz.getId());
         }
     }
     private void getActivity(String activityID) {

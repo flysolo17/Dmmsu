@@ -34,7 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.List;
 
 
-public class ViewLessonTab extends Fragment{
+public class    ViewLessonTab extends Fragment{
     private String classroomID;
     private Lesson lesson;
     private ViewLessonTabBinding binding;

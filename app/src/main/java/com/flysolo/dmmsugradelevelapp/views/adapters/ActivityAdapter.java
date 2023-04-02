@@ -23,7 +23,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
     List<Quiz> quizzes;
     ActivityClickListener activityClickListener;
     public interface ActivityClickListener{
-        void onActivityClicked(String activityID);
+        void onActivityClicked(Quiz quiz);
     }
 
     public ActivityAdapter(Context context, List<Quiz> quizzes,ActivityClickListener activityClickListener) {
@@ -48,7 +48,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
         holder.textDesc.setText(quiz.getDescription());
         DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
         holder.textCreatedAt.setText(df.format(date));
-        holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(quiz.getId()));
+        holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(quiz));
     }
 
     @Override

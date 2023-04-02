@@ -27,10 +27,15 @@ public class RespondentsAdapter extends RecyclerView.Adapter<RespondentsAdapter.
     Context context;
     List<Respond> responses;
     List<Question> questions;
-    public RespondentsAdapter(Context context, List<Respond> responds,List<Question> questions) {
+    RespondentsClickListener listener;
+    public interface RespondentsClickListener {
+        void onRespondentClicked(Respond respond);
+    }
+    public RespondentsAdapter(Context context, List<Respond> responds,List<Question> questions,RespondentsClickListener listener) {
         this.context = context;
         this.responses = responds;
         this.questions = questions;
+        this.listener = listener;
     }
 
     @NonNull
@@ -47,6 +52,12 @@ public class RespondentsAdapter extends RecyclerView.Adapter<RespondentsAdapter.
         holder.textAnswered.setText(Constants.formatDate(respond.getDateAnswered()));
         holder.textScore.setText(String.valueOf(Constants.getMyScore(questions,respond)));
         holder.displayStudentInfo(respond.getStudentID());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onRespondentClicked(respond);
+            }
+        });
     }
 
     @Override

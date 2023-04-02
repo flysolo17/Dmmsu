@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.ActivityTab;
 import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.ContentTab;
 import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.QuestionsTab;
@@ -19,14 +20,13 @@ import java.util.List;
 public class QuestionTabAdapter extends FragmentStateAdapter {
     FragmentManager fragment;
     Lifecycle lifecycle;
-    String activityID;
+    Quiz quiz;
     String classroomID;
 
-    public QuestionTabAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, String classroomID, String activityID) {
+    public QuestionTabAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, String classroomID, Quiz quiz) {
         super(fragmentManager, lifecycle);
         this.classroomID = classroomID;
-        this.activityID = activityID;
-
+        this.quiz =quiz;
     }
 
 
@@ -41,7 +41,7 @@ public class QuestionTabAdapter extends FragmentStateAdapter {
             fragment = new QuestionsTab();
         }
         Bundle bundle = new Bundle();
-        bundle.putString("activityID",activityID);
+        bundle.putParcelable("activityID",quiz);
         bundle.putString("classroomID",classroomID);
 
         fragment.setArguments(bundle);

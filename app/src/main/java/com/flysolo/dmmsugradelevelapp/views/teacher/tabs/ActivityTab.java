@@ -137,8 +137,8 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
     }
 
     @Override
-    public void onActivityClicked(String activityID) {
-        NavDirections directions = ViewLessonTabDirections.actionViewLessonTabToViewActivityFragment(activityID,classroomID);
+    public void onActivityClicked(Quiz quiz) {
+        NavDirections directions = ViewLessonTabDirections.actionViewLessonTabToViewActivityFragment(classroomID,quiz);
         Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 }

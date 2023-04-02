@@ -121,42 +121,6 @@
                         android:layout_marginHorizontal="10dp"
                         android:text="@string/juan_dela_cruz"/>
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_baseline_person_24"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:id="@+id/textLessons"
-                        android:layout_marginHorizontal="10dp"
-                        android:text="@string/lesson"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/ic_baseline_person_24"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins"
-                        android:id="@+id/textActivities"
-                        android:layout_marginHorizontal="10dp"
-                        android:text="@string/activities"/>
-                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

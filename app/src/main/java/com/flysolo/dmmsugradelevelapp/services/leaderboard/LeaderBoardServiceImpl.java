@@ -83,7 +83,7 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
     }
 
     @Override
-    public void getTeacherResponses(List<Classroom> classroomList, String uid, UiState<List<Respond>> result) {
+    public void getTeacherResponses(List<Classroom> classroomList, UiState<List<Respond>> result) {
         List<Respond> respondArrayList = new ArrayList<>();
         result.Loading();
         for (Classroom classroom: classroomList) {
@@ -174,6 +174,29 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
                         result.Successful(value.toObjects(Respond.class));
                     }
                 });
+    }
+
+    @Override
+    public void getAllActivities(List<Classroom> classroomList, UiState<List<Quiz>> result) {
+        List<Quiz> arrayList = new ArrayList<>();
+        result.Loading();
+        for (Classroom classroom: classroomList) {
+            firestore.collection(Constants.CLASSROOM_TABLE)
+                    .document(classroom.getId())
+                    .collection(Constants.ACTIVITIES_TABLE)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot snap: task.getResult()) {
+                                Quiz respond = snap.toObject(Quiz.class);
+                                arrayList.add(respond);
+                            }
+                            result.Successful(arrayList);
+                        } else {
+                            result.Failed("Failed getting activities");
+                        }
+                    }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+        }
     }
 
 }

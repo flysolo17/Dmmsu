@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -15,26 +17,28 @@ import android.widget.Toast;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentRespondentsTabBinding;
 import com.flysolo.dmmsugradelevelapp.model.Question;
+import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.model.Respond;
 import com.flysolo.dmmsugradelevelapp.services.leaderboard.LeaderBoardServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.RespondentsAdapter;
+import com.flysolo.dmmsugradelevelapp.views.teacher.nav.ViewActivityFragmentDirections;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.List;
 
 
-public class RespondentsTab extends Fragment {
+public class RespondentsTab extends Fragment implements RespondentsAdapter.RespondentsClickListener {
 
 
     private static final String ARG_CLASSROOM_ID = "classroomID";
     private static final String ARG_ACTIVITY_ID = "activityID";
 
     private String classroomID;
-    private String activityID;
+    private Quiz quiz;
     private List<String> students;
     private FragmentRespondentsTabBinding binding;
     private LeaderBoardServiceImpl leaderBoardService;
@@ -44,7 +48,7 @@ public class RespondentsTab extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classroomID = getArguments().getString(ARG_CLASSROOM_ID);
-            activityID = getArguments().getString(ARG_ACTIVITY_ID);
+            quiz = getArguments().getParcelable(ARG_ACTIVITY_ID);
 
         }
     }
@@ -63,7 +67,7 @@ public class RespondentsTab extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         leaderBoardService = new LeaderBoardServiceImpl(FirebaseFirestore.getInstance());
-        getResponses(activityID);
+        getResponses(quiz.getId());
     }
     private void getResponses(String activityID) {
         leaderBoardService.getRespondents(classroomID, activityID, new UiState<List<Respond>>() {
@@ -86,7 +90,7 @@ public class RespondentsTab extends Fragment {
         });
     }
     private void getQuestions(List<Respond> respondList) {
-        leaderBoardService.getQuestions(classroomID, activityID, new UiState<List<Question>>() {
+        leaderBoardService.getQuestions(classroomID, quiz.getId(), new UiState<List<Question>>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Getting Questions...");
@@ -95,7 +99,7 @@ public class RespondentsTab extends Fragment {
             @Override
             public void Successful(List<Question> data) {
                 loadingDialog.stopLoading();
-                RespondentsAdapter adapter = new RespondentsAdapter(binding.getRoot().getContext(),respondList,data);
+                RespondentsAdapter adapter = new RespondentsAdapter(binding.getRoot().getContext(),respondList,data,RespondentsTab.this);
                 binding.recyclerviewResponses.setAdapter(adapter);
             }
 
@@ -105,5 +109,11 @@ public class RespondentsTab extends Fragment {
                 Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onRespondentClicked(Respond respond) {
+        NavDirections directions = ViewActivityFragmentDirections.actionViewActivityFragmentToViewScore(respond,quiz);
+        Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 }

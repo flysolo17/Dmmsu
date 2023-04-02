@@ -12,9 +12,10 @@ import java.util.List;
 public interface LeaderBoardService {
     void submitAnswer(String classroomID,Respond respond, UiState<String> result);
     void getAllResponse(List<Classroom> classroomList, String uid, UiState<List<Respond>> result);
-    void getTeacherResponses(List<Classroom> classroomList, String uid, UiState<List<Respond>> result);
+    void getTeacherResponses(List<Classroom> classroomList, UiState<List<Respond>> result);
     void getActivity(String classroomID,String quizID, UiState<Quiz> result);
     void getQuestions(String classroomID, String quizID, UiState<List<Question>> result);
     void getStudentInfo(String studentID, UiState<Accounts> result);
     void getRespondents(String classroomID,String activityID,UiState<List<Respond>> result);
+    void getAllActivities(List<Classroom> classroomList,UiState<List<Quiz>> result);
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentViewActivityBinding;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
+import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
@@ -32,20 +33,18 @@ public class ViewActivityFragment extends Fragment {
     private static final String ARG_CLASSROOM_ID= "classroomID";
     private static final String ARG_ACTVITY_ID = "activityID";
     private String classroomID;
-    private String activityID;
-    private ClassroomServiceImpl classroomService;
+    private Quiz quiz;
+
     private FragmentViewActivityBinding binding;
-    private LoadingDialog loadingDialog;
-    private LessonServiceImpl lessonService;
-    private Classroom classroom;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            classroomID = getArguments().getString(ARG_CLASSROOM_ID);
-            activityID = getArguments().getString(ARG_ACTVITY_ID);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
-            classroomService = new ClassroomServiceImpl(FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
+            classroomID = ViewActivityFragmentArgs.fromBundle(getArguments()).getClassroomID();
+            quiz = ViewActivityFragmentArgs.fromBundle(getArguments()).getActivity();
+
         }
     }
 
@@ -54,7 +53,6 @@ public class ViewActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentViewActivityBinding.inflate(inflater,container,false);
-        loadingDialog = new LoadingDialog(binding.getRoot().getContext());
         return binding.getRoot();
     }
 
@@ -65,7 +63,7 @@ public class ViewActivityFragment extends Fragment {
     }
 
     private void setUpViewPager() {
-        QuestionTabAdapter adapter = new QuestionTabAdapter(getChildFragmentManager(),getLifecycle(), classroomID,activityID);
+        QuestionTabAdapter adapter = new QuestionTabAdapter(getChildFragmentManager(),getLifecycle(), classroomID,quiz);
         binding.viewpager2.setAdapter(adapter);
         binding.tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

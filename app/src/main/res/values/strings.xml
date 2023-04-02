@@ -92,4 +92,5 @@
     <string name="test_answer">test answer</string>
     <string name="start_activity">Start Activity</string>
     <string name="your_answer">Your answer</string>
+    <string name="_75">75%</string>
 </resources>
