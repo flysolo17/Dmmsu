@@ -22,8 +22,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
     ArrayList<Lesson> lessons;
     LessonClickListener lessonClickListener;
     public interface LessonClickListener {
-        void onCreateActivity(Lesson lesson);
-        void onDeleteLesson(Lesson lesson,int position);
         void onViewLesson(Lesson lesson);
     }
     public LessonAdapter(Context context, ArrayList<Lesson> lessons,LessonClickListener lessonClickListener) {
@@ -66,9 +64,6 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
             textDesc = itemView.findViewById(R.id.textDesc);
             cardLesson = itemView.findViewById(R.id.cardLesson);
             layoutActions = itemView.findViewById(R.id.layoutActions);
-
-
-
         }
     }
 }

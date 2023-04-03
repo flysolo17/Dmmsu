@@ -67,9 +67,7 @@ public class StudentScoreboardNav extends Fragment implements ResponsesAdapter.R
         if (user != null) {
             getAllMyClassroom(user.getUid());
         }
-
         binding.recyclerviewScoreboard.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
     }
     private void getAllMyClassroom(String uid){
         classroomService.getAllMyClass(uid, new UiState<List<Classroom>>() {

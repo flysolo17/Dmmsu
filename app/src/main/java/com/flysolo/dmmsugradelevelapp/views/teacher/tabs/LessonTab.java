@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +42,19 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
     private Classroom classroom;
     private FragmentLessonTabBinding binding;
     private ArrayList<Lesson> lessons;
+    private ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        public boolean onMove(RecyclerView recyclerView,
+                              RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            if (swipeDir == ItemTouchHelper.LEFT) {
+                deleteLesson(lessons.get(viewHolder.getAdapterPosition()),viewHolder.getAdapterPosition());
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +69,7 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
         // Inflate the layout for this fragment
         binding = FragmentLessonTabBinding.inflate(inflater,container,false);
         loadingDialog = new LoadingDialog(binding.getRoot().getContext());
+
         return binding.getRoot();
     }
 
@@ -63,6 +78,8 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
         super.onViewCreated(view, savedInstanceState);
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         binding.recyclerviewLessons.setLayoutManager(layoutManager);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerviewLessons);
         lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(), classroom.getId());
         getAllLesson();
         binding.recyclerviewLessons.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -110,15 +127,12 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
         });
 
     }
-
     @Override
-    public void onCreateActivity(Lesson lesson) {
-        NavDirections directions = TeacherClassroomFragmentDirections.actionTeacherClassroomFragmentToCreateActivityFragment(classroom.getId(),lesson.getId());
+    public void onViewLesson(Lesson lesson) {
+        NavDirections directions = TeacherClassroomFragmentDirections.actionTeacherClassroomFragmentToViewLessonTab(lesson, classroom.getId());
         Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
-
-    @Override
-    public void onDeleteLesson(Lesson lesson,int position) {
+    private void deleteLesson(Lesson lesson,int position) {
         lessonService.deleteLesson(lesson.getId(), new UiState<String>() {
             @Override
             public void Loading() {
@@ -139,9 +153,4 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
         });
     }
 
-    @Override
-    public void onViewLesson(Lesson lesson) {
-        NavDirections directions = TeacherClassroomFragmentDirections.actionTeacherClassroomFragmentToViewLessonTab(lesson, classroom.getId());
-        Navigation.findNavController(binding.getRoot()).navigate(directions);
-    }
 }

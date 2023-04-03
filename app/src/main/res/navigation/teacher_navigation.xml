@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_teacherClassroomFragment_to_viewLessonTab"
             app:destination="@id/viewLessonTab" />
+        <action
+            android:id="@+id/action_teacherClassroomFragment_to_editClassroom"
+            app:destination="@id/editClassroom" />
 
     </fragment>
     <fragment
@@ -157,5 +160,14 @@
         <argument
             android:name="quiz"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+    </fragment>
+    <fragment
+        android:id="@+id/editClassroom"
+        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.components.EditClassroom"
+        android:label="fragment_edit_classroom"
+        tools:layout="@layout/fragment_edit_classroom" >
+        <argument
+            android:name="classroom"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Classroom" />
     </fragment>
 </navigation>

@@ -13,6 +13,9 @@ import java.util.List;
 public interface ClassroomService {
     void getAllClassrooms(String uid , UiState<List<Classroom>> result);
     void createClassroom(Classroom classroom,UiState<String> result);
+    void deleteClassroom(String classroomID,UiState<String> result);
+    void editClassroom(Classroom classroom,UiState<String> result);
+    void getClassroomByID(String classroomID,UiState<Classroom> result);
     void createActivity(String classroomID,Quiz quiz,UiState<String> result);
     void deleteActivity(String classroomID,String activtyID, UiState<String> result);
     void updateActivity(String activityID,Quiz quiz,UiState<String> result);

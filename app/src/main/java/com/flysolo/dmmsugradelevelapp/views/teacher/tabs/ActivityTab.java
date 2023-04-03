@@ -7,7 +7,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentActivityTabBinding;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
+import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
@@ -39,6 +42,20 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
     private ActivityAdapter activityAdapter;
     private String lessonID,classroomID;
     private LoadingDialog loadingDialog;
+    private List<Quiz> activities;
+    private ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        public boolean onMove(RecyclerView recyclerView,
+                              RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            if (swipeDir == ItemTouchHelper.LEFT) {
+                deleteActivity(activities.get(viewHolder.getAdapterPosition()),viewHolder.getAdapterPosition());
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +78,15 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        activities = new ArrayList<>();
         binding.recyclerviewActivities.setLayoutManager(new LinearLayoutManager(view.getContext()));
         getAllActivities();
         binding.buttonCreateActivity.setOnClickListener(view1 -> {
            binding.layoutInputs.setVisibility(View.VISIBLE);
            binding.buttonCreateActivity.setVisibility(View.GONE);
         });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerviewActivities);
         binding.buttonCancel.setOnClickListener(view12 -> {
             binding.inputTitle.setText("");
             binding.inputDesc.setText("");
@@ -92,6 +112,7 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
         });
     }
     private void getAllActivities() {
+        activities.clear();
         lessonService.getAllActivity(lessonID,new UiState<List<Quiz>>() {
             @Override
             public void Loading() {
@@ -101,10 +122,11 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
             @Override
             public void Successful(List<Quiz> data) {
                 loadingDialog.stopLoading();
+                activities.addAll(data);
                 if (data.isEmpty()) {
                     Toast.makeText(binding.getRoot().getContext(), "no activities yet!", Toast.LENGTH_SHORT).show();
                 }
-                activityAdapter = new ActivityAdapter(binding.getRoot().getContext(),data,ActivityTab.this);
+                activityAdapter = new ActivityAdapter(binding.getRoot().getContext(),activities,ActivityTab.this);
                 binding.recyclerviewActivities.setAdapter(activityAdapter);
             }
 
@@ -141,4 +163,24 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
         NavDirections directions = ViewLessonTabDirections.actionViewLessonTabToViewActivityFragment(classroomID,quiz);
         Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
+    private void deleteActivity(Quiz quiz, int position) {
+        lessonService.deleteActivity(quiz.getId(), new UiState<String>() {
+            @Override
+            public void Loading() {
+                loadingDialog.showLoadingDialog("deleting " + quiz.getName() + "....");
+            }
+            @Override
+            public void Successful(String data) {
+                loadingDialog.stopLoading();
+                Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
+                activityAdapter.notifyItemRemoved(position);
+            }
+            @Override
+            public void Failed(String message) {
+                loadingDialog.stopLoading();
+                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

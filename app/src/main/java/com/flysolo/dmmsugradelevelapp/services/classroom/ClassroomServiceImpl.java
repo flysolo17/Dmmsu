@@ -81,6 +81,52 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
+    public void deleteClassroom(String classroomID, UiState<String> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classroomID)
+                .delete()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        result.Successful("Successfully deleted!");
+                    } else {
+                        result.Failed("Failed deleting classroom");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
+
+    @Override
+    public void editClassroom(Classroom classroom, UiState<String> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classroom.getId())
+                .set(classroom)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        result.Successful("Successfully updated!");
+                    } else {
+                        result.Failed("Failed updating classroom");
+                    }
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
+
+    @Override
+    public void getClassroomByID(String classroomID, UiState<Classroom> result) {
+        result.Loading();
+        firestore.collection(Constants.CLASSROOM_TABLE)
+                .document(classroomID)
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        result.Failed(error.getMessage());
+                    }
+                    if (value != null) {
+                        result.Successful(value.toObject(Classroom.class));
+                    }
+                });
+
+    }
+
+    @Override
     public void createActivity(String classroomID ,Quiz quiz, UiState<String> result) {
         result.Loading();
         quiz.setId(firestore.collection(Constants.CLASSROOM_TABLE).document(classroomID).collection(Constants.ACTIVITIES_TABLE).document().getId());

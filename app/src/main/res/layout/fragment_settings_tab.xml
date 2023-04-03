@@ -1,14 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".views.teacher.tabs.SettingsTab">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="settings" />
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/classroom_name"
+            android:textColor="@color/black"
+            android:id="@+id/textClassroomName"
+            android:textSize="24sp"
+            android:fontFamily="@font/poppins_black"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/textCreatedAt"
+                android:fontFamily="@font/poppins_medium"
+                android:text="created at "/>
+    </LinearLayout>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#f7f5f9"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="20dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Info"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/students"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_medium"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/textStudents"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_medium"/>
+            </LinearLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/active_students"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_medium"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/textActiveStudents"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_medium"/>
+            </LinearLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="OPEN"
+                    android:layout_weight="1"
+                    android:id="@+id/textStatus"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_medium"/>
+            </LinearLayout>
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:id="@+id/openDivider"
+                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:id="@+id/layoutCode"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/share_code"
+                    android:layout_weight="1"
+                    android:id="@+id/textCode"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_medium"/>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:id="@+id/buttonShare"
+                    android:background="@drawable/ic_baseline_share_24"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="#f7f5f9"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Schedule" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Days"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/textSched"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/schedule"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Time"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textTime"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/_10_03_2023"/>
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="#f7f5f9"
+        android:layout_marginBottom="20dp"
+        app:cardElevation="0dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Actions"/>
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="EDIT"
+                    android:textAlignment="textStart"
+                    android:fontFamily="@font/poppins_medium"
+                    android:id="@+id/buttonEdit"
+                    android:layout_weight="1"
+                    android:textColor="#4CAF50" />
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <Button
+                    android:id="@+id/buttonDelete"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:fontFamily="@font/poppins_medium"
+                    android:layout_height="wrap_content"
+                    android:text="DELETE"
+                    android:textAlignment="textStart"
+                    android:textColor="#F44336" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

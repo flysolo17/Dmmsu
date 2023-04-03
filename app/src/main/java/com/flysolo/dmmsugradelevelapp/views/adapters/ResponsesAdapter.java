@@ -47,7 +47,12 @@ public class ResponsesAdapter extends RecyclerView.Adapter<ResponsesAdapter.Resp
         Respond respond = responds.get(position);
         holder.displayActivityInfo(respond.getClassroomID(),respond.getActivityID(),respond);
         holder.cardActivity.setOnClickListener(view -> {
-            listener.onResponseClicked(responds.get(position),holder.quiz);
+            if (holder.quiz != null) {
+                listener.onResponseClicked(responds.get(position),holder.quiz);
+            } else {
+                Toast.makeText(context, "This activity is deleted!", Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
 
@@ -82,11 +87,13 @@ public class ResponsesAdapter extends RecyclerView.Adapter<ResponsesAdapter.Resp
                     .addOnSuccessListener(documentSnapshot -> {
                         if(documentSnapshot.exists()) {
                             quiz = documentSnapshot.toObject(Quiz.class);
-
                             textTitle.setText(quiz.getName() + "");
                             textDesc.setText(quiz.getDescription()+ "");
                             textCreatedAt.setText(Constants.formatDate(quiz.getCreatedAt()));
                             getQuestion(activityID,respond);
+                        } else {
+                            textTitle.setText("Deleted activity");
+                            textDesc.setText("Deleted activity");
                         }
                     });
         }
