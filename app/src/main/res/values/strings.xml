@@ -95,4 +95,9 @@
     <string name="_75">75%</string>
     <string name="update">update</string>
     <string name="active_students">Active Students</string>
+    <string name="dmmsu_grade_level_app">DMMSU Grade Level App</string>
+    <string name="word_hunt">WORD HUNT</string>
+    <string name="fill_in_the_blank">FILL IN THE BLANK</string>
+    <string name="add_timer_here">add timer here</string>
+    <string name="_1_min">1 min</string>
 </resources>

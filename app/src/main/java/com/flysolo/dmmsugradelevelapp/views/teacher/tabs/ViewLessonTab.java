@@ -34,12 +34,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import java.util.List;
 
 
-public class    ViewLessonTab extends Fragment{
+public class  ViewLessonTab extends Fragment{
     private String classroomID;
     private Lesson lesson;
     private ViewLessonTabBinding binding;
     private LessonServiceImpl lessonService;
     private LoadingDialog loadingDialog;
+    private LessonTabAdapter lessonTabAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +50,7 @@ public class    ViewLessonTab extends Fragment{
             ).getClassroomID();
             lesson = ViewLessonTabArgs.fromBundle(getArguments())
                     .getLesson();
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         }
     }
 
@@ -65,9 +66,8 @@ public class    ViewLessonTab extends Fragment{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        LessonTabAdapter adapter = new LessonTabAdapter(getChildFragmentManager(),getLifecycle(), classroomID,lesson.getId());
-        binding.viewpager2.setAdapter(adapter);
+        lessonTabAdapter = new LessonTabAdapter(getChildFragmentManager(),getLifecycle(), classroomID,lesson);
+        binding.viewpager2.setAdapter(lessonTabAdapter);
         binding.tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -90,8 +90,6 @@ public class    ViewLessonTab extends Fragment{
                 binding.tablayout.getTabAt(position).select();
             }
         });
-
-
     }
 
 

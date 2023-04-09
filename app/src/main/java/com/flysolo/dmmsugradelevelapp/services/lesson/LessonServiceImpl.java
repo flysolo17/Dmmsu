@@ -34,21 +34,19 @@ import java.util.List;
 public class LessonServiceImpl implements LessonService {
     FirebaseFirestore firestore;
     FirebaseStorage storage;
-    String classroomID;
 
-    public LessonServiceImpl(FirebaseFirestore firestore, FirebaseStorage storage, String classroomID) {
+
+    public LessonServiceImpl(FirebaseFirestore firestore, FirebaseStorage storage) {
         this.firestore = firestore;
         this.storage = storage;
-        this.classroomID = classroomID;
+
     }
 
     @Override
     public void createLesson(Lesson lesson, UiState<String> result) {
         result.Loading();
-        lesson.setId(firestore.collection(Constants.CLASSROOM_TABLE).document(classroomID).collection(Constants.LESSONS_TABLE).document().getId());
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.LESSONS_TABLE)
+        lesson.setId(firestore.collection(Constants.CLASSROOM_TABLE).document(lesson.getClassroomID()).collection(Constants.LESSONS_TABLE).document().getId());
+        firestore.collection(Constants.LESSONS_TABLE)
                 .document(lesson.getId())
                 .set(lesson)
                 .addOnCompleteListener(task -> {
@@ -64,9 +62,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void deleteLesson(String lessonID, UiState<String> result) {
         result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.LESSONS_TABLE)
+        firestore.collection(Constants.LESSONS_TABLE)
                 .document(lessonID)
                 .delete()
                 .addOnCompleteListener(task -> {
@@ -83,9 +79,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public void updateLesson(Lesson lesson, UiState<String> result) {
         result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.LESSONS_TABLE)
+        firestore.collection(Constants.LESSONS_TABLE)
                 .document(lesson.getId())
                 .update("title",lesson.getTitle(),"description",lesson.getDescription())
                 .addOnCompleteListener(task -> {
@@ -99,10 +93,24 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
+    public void getLesson(String lessonID, UiState<Lesson> result) {
+        result.Loading();
+        firestore.collection(Constants.LESSONS_TABLE)
+                .document(lessonID)
+                .addSnapshotListener((value, error) -> {
+                    if (value != null && value.exists()) {
+                        result.Successful(value.toObject(Lesson.class));
+                    }
+                    if (error != null){
+                        result.Failed(error.getMessage());
+                    }
+                });
+    }
+
+    @Override
     public void getAllLesson(UiState<List<Lesson>> result) {
         result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
+        firestore
                 .collection(Constants.LESSONS_TABLE)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
@@ -114,74 +122,12 @@ public class LessonServiceImpl implements LessonService {
                     }
                 });
     }
-
     @Override
-    public void createActivity(Quiz quiz, UiState<String> result) {
+    public void addContent(String lessonID,Content content, UiState<String> result) {
         result.Loading();
-        quiz.setId(firestore.collection(Constants.CLASSROOM_TABLE).document(classroomID).collection(Constants.ACTIVITIES_TABLE).document().getId());
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.ACTIVITIES_TABLE)
-                .document(quiz.getId())
-                .set(quiz)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        result.Successful("Successfully Created!");
-                    } else {
-                        result.Failed("Failed creating activity");
-                    }
-                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
-    }
-
-    @Override
-    public void getAllActivity(String lessonID,UiState<List<Quiz>> result) {
-        ArrayList<Quiz> quizzes = new ArrayList<>();
-        result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.ACTIVITIES_TABLE)
-                .whereEqualTo("lessonID",lessonID)
-                .orderBy("createdAt", Query.Direction.DESCENDING)
-                .addSnapshotListener((value, error) -> {
-                    if (error!= null) {
-                        result.Failed(error.getMessage());
-                    }
-                    if (value != null) {
-                        result.Successful(value.toObjects(Quiz.class));
-                    }
-                });
-    }
-
-    @Override
-    public void deleteActivity(String quizID, UiState<String> result) {
-        result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.ACTIVITIES_TABLE)
-                .document(quizID)
-                .delete()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        result.Successful("Successfully Deleted");
-                    } else  {
-                        result.Failed("Failed deleting activity");
-                    }
-                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
-
-    }
-
-    @Override
-    public void addContent(Content content, UiState<String> result) {
-        result.Loading();
-        content.setId( firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.CONTENTS_TABLE)
-                .document().getId());
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.CONTENTS_TABLE)
-                .document(content.getId())
-                .set(content)
+        firestore.collection(Constants.LESSONS_TABLE)
+                .document(lessonID)
+                .update("contents",FieldValue.arrayUnion(content))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         result.Successful("Successfully Added!");
@@ -192,12 +138,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void deleteContent(String contentID, UiState<String> result) {
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.CONTENTS_TABLE)
-                .document(contentID)
-                .delete()
+    public void deleteContent(String lessonID,Content content, UiState<String> result) {
+        result.Loading();
+        firestore
+                .collection(Constants.LESSONS_TABLE)
+                .document(lessonID)
+                .update("contents",FieldValue.arrayRemove(content))
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         result.Successful("Successfully Deleted!");
@@ -208,13 +154,11 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void updateContent(Content content, UiState<String> result) {
+    public void updateContent(String lessonID,List<Content> contents, UiState<String> result) {
         result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.CONTENTS_TABLE)
-                .document(content.getId())
-                .set(content)
+        firestore.collection(Constants.LESSONS_TABLE)
+                .document(lessonID)
+                .update("contents",contents)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         result.Successful("Successfully Updated!");
@@ -224,23 +168,6 @@ public class LessonServiceImpl implements LessonService {
                 }).addOnFailureListener(e -> result.Failed(e.getMessage()));
     }
 
-    @Override
-    public void getAllContent(String lessonID, UiState<List<Content>> result) {
-        result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.CONTENTS_TABLE)
-                .whereEqualTo("lessonID",lessonID)
-                .orderBy("createdAt", Query.Direction.ASCENDING)
-                .addSnapshotListener((value, error) -> {
-                    if (error!= null) {
-                        result.Failed(error.getMessage());
-                    }
-                    if (value != null) {
-                        result.Successful(value.toObjects(Content.class));
-                    }
-                });
-    }
 
     @Override
     public void uploadAttachment(String type,String filename,Uri uri, UiState<String> result) {
@@ -252,77 +179,6 @@ public class LessonServiceImpl implements LessonService {
                 result.Failed(e.getMessage());
             });
 
-    }
-
-    @Override
-    public void getQuestionsByID(String activityID, UiState<List<Question>> result) {
-        result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.QUESTIONS_TABLE)
-                .whereEqualTo("activityID",activityID)
-                .orderBy("createdAt", Query.Direction.ASCENDING)
-                .addSnapshotListener((value, error) -> {
-                    if (error!= null) {
-                        result.Failed(error.getMessage());
-                    }
-                    if (value != null) {
-                        result.Successful(value.toObjects(Question.class));
-                    }
-                });
-    }
-    @Override
-    public void addQuestion(Question question, UiState<String> result) {
-        result.Loading();
-        question.setId(firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.QUESTIONS_TABLE).document().getId());
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.QUESTIONS_TABLE)
-                .document(question.getId())
-                .set(question)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        result.Successful("Successfully added");
-                    } else  {
-                        result.Failed("Failed to add question");
-                    }
-                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
-    }
-
-    @Override
-    public void deleteQuestion(String questionID, UiState<String> result) {
-        result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.QUESTIONS_TABLE)
-                .document(questionID)
-                .delete()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        result.Successful("Successfully deleted");
-                    } else  {
-                        result.Failed("Failed to delete question");
-                    }
-                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
-    }
-
-    @Override
-    public void updateQuestion(String questionID, Question question, UiState<String> result) {
-        result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.QUESTIONS_TABLE)
-                .document(question.getId())
-                .set(question)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        result.Successful("Successfully updated");
-                    } else  {
-                        result.Failed("Failed to update question");
-                    }
-                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
     }
 
 

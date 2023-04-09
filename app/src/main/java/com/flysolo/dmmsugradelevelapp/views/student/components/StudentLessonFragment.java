@@ -20,6 +20,7 @@ import com.flysolo.dmmsugradelevelapp.databinding.FragmentStudentLessonBinding;
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
+import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.services.auth.AuthServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
@@ -46,7 +47,7 @@ public class StudentLessonFragment extends Fragment implements StudentLessonAdap
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classroom = getArguments().getParcelable(ARG_PARAM1);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroom.getId());
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
             authService = new AuthServiceImpl(FirebaseAuth.getInstance(),FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
         }
     }
@@ -106,9 +107,6 @@ public class StudentLessonFragment extends Fragment implements StudentLessonAdap
             @Override
             public void Successful(Accounts data) {
                 binding.textTeacherName.setText(data.getName());
-                if (!data.getProfile().isEmpty()){
-                    Glide.with(binding.getRoot().getContext()).load(data.getProfile()).into(binding.teacherProfile);
-                }
             }
 
             @Override
@@ -119,8 +117,8 @@ public class StudentLessonFragment extends Fragment implements StudentLessonAdap
         });
     }
     @Override
-    public void onViewLesson(Lesson lesson) {
-        NavDirections directions = StudentLessonFragmentDirections.actionStudentLessonFragmentToStudentViewLessonFragment(classroom,lesson);
+    public void onViewLesson(Lesson lesson,List<Quiz> quizzes) {
+        NavDirections directions = StudentLessonFragmentDirections.actionStudentLessonFragmentToStudentViewLessonFragment(lesson,quizzes.toArray(new Quiz[0]));
         Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 }

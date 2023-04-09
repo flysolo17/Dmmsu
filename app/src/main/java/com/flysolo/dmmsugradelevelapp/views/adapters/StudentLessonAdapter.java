@@ -12,11 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
+import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.utils.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +31,9 @@ public class StudentLessonAdapter extends RecyclerView.Adapter<StudentLessonAdap
     Context context;
     List<Lesson> lessons;
     StudentLessonClickListener lessonClickListener;
+
     public interface StudentLessonClickListener {
-        void onViewLesson(Lesson lesson);
+        void onViewLesson(Lesson lesson,List<Quiz> quizzes);
     }
     public StudentLessonAdapter(Context context, List<Lesson> lessons, StudentLessonClickListener lessonClickListener) {
         this.context = context;
@@ -44,10 +52,13 @@ public class StudentLessonAdapter extends RecyclerView.Adapter<StudentLessonAdap
     public void onBindViewHolder(@NonNull LessonViewHolder holder, int position) {
         Lesson lesson = lessons.get(position);
         holder.textTitle.setText(lesson.getTitle());
-        holder.textDesc.setText(lesson.getDescription());
         holder.cardLesson.setOnClickListener(view -> {
-            lessonClickListener.onViewLesson(lesson);
+            if (holder.quizArray != null) {
+                lessonClickListener.onViewLesson(lesson,holder.quizArray);
+            }
+
         });
+        holder.getActivities(lesson.getId());
     }
 
     @Override
@@ -56,15 +67,30 @@ public class StudentLessonAdapter extends RecyclerView.Adapter<StudentLessonAdap
     }
 
     public class LessonViewHolder extends RecyclerView.ViewHolder {
-        TextView textTitle,textDesc;
+        TextView textTitle,textActivities;
         MaterialCardView cardLesson;
+        FirebaseFirestore firestore;
+        List<Quiz> quizArray;
         public LessonViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textLessonTitle);
-            textDesc = itemView.findViewById(R.id.textLessonDesc);
             cardLesson = itemView.findViewById(R.id.cardLesson);
+            textActivities = itemView.findViewById(R.id.textActivities);
+            firestore = FirebaseFirestore.getInstance();
 
-
+        }
+        void getActivities(String lessonID) {
+            firestore.collection(Constants.ACTIVITIES_TABLE)
+                    .whereEqualTo("lessonID",lessonID)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            List<Quiz> quizzes = task.getResult().toObjects(Quiz.class);
+                            quizArray = quizzes;
+                            String count = quizzes.size() > 1 ? "Activities" : "Activity";
+                            textActivities.setText(quizzes.size() + " " + count);
+                        }
+                    });
         }
     }
 }

@@ -18,10 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.TeacherHomeNavBinding;
+import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.services.auth.AuthServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
@@ -46,6 +49,7 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
     private LoadingDialog loadingDialog;
     private ArrayList<Classroom> classrooms;
     private ClassroomAdapter classroomAdapter;
+    private AuthServiceImpl authService;
     // implement the TextWatcher callback listener
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
@@ -85,6 +89,7 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
         super.onViewCreated(view, savedInstanceState);
         firestore = FirebaseFirestore.getInstance();
         classrooms = new ArrayList<>();
+        authService = new AuthServiceImpl(FirebaseAuth.getInstance(),FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
         classroomService = new ClassroomServiceImpl(firestore, FirebaseStorage.getInstance());
         binding.recyclerviewClasses.setLayoutManager(new LinearLayoutManager(view.getContext()));
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -115,6 +120,7 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
                     binding.textNoClass.setVisibility(View.GONE);
                     //getAllActivities(data);
                 }
+                displayInfo(uid);
 
             }
 
@@ -193,31 +199,29 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
         intent.putExtra(Intent.EXTRA_TEXT,classrooms.get(position).getCode());
         startActivity(Intent.createChooser(intent,"Share to"));
     }
-//    private void getAllActivities(List<Classroom> classroomList) {
-//        classroomService.getAllActivities2(classroomList, new UiState<List<Quiz>>() {
-//            @Override
-//            public void Loading() {
-//                loadingDialog.showLoadingDialog("Getting all activities");
-//            }
-//            @Override
-//            public void Successful(List<Quiz> data) {
-//                loadingDialog.stopLoading();
-//
-//                if (data.isEmpty()) {
-//                    binding.textNoActivities.setVisibility(View.VISIBLE);
-//                } else {
-//                    binding.textNoActivities.setVisibility(View.GONE);
-//                    binding.recyclerviewQuiz.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-//                    ActivityAdapter adapter = new ActivityAdapter(binding.getRoot().getContext(), (ArrayList<Quiz>) data);
-//                    binding.recyclerviewQuiz.setAdapter(adapter);
-//                }
-//            }
-//
-//            @Override
-//            public void Failed(String message) {
-//                loadingDialog.stopLoading();
-//                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void displayInfo(String uid) {
+        authService.getAccount(uid, new UiState<Accounts>() {
+            @Override
+            public void Loading() {
+                binding.textFullname.setText("Loading....");
+                binding.textType.setText("Loading..");
+            }
+
+            @Override
+            public void Successful(Accounts data) {
+                if (!data.getProfile().isEmpty()) {
+                    Glide.with(binding.getRoot().getContext()).load(data.getProfile()).into(binding.imageProfile);
+                }
+                binding.textFullname.setText(data.getName());
+                binding.textType.setText(data.getType().toString());
+            }
+
+            @Override
+            public void Failed(String message) {
+                binding.textFullname.setText("No name");
+                binding.textType.setText("user not found!");
+            }
+        });
+    }
+
 }

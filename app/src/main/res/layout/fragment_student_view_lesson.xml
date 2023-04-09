@@ -1,27 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
+    android:background="@color/purple_700"
     tools:context=".views.student.components.StudentViewLessonFragment">
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tablayout"
+    <LinearLayout
         android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:gravity="center"
         android:layout_height="wrap_content">
-        <com.google.android.material.tabs.TabItem
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAllCaps="false"
+            android:gravity="center"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/data_structure_and_algorithm"
+            android:textColor="#FFCCD5"
+            android:textSize="18sp" />
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/content" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/activities" />
-
-    </com.google.android.material.tabs.TabLayout>
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewpager2"
+            android:layout_gravity="center"
+            android:text="@string/description"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:id="@+id/textDesc"/>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:background="@drawable/box"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerviewContent"
+            tools:listitem="@layout/row_student_classroom_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activities"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textActivityCount"
+                android:layout_marginStart="10dp"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="15dp"
+                android:background="@drawable/box2"
+                android:backgroundTint="@color/purple_700"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerviewActivities"/>
+    </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -147,7 +147,7 @@ public class TeacherScoreboardAdapter extends RecyclerView.Adapter<TeacherScoreb
         return classrooms;
     }
 
-    private double getCompleted(int completed,int activities) {
+    private int getCompleted(int completed,int activities) {
         return completed * 100 / activities;
     }
 }

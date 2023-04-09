@@ -44,12 +44,14 @@ public class TeacherMainActivity extends AppCompatActivity {
         }
         navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             if (R.id.navigation_home == navDestination.getId()) {
+                getSupportActionBar().hide();
                 showBottomNav();
             } else if (R.id.navigation_scoreboard == navDestination.getId()) {
                 showBottomNav();
             }else if (R.id.navigation_account == navDestination.getId()) {
                 showBottomNav();
             } else {
+                getSupportActionBar().show();
                 hideBottomNav();
             }
         });

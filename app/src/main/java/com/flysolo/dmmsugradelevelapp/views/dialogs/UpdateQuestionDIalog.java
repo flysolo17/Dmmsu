@@ -1,5 +1,6 @@
 package com.flysolo.dmmsugradelevelapp.views.dialogs;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,33 +24,36 @@ import com.bumptech.glide.Glide;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentUpdateQuestionDIalogBinding;
 import com.flysolo.dmmsugradelevelapp.model.Question;
+import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.services.activity.ActivityServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class UpdateQuestionDIalog extends DialogFragment {
 
-    private static final String ARG_CLASSROOM_ID = "classroomID";
-    private static final String ARG_QUESTION = "question";
-    private String classroomID;
-    private Question question;
-    private LessonServiceImpl lessonService;
+    private static final String ARG_POSITION= "position";
+    private static final String ARG_QUIZ = "quiz";
+    private int position;
+    private Quiz quiz;
+    private ActivityServiceImpl activityService;
     private LoadingDialog loadingDialog;
     private FragmentUpdateQuestionDIalogBinding binding;
     private ActivityResultLauncher<Intent> galleryLauncher;
     private Uri imageURI = null;
-    private ArrayList<String> choices = new ArrayList<>();
-    public static UpdateQuestionDIalog newInstance(String classroomID, Question question) {
+    public static UpdateQuestionDIalog newInstance(int position, Quiz quiz) {
         UpdateQuestionDIalog fragment = new UpdateQuestionDIalog();
         Bundle args = new Bundle();
-        args.putString(ARG_CLASSROOM_ID, classroomID);
-        args.putParcelable(ARG_QUESTION, question);
+        args.putInt(ARG_POSITION, position);
+        args.putParcelable(ARG_QUIZ ,quiz);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,9 +63,9 @@ public class UpdateQuestionDIalog extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL,android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         if (getArguments() != null) {
-            classroomID = getArguments().getString(ARG_CLASSROOM_ID);
-            question = getArguments().getParcelable(ARG_QUESTION);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
+            quiz = getArguments().getParcelable(ARG_QUIZ);
+            position = getArguments().getInt(ARG_POSITION);
+            activityService = new ActivityServiceImpl(FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
         }
     }
 
@@ -78,8 +82,8 @@ public class UpdateQuestionDIalog extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (question != null) {
-            display(question);
+        if (quiz.getQuestions().get(position) != null) {
+            display(quiz.getQuestions().get(position));
         }
         galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             Intent intent = result.getData();
@@ -97,29 +101,9 @@ public class UpdateQuestionDIalog extends DialogFragment {
             galleryLauncher.launch(intent);
         });
 
-        binding.buttonAddChoice.setOnClickListener(view1 -> {
-            if (binding.cardAddChoice.getVisibility() == View.VISIBLE){
-                binding.cardAddChoice.setVisibility(View.GONE);
-            } else {
-                binding.cardAddChoice.setVisibility(View.VISIBLE);
-            }
-        });
         binding.buttonBack.setOnClickListener(view14 -> dismiss());
-        binding.buttonSaveChoice.setOnClickListener(view12 -> {
-            String choice = binding.inputChoice.getText().toString();
-            if (choice.isEmpty()) {
-                binding.inputChoice.setError("This field is required");
-            } else {
-                if (choices.contains(choice)) {
-                    Toast.makeText(view.getContext(), choice + " already added!", Toast.LENGTH_SHORT).show();
-                } else {
-                    addChoice(choice);
-                }
-            }
-        });
         binding.buttonSaveQuestion.setOnClickListener(view13 -> {
             String textQusetion = binding.inputQuestion.getText().toString();
-            String description = binding.inputDesc.getText().toString();
             String answer = binding.inputAnswer.getText().toString();
             String points = binding.inputPoints.getText().toString();
             if (textQusetion.isEmpty()) {
@@ -130,39 +114,75 @@ public class UpdateQuestionDIalog extends DialogFragment {
                 binding.inputPoints.setError("this field is required");
             }
             else {
-                question.setQuestion(textQusetion);
-                question.setDescription(description);
-                question.setAnswer(answer);
-                question.setPoints(Integer.parseInt(points));
-                question.setChoices(choices);
+                quiz.getQuestions().get(position).setQuestion(textQusetion);
+                quiz.getQuestions().get(position).setAnswer(answer);
+                quiz.getQuestions().get(position).setPoints(Integer.parseInt(points));
                 if (imageURI != null) {
-                    uploadAttachment(imageURI,question);
+                    uploadAttachment(imageURI,quiz.getQuestions().get(position));
                 } else {
-                    updateQuestion(question);
+                    updateQuestion(quiz.getQuestions());
                 }
             }
         });
+        binding.buttonDelete.setOnClickListener(view12 -> new MaterialAlertDialogBuilder(view12.getContext())
+                .setMessage("Are you sure you want to delete this question?")
+                .setTitle("Delete Question")
+                .setPositiveButton("Delete", (dialogInterface, i) -> {
+                    quiz.getQuestions().remove(position);
+                    updateQuestion(quiz.getQuestions());
+                    dismiss();
+                }).setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss()).show());
     }
-    private void addChoice(String choice) {
-        View view = LayoutInflater.from(binding.getRoot().getContext()).inflate(R.layout.layout_choice,null,false);
-        TextView textChoice = view.findViewById(R.id.textChoice);
-        textChoice.setText(choice);
-        ImageButton buttonDeleteChoice = view.findViewById(R.id.buttonDeleteChoice);
-        buttonDeleteChoice.setOnClickListener(view1 ->{
-                    choices.remove(choice);
-                    binding.layoutChoices.removeView(view);
-                }
-        );
-        choices.add(choice);
-        binding.layoutChoices.addView(view);
-        binding.cardAddChoice.setVisibility(View.GONE);
-        binding.inputChoice.setText("");
+
+
+    private void uploadAttachment(Uri uri, Question question) {
+        activityService.uploadAttachment(uri.getLastPathSegment(),
+                Constants.getFilename(requireActivity().getContentResolver(),
+                        uri), uri, new UiState<String>() {
+                    @Override
+                    public void Loading() {
+                        loadingDialog.showLoadingDialog("Uploading attachment.....");
+                    }
+                    @Override
+                    public void Successful(String data) {
+                        loadingDialog.stopLoading();
+                        question.setImage(data);
+                        updateQuestion(quiz.getQuestions());
+                    }
+
+                    @Override
+                    public void Failed(String message) {
+                        loadingDialog.stopLoading();
+                        Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
-    private void updateQuestion(Question question) {
-        lessonService.updateQuestion(question.getId(), question, new UiState<String>() {
+private void deleteQuestion(List<Question> questions) {
+    activityService.updateQuestion(quiz.getId(), questions, new UiState<String>() {
+        @Override
+        public void Loading() {
+            loadingDialog.showLoadingDialog("Deleting question....");
+        }
+
+        @Override
+        public void Successful(String data) {
+            loadingDialog.stopLoading();
+            Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
+            dismiss();
+        }
+
+        @Override
+        public void Failed(String message) {
+            loadingDialog.stopLoading();
+            Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    });
+}
+    private void updateQuestion(List<Question>  questions) {
+        activityService.updateQuestion(quiz.getId(), questions, new UiState<String>() {
             @Override
             public void Loading() {
-                loadingDialog.showLoadingDialog("Updating Question....");
+                loadingDialog.showLoadingDialog("Updating question....");
             }
 
             @Override
@@ -179,38 +199,12 @@ public class UpdateQuestionDIalog extends DialogFragment {
             }
         });
     }
-    private void uploadAttachment(Uri uri, Question question) {
-        lessonService.uploadAttachment(uri.getLastPathSegment(),
-                Constants.getFilename(requireActivity().getContentResolver(),
-                        uri), uri, new UiState<String>() {
-                    @Override
-                    public void Loading() {
-                        loadingDialog.showLoadingDialog("Uploading attachment.....");
-                    }
-                    @Override
-                    public void Successful(String data) {
-                        loadingDialog.stopLoading();
-                        question.setImage(data);
-                        updateQuestion(question);
-                    }
-
-                    @Override
-                    public void Failed(String message) {
-                        loadingDialog.stopLoading();
-                        Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
     private void display(Question question) {
         binding.inputQuestion.setText(question.getQuestion());
-        binding.inputDesc.setText(question.getQuestion());
         binding.inputPoints.setText(String.valueOf(question.getPoints()));
         binding.inputAnswer.setText(question.getAnswer());
         if(!question.getImage().isEmpty()) {
             Glide.with(binding.getRoot().getContext()).load(question.getImage()).into(binding.imageAttachment);
-        }
-        for (String choice : question.getChoices()) {
-            addChoice(choice);
         }
     }
 }

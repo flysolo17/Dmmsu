@@ -41,8 +41,7 @@ public class CreateLessonFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String classroomID = CreateLessonFragmentArgs.fromBundle(getArguments()).getClassroomID();
-        lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
-
+        lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         binding.buttonSave.setOnClickListener(view1 -> {
             String title = binding.inputTitle.getText().toString();
             String desc = binding.inputDesc.getText().toString();
@@ -51,7 +50,7 @@ public class CreateLessonFragment extends Fragment {
             } else  if (desc.isEmpty()) {
                 binding.layoutDesc.setError("This field is required");
             } else {
-                Lesson lesson = new Lesson("",title,desc,System.currentTimeMillis());
+                Lesson lesson = new Lesson("",classroomID,title,desc,new ArrayList<>(),System.currentTimeMillis());
                 saveLesson(lesson);
             }
         });

@@ -14,9 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.StudentClassesNavBinding;
+import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
+import com.flysolo.dmmsugradelevelapp.services.auth.AuthServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
@@ -33,6 +36,7 @@ public class StudentClassesNav extends Fragment implements StudentClassroomAdapt
     private StudentClassesNavBinding binding;
     private LoadingDialog loadingDialog;
     private ClassroomServiceImpl classroomService;
+    private AuthServiceImpl authService;
     private FirebaseUser user;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +51,7 @@ public class StudentClassesNav extends Fragment implements StudentClassroomAdapt
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         user = FirebaseAuth.getInstance().getCurrentUser();
+        authService = new AuthServiceImpl(FirebaseAuth.getInstance(),FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
         classroomService = new ClassroomServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         binding.buttonSearch.setOnClickListener(view1 -> {
             String code = binding.inputSearch.getText().toString();
@@ -68,6 +73,7 @@ public class StudentClassesNav extends Fragment implements StudentClassroomAdapt
                 loadingDialog.stopLoading();
                 StudentClassroomAdapter adapter = new StudentClassroomAdapter(binding.getRoot().getContext(),data,studentID,StudentClassesNav.this);
                 binding.recyclerviewStudentClass.setAdapter(adapter);
+                displayInfo(studentID);
             }
 
             @Override
@@ -152,6 +158,30 @@ public class StudentClassesNav extends Fragment implements StudentClassroomAdapt
                 }
             });
         }
+    }
 
+    private void displayInfo(String uid) {
+        authService.getAccount(uid, new UiState<Accounts>() {
+            @Override
+            public void Loading() {
+                binding.textFullname.setText("Loading....");
+                binding.textType.setText("Loading..");
+            }
+
+            @Override
+            public void Successful(Accounts data) {
+                if (!data.getProfile().isEmpty()) {
+                    Glide.with(binding.getRoot().getContext()).load(data.getProfile()).into(binding.imageProfile);
+                }
+                binding.textFullname.setText(data.getName());
+                binding.textType.setText(data.getType().toString());
+            }
+
+            @Override
+            public void Failed(String message) {
+                binding.textFullname.setText("No name");
+                binding.textType.setText("user not found!");
+            }
+        });
     }
 }

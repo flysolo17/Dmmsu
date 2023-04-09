@@ -15,17 +15,10 @@ public interface LessonService {
     void createLesson(Lesson lesson, UiState<String> result);
     void deleteLesson(String lessonID ,UiState<String> result);
     void updateLesson(Lesson lesson,UiState<String> result);
+    void getLesson(String lessonID,UiState<Lesson> result);
     void getAllLesson(UiState<List<Lesson>> result);
-    void createActivity(Quiz quiz,UiState<String> result);
-    void getAllActivity(String lessonID,UiState<List<Quiz>> result);
-    void deleteActivity(String quizID,UiState<String> result);
-    void addContent(Content content,UiState<String> result);
-    void deleteContent(String contentID,UiState<String> result);
-    void updateContent(Content content,UiState<String> result);
-    void getAllContent(String lessonID,UiState<List<Content>> result);
+    void addContent(String lessonID,Content content,UiState<String> result);
+    void deleteContent(String lessonID,Content content,UiState<String> result);
+    void updateContent(String lessonID,List<Content> contents,UiState<String> result);
     void uploadAttachment(String type,String filename,Uri uri, UiState<String> result);
-    void getQuestionsByID(String activityID,UiState<List<Question>> result);
-    void addQuestion(Question question, UiState<String> result);
-    void deleteQuestion(String questionID,UiState<String> result);
-    void updateQuestion(String questionID,Question question,UiState<String> result);
 }

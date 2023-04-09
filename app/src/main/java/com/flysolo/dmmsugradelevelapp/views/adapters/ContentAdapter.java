@@ -22,8 +22,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentV
     List<Content> contents;
     ContentClickListener contentClickListener;
     public interface ContentClickListener{
-        void onDelete(String id);
-        void onEdit(Content content);
+        void onDelete(int position,Content content);
+        void onEdit(int position);
     }
     public ContentAdapter(Context context, List<Content> contents,ContentClickListener contentClickListener) {
         this.context = context;
@@ -48,8 +48,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ContentV
         } else {
             holder.imageContent.setVisibility(View.GONE);
         }
-        holder.buttonEdit.setOnClickListener(view -> contentClickListener.onEdit(content));
-        holder.buttonDelete.setOnClickListener(view -> contentClickListener.onDelete(content.getId()));
+        holder.buttonEdit.setOnClickListener(view -> contentClickListener.onEdit(position));
+        holder.buttonDelete.setOnClickListener(view -> contentClickListener.onDelete(position,content));
     }
 
     @Override

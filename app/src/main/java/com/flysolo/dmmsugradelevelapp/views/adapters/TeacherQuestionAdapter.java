@@ -22,8 +22,7 @@ public class TeacherQuestionAdapter extends RecyclerView.Adapter<TeacherQuestion
     List<Question> questions;
     QuestionClickListener questionClickListener;
     public interface QuestionClickListener{
-        void onDelete(String questionID);
-        void onEdit(Question question);
+        void onEdit(int position);
     }
     public TeacherQuestionAdapter(Context context, List<Question> questions,QuestionClickListener questionClickListener) {
         this.context = context;
@@ -47,15 +46,15 @@ public class TeacherQuestionAdapter extends RecyclerView.Adapter<TeacherQuestion
         } else {
             holder.imageAttachment.setVisibility(View.GONE);
         }
-        if (!question.getDescription().isEmpty()) {
-            holder.textDesc.setText(question.getDescription());
-        } else {
-            holder.textDesc.setVisibility(View.GONE);
-        }
-        holder.textAnswer.setText(question.getAnswer());
+        holder.textPoints.setText("+" + question.getPoints());
+        holder.textPosition.setText(position + 1 + "");
         holder.textTitle.setText(question.getQuestion());
-        holder.buttonDelete.setOnClickListener(view -> questionClickListener.onDelete(question.getId()));
-        holder.buttonEdit.setOnClickListener(view -> questionClickListener.onEdit(question));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                questionClickListener.onEdit(position);
+            }
+        });
     }
 
     @Override
@@ -64,18 +63,15 @@ public class TeacherQuestionAdapter extends RecyclerView.Adapter<TeacherQuestion
     }
 
     public class TeacherQuestionViewHolder extends RecyclerView.ViewHolder {
-        TextView textTitle,textDesc,textAnswer;
+        TextView textTitle,textPoints,textPosition;
         ImageView imageAttachment;
-        Button buttonDelete,buttonEdit;
-
         public TeacherQuestionViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
-            textDesc=  itemView.findViewById(R.id.textDesc);
-            textAnswer = itemView.findViewById(R.id.textAnswer);
+            textPoints = itemView.findViewById(R.id.textPoints);
+            textPosition = itemView.findViewById(R.id.textPosition);
             imageAttachment = itemView.findViewById(R.id.imageAttachment);
-            buttonDelete = itemView.findViewById(R.id.buttonDelete);
-            buttonEdit = itemView.findViewById(R.id.buttonEdit);
+
         }
     }
 }

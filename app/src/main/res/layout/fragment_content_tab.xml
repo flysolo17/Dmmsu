@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,30 +7,16 @@
     android:orientation="vertical"
     android:background="#f7f5f9"
     tools:context=".views.teacher.tabs.ContentTab">
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="1dp"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_height="wrap_content">
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="add content"
-                android:textColor="@color/black"
-                android:drawableLeft="@drawable/ic_baseline_add_24"
-                android:id="@+id/buttonCreateContent"
-                style="@style/Widget.MaterialComponents.Button.TextButton"/>
-            </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerviewContent"/>
-
-</LinearLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:id="@+id/buttonCreateContent"
+        android:backgroundTint="@color/purple_700"
+        android:src="@drawable/ic_add"/>
+</FrameLayout>

@@ -4,63 +4,128 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:background="@color/purple_700"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.dialogs.UpdateContentDialog">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <ImageButton
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/buttonBack"
+            android:background="@drawable/ic_back"
+            android:layout_gravity="center_vertical"
+            android:backgroundTint="@color/white"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:text="Update Content"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_margin="10dp"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title"
-            android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/black"
-            />
-        <EditText
+        android:background="@drawable/box"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/inputTitle"
-            android:inputType="text"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:fontFamily="@font/poppins_medium"
-            android:textColor="@color/black"
-            />
-        <EditText
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+
+                    android:padding="10dp">
+
+                    <ImageButton
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:id="@+id/imageContent"
+                        android:background="@drawable/ic_baseline_image_24"
+                        android:backgroundTint="@color/purple_700" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:padding="10dp"
+                        android:layout_margin="10dp"
+                        android:tint="@color/purple_700"
+                        android:id="@+id/buttonAddImage"
+                        android:backgroundTint="#EFEEFC"
+                        android:src="@drawable/ic_baseline_attach_file_24"/>
+                </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/black"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inputTitle"
+                android:backgroundTint="#EFEEFC"
+                android:textSize="12sp"
+                android:padding="15dp"
+                android:hint="Content Title"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/black"
+                android:background="@drawable/search_bg_2"
+                android:inputType="text"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/black"
+                />
+
+            <EditText
+                android:id="@+id/inputDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_bg_2"
+                android:backgroundTint="#EFEEFC"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="Description"
+                android:inputType="textMultiLine"
+                android:padding="15dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutFile"/>
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/inputDesc"
-            android:inputType="textMultiLine"
-            android:minLines="4"/>
-        <ImageButton
-            android:layout_width="60dp"
             android:layout_height="60dp"
-            android:id="@+id/buttonAttachFile"
+            android:id="@+id/buttonUpdateContent"
             android:layout_margin="10dp"
-            android:backgroundTint="#E8E5FF"
-            android:src="@drawable/ic_baseline_attach_file_24"
-            app:tint="#6350FF" />
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageContent"/>
+            app:cornerRadius="10dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="Update"
+            android:layout_gravity="bottom"/>
     </LinearLayout>
 
-
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:id="@+id/buttonUpdateContent"
-        android:layout_margin="10dp"
-        app:cornerRadius="10dp"
-        android:fontFamily="@font/poppins_medium"
-        android:text="Save"
-        android:layout_gravity="bottom"/>
 
 
 </LinearLayout>

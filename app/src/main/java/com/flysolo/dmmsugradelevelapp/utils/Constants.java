@@ -12,12 +12,16 @@ import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.model.Answer;
 import com.flysolo.dmmsugradelevelapp.model.Days;
 import com.flysolo.dmmsugradelevelapp.model.Question;
+import com.flysolo.dmmsugradelevelapp.model.QuizType;
 import com.flysolo.dmmsugradelevelapp.model.Respond;
+import com.google.android.gms.common.util.ArrayUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public interface Constants {
@@ -83,5 +87,42 @@ public interface Constants {
             }
         }
         return score;
+    }
+    static String shuffle(String text) {
+        List<Character> characters = new ArrayList<Character>();
+        for(char c:text.toCharArray()){
+            characters.add(c);
+        }
+        StringBuilder output = new StringBuilder(text.length());
+        while(characters.size()!=0){
+            int randPicker = (int)(Math.random()*characters.size());
+            output.append(characters.remove(randPicker));
+        }
+        return output.toString();
+    }
+    static String deleteCharAt(String str ,int position) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(str);
+        sb.deleteCharAt(position);
+        return sb.toString();
+    }
+    static int getCorrectAnswer(List<Question> questions,Respond respond) {
+        int count = 0;
+        for (Answer answer: respond.getAnswers()) {
+            answer.getAnswer().toLowerCase(Locale.ROOT);
+            for (Question question: questions) {
+                question.getAnswer().toLowerCase(Locale.ROOT);
+                if (answer.getQuestionID().equals(question.getId()) && answer.getAnswer().equals(question.getAnswer())) {
+                    count += 1;
+                }
+            }
+        }
+        return count;
+    }
+    static int getIncorrectQuestions(List<Question> questions,Respond respond) {
+        return questions.size() - getCorrectAnswer(questions,respond);
+    }
+    static int getCompletion(int completed,int activities) {
+        return completed * 100 / activities;
     }
 }

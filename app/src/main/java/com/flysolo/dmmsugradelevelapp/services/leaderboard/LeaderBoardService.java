@@ -10,7 +10,7 @@ import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import java.util.List;
 
 public interface LeaderBoardService {
-    void submitAnswer(String classroomID,Respond respond, UiState<String> result);
+    void submitAnswer(Respond respond, UiState<String> result);
     void getAllResponse(List<Classroom> classroomList, String uid, UiState<List<Respond>> result);
     void getTeacherResponses(List<Classroom> classroomList, UiState<List<Respond>> result);
     void getActivity(String classroomID,String quizID, UiState<Quiz> result);

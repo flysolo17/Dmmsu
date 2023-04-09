@@ -71,20 +71,21 @@
     <fragment
         android:id="@+id/studentViewLessonFragment"
         android:name="com.flysolo.dmmsugradelevelapp.views.student.components.StudentViewLessonFragment"
-        android:label="View Lessons"
+        android:label=""
         tools:layout="@layout/fragment_student_view_lesson" >
-        <argument
-            android:name="classroom"
-            app:argType="com.flysolo.dmmsugradelevelapp.model.Classroom" />
-        <argument
-            android:name="lesson"
-            app:argType="com.flysolo.dmmsugradelevelapp.model.Lesson" />
-        <action
-            android:id="@+id/action_studentViewLessonFragment_to_startActivity"
-            app:destination="@id/startActivity" />
+
         <action
             android:id="@+id/action_studentViewLessonFragment_to_viewRespond"
             app:destination="@id/viewRespond" />
+        <argument
+            android:name="lesson"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Lesson" />
+        <argument
+            android:name="quiz"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz[]" />
+        <action
+            android:id="@+id/action_studentViewLessonFragment_to_studentViewActivity"
+            app:destination="@id/studentViewActivity" />
 
     </fragment>
     <fragment
@@ -93,14 +94,11 @@
         android:label=""
         tools:layout="@layout/fragment_start_activity" >
         <argument
-            android:name="classroomID"
-            app:argType="string" />
-        <argument
-            android:name="lessonID"
-            app:argType="string" />
-        <argument
             android:name="activity"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+        <action
+            android:id="@+id/action_startActivity_to_finishActivity"
+            app:destination="@id/finishActivity" />
     </fragment>
     <fragment
         android:id="@+id/viewRespond"
@@ -128,6 +126,30 @@
         <argument
             android:name="quiz"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentViewActivity"
+        android:name="com.flysolo.dmmsugradelevelapp.views.dialogs.StudentViewActivity"
+        android:label=""
+        tools:layout="@layout/fragment_student_view_activity" >
+        <action
+            android:id="@+id/action_studentViewActivity_to_startActivity"
+            app:destination="@id/startActivity" />
+        <argument
+            android:name="activity"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+    </fragment>
+    <fragment
+        android:id="@+id/finishActivity"
+        android:name="com.flysolo.dmmsugradelevelapp.views.dialogs.FinishActivity"
+        android:label=""
+        tools:layout="@layout/fragment_finish_activity" >
+        <argument
+            android:name="quiz"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+        <argument
+            android:name="respond"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Respond" />
     </fragment>
 
 

@@ -1,36 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f7f5f9"
+    android:background="@color/white"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.teacher.tabs.QuestionsTab">
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="1dp"
-        android:layout_height="wrap_content">
+        android:orientation="vertical"
+        android:layout_height="match_parent">
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_height="wrap_content">
-            <Button
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="add question"
-                android:textColor="@color/black"
-                android:drawableLeft="@drawable/ic_baseline_add_24"
-                android:id="@+id/buttonCreateQuestion"
-                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/questions"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/black"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:id="@+id/textQuestionCount"
+                    android:layout_marginStart="10dp"
+                    android:paddingVertical="5dp"
+                    android:paddingHorizontal="15dp"
+                    android:background="@drawable/box2"
+                    android:backgroundTint="@color/purple_700"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/row_teacher_questions"
-        android:id="@+id/recyclerviewQuestions"/>
-</LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/row_teacher_questions"
+            android:id="@+id/recyclerviewQuestions"/>
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/purple_700"
+        android:id="@+id/buttonAddQuestion"
+        android:src="@drawable/ic_add"/>
+</FrameLayout>

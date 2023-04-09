@@ -51,7 +51,7 @@ public class StudentActivities extends Fragment implements StudentActivityAdapte
         if (getArguments() != null) {
             classroom = getArguments().getParcelable(ARG_PARAM1);
             lesson = getArguments().getParcelable(LESSON_ID);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroom.getId());
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         }
     }
 
@@ -69,44 +69,14 @@ public class StudentActivities extends Fragment implements StudentActivityAdapte
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (lesson.getId() != null) {
-            getActivities(lesson.getId());
+
         }
-
     }
-    private void getActivities(String lessonID) {
-        lessonService.getAllActivity(lessonID, new UiState<List<Quiz>>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Getting all activities");
-            }
 
-            @Override
-            public void Successful(List<Quiz> data) {
-                loadingDialog.stopLoading();
-                StudentActivityAdapter activityAdapter = new StudentActivityAdapter(binding.getRoot().getContext(),data,classroom.getId(),StudentActivities.this);
-                binding.recyclerviewActivities.setAdapter(activityAdapter);
-                if (data.isEmpty()) {
-                    Toast.makeText(binding.getRoot().getContext(), "No Activities yet!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), "No Activities yet!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     @Override
     public void onActivityClicked(Quiz quiz) {
-        NavDirections  directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToStartActivity(classroom.getId(),lesson.getId(),quiz);
-        Navigation.findNavController(binding.getRoot()).navigate(directions);
+
     }
 
-    @Override
-    public void viewScore(Quiz quiz, Respond respond) {
-        NavDirections  directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToViewRespond(quiz,respond, classroom.getId());
-        Navigation.findNavController(binding.getRoot()).navigate(directions);
-    }
 }

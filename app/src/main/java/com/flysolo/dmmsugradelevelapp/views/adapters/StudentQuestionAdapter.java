@@ -48,28 +48,12 @@ public class StudentQuestionAdapter extends RecyclerView.Adapter<StudentQuestion
     public void onBindViewHolder(@NonNull StudentQuestionViewHolder holder,int position) {
         Question question = questions.get(position);
         holder.textQuestion.setText(question.getQuestion());
-        holder.textDescription.setText(question.getDescription());
         holder.textMaxScore.setText(String.valueOf(question.getPoints()));
-        if (question.getDescription().isEmpty()) {
-            holder.textDescription.setVisibility(View.GONE);
-        }
         if(!question.getImage().isEmpty()) {
             Glide.with(context).load(question.getImage()).into(holder.imageQuestion);
         } else {
             holder.imageQuestion.setVisibility(View.GONE);
         }
-        if (!question.getChoices().isEmpty()) {
-            holder.edtAnswer.setVisibility(View.GONE);
-
-        } else {
-            holder.edtAnswer.setVisibility(View.VISIBLE);
-            holder.radioGroup.setVisibility(View.GONE);
-        }
-
-        holder.radioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
-            answers.get(position).setAnswer(holder.getAnswer(i));
-        });
-        holder.attachRadioButtons(question);
         holder.edtAnswer.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -112,18 +96,8 @@ public class StudentQuestionAdapter extends RecyclerView.Adapter<StudentQuestion
             edtAnswer = itemView.findViewById(R.id.edtAnswer);
 
         }
-        void attachRadioButtons(Question question) {
-            rb = new RadioButton[question.getChoices().size()];
-            for (int i = 0; i < question.getChoices().size(); i++) {
-                rb[i]  = new RadioButton(context);
-                rb[i].setText(" " + question.getChoices().get(i));
-                rb[i].setId(i);
-                radioGroup.addView(rb[i]);
-            }
-        }
-        String getAnswer(int position) {
-           return rb[position].getText().toString().substring(1);
-        }
+
+
     }
     public List<Answer> getAnswer() {
         return answers;

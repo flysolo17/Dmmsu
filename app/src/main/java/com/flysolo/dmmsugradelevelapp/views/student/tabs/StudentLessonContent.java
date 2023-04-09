@@ -43,7 +43,7 @@ public class StudentLessonContent extends Fragment {
         if (getArguments() != null) {
             classroom = getArguments().getParcelable(CLASSROOM);
             lesson = getArguments().getParcelable(LESSON_ID);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroom.getId());
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         }
     }
     @Override
@@ -59,27 +59,7 @@ public class StudentLessonContent extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getClassroomContent(lesson.getId());
-    }
-    private void getClassroomContent(String lessonID) {
-        lessonService.getAllContent(lessonID, new UiState<List<Content>>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Getting all lessons...");
-            }
 
-            @Override
-            public void Successful(List<Content> data) {
-                loadingDialog.stopLoading();
-                StudentContentAdapter contentAdapter = new StudentContentAdapter(binding.getRoot().getContext(),data);
-                binding.recyclerviewContent.setAdapter(contentAdapter);
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
+
 }

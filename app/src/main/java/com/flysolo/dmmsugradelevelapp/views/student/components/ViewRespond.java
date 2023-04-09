@@ -47,7 +47,7 @@ public class ViewRespond extends Fragment {
             quiz = ViewRespondArgs.fromBundle(getArguments()).getQuiz();
             respond = ViewRespondArgs.fromBundle(getArguments()).getRespond();
             classroomID = ViewRespondArgs.fromBundle(getArguments()).getClassroomID();
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         }
     }
 
@@ -68,31 +68,9 @@ public class ViewRespond extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getQuestions(quiz.getId());
-    }
-    private void getQuestions(String activityID) {
-        lessonService.getQuestionsByID(activityID, new UiState<List<Question>>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Getting all questions....");
-            }
 
-            @Override
-            public void Successful(List<Question> data) {
-                loadingDialog.stopLoading();
-                StudentViewQuestionAdapter adapter = new StudentViewQuestionAdapter(binding.getRoot().getContext(),data,respond);
-                binding.recyclerviewQuestions.setAdapter(adapter);
-                binding.textMaxScore.setText(String.valueOf(getMaxScore(data)));
-                binding.textMyScore.setText(String.valueOf(checkIfAnswerCorrect(data,respond)));
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
+
     private int checkIfAnswerCorrect(List<Question> questions,Respond respond) {
         int score = 0;
         for (Question question: questions) {

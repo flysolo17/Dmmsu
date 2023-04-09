@@ -51,9 +51,11 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:fontFamily="@font/poppins_semibold"
+
         android:id="@+id/buttonSave"
         android:layout_margin="10dp"
         android:text="@string/save"
-        app:backgroundTint="#388E3C"
+        app:backgroundTint="@color/purple_700"
         app:cornerRadius="10dp" />
 </LinearLayout>

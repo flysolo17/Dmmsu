@@ -4,7 +4,7 @@ package com.flysolo.dmmsugradelevelapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
+import java.util.List;
 
 
 public class Quiz  implements Parcelable {
@@ -12,14 +12,20 @@ public class Quiz  implements Parcelable {
     String lessonID;
     String name;
     String description;
+    int timer;
+    QuizType quizType;
+    List<Question> questions;
     Long createdAt;
-    public Quiz() {}
+    public Quiz(){}
 
-    public Quiz(String id, String lessonID, String name, String description, Long createdAt) {
+    public Quiz(String id, String lessonID, String name, String description, int timer, QuizType quizType, List<Question> questions, Long createdAt) {
         this.id = id;
         this.lessonID = lessonID;
         this.name = name;
         this.description = description;
+        this.timer = timer;
+        this.quizType = quizType;
+        this.questions = questions;
         this.createdAt = createdAt;
     }
 
@@ -28,11 +34,36 @@ public class Quiz  implements Parcelable {
         lessonID = in.readString();
         name = in.readString();
         description = in.readString();
+        timer = in.readInt();
+        quizType = in.readParcelable(QuizType.class.getClassLoader());
+        questions = in.createTypedArrayList(Question.CREATOR);
         if (in.readByte() == 0) {
             createdAt = null;
         } else {
             createdAt = in.readLong();
         }
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(lessonID);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeInt(timer);
+        dest.writeParcelable(quizType, flags);
+        dest.writeTypedList(questions);
+        if (createdAt == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeLong(createdAt);
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Quiz> CREATOR = new Creator<Quiz>() {
@@ -78,6 +109,31 @@ public class Quiz  implements Parcelable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
+
+    public QuizType getQuizType() {
+        return quizType;
+    }
+
+    public void setQuizType(QuizType quizType) {
+        this.quizType = quizType;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
     public Long getCreatedAt() {
         return createdAt;
     }
@@ -86,22 +142,5 @@ public class Quiz  implements Parcelable {
         this.createdAt = createdAt;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeString(lessonID);
-        parcel.writeString(name);
-        parcel.writeString(description);
-        if (createdAt == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(createdAt);
-        }
-    }
 }

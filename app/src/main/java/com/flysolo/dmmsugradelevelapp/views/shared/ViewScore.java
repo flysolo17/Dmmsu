@@ -62,36 +62,11 @@ public class ViewScore extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         getMyInfo(respond.getStudentID());
         binding.textActivityTitle.setText(quiz.getName());
         binding.textActivityDesc.setText(quiz.getDescription());
         binding.textCreatedAt.setText(Constants.formatDate(quiz.getCreatedAt()));
         binding.textRespondDate.setText(Constants.formatDate(respond.getDateAnswered()));
-        getQuestions(respond.getClassroomID(),quiz.getId());
-    }
-    private void getQuestions(String classroomID,String activityID) {
-        leaderBoardService.getQuestions(classroomID, activityID, new UiState<List<Question>>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Getting questions...");
-            }
-
-            @Override
-            public void Successful(List<Question> data) {
-                loadingDialog.stopLoading();
-                binding.textMaxScore.setText(String.valueOf(Constants.getMaxScore(data)));
-                binding.textMyScore.setText(String.valueOf(Constants.getMyScore(data,respond)));
-                StudentViewQuestionAdapter adapter = new StudentViewQuestionAdapter(binding.getRoot().getContext(), data,respond);
-                binding.recyclerviewResponses.setAdapter(adapter);
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
     private void getMyInfo(String studentID) {
         leaderBoardService.getStudentInfo(studentID, new UiState<Accounts>() {

@@ -45,7 +45,7 @@ public class TeacherClassroomFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 binding.viewpager2.setCurrentItem(tab.getPosition());
                 int position = tab.getPosition();
-                binding.textPageName.setText(position <= 3 ? tabs[position] : tabs[0]);
+
             }
 
             @Override

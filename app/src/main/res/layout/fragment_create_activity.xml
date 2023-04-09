@@ -1,61 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/scrollable"
+    android:background="#EFEEFC"
+    android:fillViewport="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".views.teacher.components.CreateActivityFragment">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="10dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:id="@+id/layoutName"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:errorEnabled="true">
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:id="@+id/inoutName"
-                android:layout_height="wrap_content"
-                android:hint="Name"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:errorEnabled="true"
-            app:endIconMode="clear_text"
-            android:id="@+id/layoutDesc"
-            app:endIconTint="#151515"
-            app:counterMaxLength="300"
-            app:counterEnabled="true"
-            >
-            <com.google.android.material.textfield.TextInputEditText
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="300"
-                android:gravity="start"
-                android:id="@+id/inputDesc"
-                android:minHeight="100dp"
-                android:inputType="textMultiLine"
-                android:hint="@string/description"/>
-        </com.google.android.material.textfield.TextInputLayout>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:id="@+id/buttonAddQuestion"
-            android:text="@string/add_question"/>
-            <LinearLayout
+                android:text="Title"
+                android:layout_marginVertical="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semibold"/>
+            <EditText
+                android:backgroundTint="@color/white"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/layoutQuestions"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/inputTitle"
+                android:background="@drawable/search_bg_2"
+                android:padding="15dp"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="Title"
+                android:drawablePadding="5dp"
+                android:inputType="textMultiLine"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:layout_marginVertical="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semibold"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/search_bg_2"
+                android:padding="15dp"
+                android:id="@+id/inputDesc"
+                android:backgroundTint="@color/white"
+                android:minLines="4"
+                android:gravity="start"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="Description"
+                android:drawableTint="#6A5AE0"
+                android:drawablePadding="5dp"
+                android:inputType="textMultiLine"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Timer"
+                android:layout_marginVertical="10dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semibold"/>
+            <EditText
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/inputTimer"
+                android:background="@drawable/search_bg_2"
+                android:padding="15dp"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_semibold"
+                android:hint="@string/add_timer_here"
+                android:drawablePadding="5dp"
+                android:inputType="number"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semibold"
+                android:layout_marginTop="10dp"/>
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:checkedButton="@+id/radio_button_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:id="@+id/radio_button_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/word_hunt"/>
+                <RadioButton
+                    android:id="@+id/radio_button_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/fill_in_the_blank"/>
+            </RadioGroup>
+
     </LinearLayout>
 
-</androidx.core.widget.NestedScrollView>
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/create_activity"
+        android:id="@+id/buttonCreateActivity"
+        android:layout_margin="10dp"
+        app:cornerRadius="10dp"
+        android:fontFamily="@font/poppins_semibold"/>
+</LinearLayout>

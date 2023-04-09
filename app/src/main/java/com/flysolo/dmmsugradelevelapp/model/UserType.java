@@ -1,5 +1,5 @@
 package com.flysolo.dmmsugradelevelapp.model;
 
-public enum  UserType {
+public enum UserType {
     STUDENT,TEACHER
 }

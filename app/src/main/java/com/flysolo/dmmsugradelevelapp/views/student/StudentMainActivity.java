@@ -33,12 +33,19 @@ public class StudentMainActivity extends AppCompatActivity {
         }
         navController.addOnDestinationChangedListener((navController, navDestination, bundle) -> {
             if (R.id.navigation_classes == navDestination.getId()) {
+                getSupportActionBar().hide();
                 showBottomNav();
             } else if (R.id.navigation_scoreboard == navDestination.getId()) {
                 showBottomNav();
             }else if (R.id.navigation_account == navDestination.getId()) {
                 showBottomNav();
-            } else {
+            } else if(R.id.startActivity == navDestination.getId()) {
+                getSupportActionBar().hide();
+            } else if(R.id.finishActivity == navDestination.getId()) {
+                getSupportActionBar().hide();
+            }
+            else {
+                getSupportActionBar().show();
                 hideBottomNav();
             }
         });
@@ -47,15 +54,25 @@ public class StudentMainActivity extends AppCompatActivity {
         binding.bottomAppBar.performShow(true);
         binding.bottomAppBar.setHideOnScroll(true);
 
+
     }
 
     private void hideBottomNav() {
         binding.bottomAppBar.performHide(true);
         binding.bottomAppBar.setHideOnScroll(false);
     }
+    public void hideToolbar() {
+        binding.toolbar.setVisibility(View.GONE);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp() ||super.onNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 }

@@ -21,6 +21,7 @@ import com.flysolo.dmmsugradelevelapp.databinding.FragmentActivityTabBinding;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.services.activity.ActivityServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
@@ -38,21 +39,22 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
     private FragmentActivityTabBinding binding;
     private LessonServiceImpl lessonService;
     private static final String ARG_PARAM1 = "classroomID";
-    private static final String ARG_PARAM2 = "lessonID";
+    private static final String ARG_PARAM2 = "lesson";
     private ActivityAdapter activityAdapter;
-    private String lessonID,classroomID;
+    private String classroomID;
+    private Lesson lesson;
     private LoadingDialog loadingDialog;
     private List<Quiz> activities;
+    private ActivityServiceImpl activityService;
     private ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        public boolean onMove(RecyclerView recyclerView,
-                              RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             return true;
         }
 
         @Override
         public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
             if (swipeDir == ItemTouchHelper.LEFT) {
-                deleteActivity(activities.get(viewHolder.getAdapterPosition()),viewHolder.getAdapterPosition());
+                deleteActivity(viewHolder.getBindingAdapterPosition());
             }
         }
     };
@@ -61,8 +63,8 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classroomID = getArguments().getString(ARG_PARAM1);
-            lessonID = getArguments().getString(ARG_PARAM2);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
+            lesson = getArguments().getParcelable(ARG_PARAM2);
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         }
     }
 
@@ -78,103 +80,43 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activities = new ArrayList<>();
+        activityService = new ActivityServiceImpl(FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
+        activityAdapter = new ActivityAdapter(activityService.getAllActivity(lesson.getId()),view.getContext(),ActivityTab.this);
+
         binding.recyclerviewActivities.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        getAllActivities();
-        binding.buttonCreateActivity.setOnClickListener(view1 -> {
-           binding.layoutInputs.setVisibility(View.VISIBLE);
-           binding.buttonCreateActivity.setVisibility(View.GONE);
-        });
+        binding.recyclerviewActivities.setAdapter(activityAdapter);
+        activityAdapter.startListening();
+
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.recyclerviewActivities);
-        binding.buttonCancel.setOnClickListener(view12 -> {
-            binding.inputTitle.setText("");
-            binding.inputDesc.setText("");
-            binding.layoutInputs.setVisibility(View.GONE);
-            binding.buttonCreateActivity.setVisibility(View.VISIBLE);
+        binding.buttonCreateActivity.setOnClickListener(view1 -> {
+            NavDirections directions = ViewLessonTabDirections.actionViewLessonTabToCreateActivityFragment(lesson.getId());
+            Navigation.findNavController(view1).navigate(directions);
         });
-        binding.buttonSave.setOnClickListener(view13 -> {
-            String title = binding.inputTitle.getText().toString();
-            String desc = binding.inputDesc.getText().toString();
-            if (title.isEmpty()) {
-                binding.inputTitle.setError("This field is required");
-            } else {
-                binding.inputTitle.setText("");
-                binding.inputDesc.setText("");
-                if (lessonID != null) {
-                    Quiz quiz = new Quiz("",lessonID,title,desc,System.currentTimeMillis());
-                    createActivity(quiz);
-                }
 
-            }
-            binding.layoutInputs.setVisibility(View.GONE);
-            binding.buttonCreateActivity.setVisibility(View.VISIBLE);
-        });
     }
-    private void getAllActivities() {
-        activities.clear();
-        lessonService.getAllActivity(lessonID,new UiState<List<Quiz>>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("getting activities....");
-            }
 
-            @Override
-            public void Successful(List<Quiz> data) {
-                loadingDialog.stopLoading();
-                activities.addAll(data);
-                if (data.isEmpty()) {
-                    Toast.makeText(binding.getRoot().getContext(), "no activities yet!", Toast.LENGTH_SHORT).show();
-                }
-                activityAdapter = new ActivityAdapter(binding.getRoot().getContext(),activities,ActivityTab.this);
-                binding.recyclerviewActivities.setAdapter(activityAdapter);
-            }
 
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    private void createActivity(Quiz quiz) {
-        lessonService.createActivity(quiz, new UiState<String>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Creating new activity...");
-            }
-
-            @Override
-            public void Successful(String data) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     @Override
     public void onActivityClicked(Quiz quiz) {
         NavDirections directions = ViewLessonTabDirections.actionViewLessonTabToViewActivityFragment(classroomID,quiz);
         Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
-    private void deleteActivity(Quiz quiz, int position) {
-        lessonService.deleteActivity(quiz.getId(), new UiState<String>() {
+    private void deleteActivity(int position) {
+        String id = activityAdapter.getSnapshots().get(position).getId();
+        activityService.deleteActivity(id, new UiState<String>() {
             @Override
             public void Loading() {
-                loadingDialog.showLoadingDialog("deleting " + quiz.getName() + "....");
+                loadingDialog.showLoadingDialog("Deleting activity.....");
             }
+
             @Override
             public void Successful(String data) {
                 loadingDialog.stopLoading();
                 Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
-                activityAdapter.notifyItemRemoved(position);
             }
+
             @Override
             public void Failed(String message) {
                 loadingDialog.stopLoading();
@@ -182,5 +124,6 @@ public class ActivityTab extends Fragment implements ActivityAdapter.ActivityCli
             }
         });
     }
+
 
 }

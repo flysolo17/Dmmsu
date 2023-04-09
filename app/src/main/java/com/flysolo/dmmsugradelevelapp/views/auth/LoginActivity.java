@@ -21,6 +21,7 @@ import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.utils.Validation;
 import com.flysolo.dmmsugradelevelapp.views.dialogs.ChooseClassDialog;
+import com.flysolo.dmmsugradelevelapp.views.dialogs.ResetPasswordDialog;
 import com.flysolo.dmmsugradelevelapp.views.student.StudentMainActivity;
 import com.flysolo.dmmsugradelevelapp.views.teacher.TeacherMainActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -43,52 +44,22 @@ public class LoginActivity extends AppCompatActivity {
           String email = binding.inputEmail.getText().toString();
           String password = binding.inputPassword.getText().toString();
           if (!validation.isValidEmail(email) || email.isEmpty()) {
-              binding.layoutEmail.setError("Invalid email");
+              binding.inputEmail.setError("Invalid email");
           } else if (password.isEmpty()) {
-              binding.layoutPassword.setError("Invalid password");
+              binding.inputPassword.setError("Invalid password");
           } else {
               login(email,password);
           }
         });
         binding.buttonForgotPassword.setOnClickListener(view -> {
-            View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_forgot_password,binding.getRoot(),false);
-            EditText editText = dialog.findViewById(R.id.edtEmail);
-            new MaterialAlertDialogBuilder(this)
-                    .setView(dialog)
-                    .setTitle("Forgot Password")
-                    .setPositiveButton("Send", (dialogInterface, i) -> {
-                        String email =editText.getText().toString();
-                        if (!validation.isValidEmail(email)) {
-                            editText.setError("Invalid email");
-                        } else {
-                            forgotPassword(email);
-                        }
-                    })
-                    .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss())
-                    .show();
+            ResetPasswordDialog resetPasswordDialog = new ResetPasswordDialog();
+            if (!resetPasswordDialog.isAdded()) {
+                resetPasswordDialog.show(getSupportFragmentManager(),"Reset Password");
+            }
         });
         binding.buttonRegister.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this,RegisterActivity.class)));
     }
-    private void forgotPassword(String email) {
-        authService.resetPassword(email, new UiState<String>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Sending reset password link..");
-            }
 
-            @Override
-            public void Successful(String data) {
-                loadingDialog.stopLoading();
-                Toast.makeText(LoginActivity.this, data, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     private void login(String email ,String password) {
 
         authService.login(email, password, new UiState<FirebaseUser>() {

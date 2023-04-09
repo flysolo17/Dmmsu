@@ -36,18 +36,14 @@ import java.util.List;
 public class StudentActivityAdapter extends RecyclerView.Adapter<StudentActivityAdapter.StudentActivityViewHolder> {
     Context context;
     List<Quiz> quizzes;
-    String classroomID;
     StudentActivityClickListener activityClickListener;
     public interface StudentActivityClickListener{
         void onActivityClicked(Quiz quiz);
-        void viewScore(Quiz quiz,Respond respond);
-
     }
 
-    public StudentActivityAdapter(Context context, List<Quiz> quizzes,String classroomID, StudentActivityClickListener activityClickListener) {
+    public StudentActivityAdapter(Context context, List<Quiz> quizzes, StudentActivityClickListener activityClickListener) {
         this.context = context;
         this.quizzes = quizzes;
-        this.classroomID = classroomID;
         this.activityClickListener = activityClickListener;
     }
 
@@ -61,22 +57,15 @@ public class StudentActivityAdapter extends RecyclerView.Adapter<StudentActivity
     @Override
     public void onBindViewHolder(@NonNull StudentActivityViewHolder holder, int position) {
         Quiz quiz = quizzes.get(position);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         holder.textTitle.setText(quiz.getName());
+        holder.textCreatedAt.setText(Constants.formatDate(quiz.getCreatedAt()));
+        String data = quiz.getQuestions().size() > 1 ? "Questions" : "Question";
+        holder.textQuestions.setText(quiz.getQuestions().size() + " " + data);
+        holder.textPoints.setText("+" + Constants.getMaxScore(quiz.getQuestions()) + " Points");
+        holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(quiz));
         holder.textDesc.setText(quiz.getDescription());
-        Date date = new Date(quiz.getCreatedAt());
-        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG);
-        holder.textCreatedAt.setText(df.format(date));
-        holder.buttonStart.setOnClickListener(view -> activityClickListener.onActivityClicked(quiz));
-        if (user != null) {
-            holder.getQuestion(user.getUid(),quiz.getId());
-        }
-        holder.cardActivity.setOnClickListener(view -> {
-            if (holder.respond != null) {
-                activityClickListener.viewScore(quiz, holder.respond);
-            }
-        });
-
+        holder.textTime.setText(quiz.getTimer() + " min");
+        holder.textType.setText(quiz.getQuizType().toString().replace("_" ," "));
     }
 
     @Override
@@ -85,65 +74,20 @@ public class StudentActivityAdapter extends RecyclerView.Adapter<StudentActivity
     }
 
     public class StudentActivityViewHolder extends RecyclerView.ViewHolder {
-        TextView textTitle,textDesc,textCreatedAt,textMyScore,textMaxScore,textRespondDate;
+        TextView textTitle,textDesc,textCreatedAt,textQuestions,textPoints,textTime,textType;
         MaterialCardView cardActivity;
-        Button  buttonStart;
-        FirebaseFirestore firestore;
-        LinearLayout layoutAnsweredAt;
-        Respond respond;
         public StudentActivityViewHolder(@NonNull View itemView) {
             super(itemView);
-            textTitle = itemView.findViewById(R.id.textActivityTitle);
+            textTitle = itemView.findViewById(R.id.textTitle);
             textDesc = itemView.findViewById(R.id.textDesc);
+            textTime = itemView.findViewById(R.id.textTime);
             textCreatedAt = itemView.findViewById(R.id.textCreatedAt);
             cardActivity = itemView.findViewById(R.id.cardActivity);
-            buttonStart = itemView.findViewById(R.id.buttonStartActivity);
-            textMaxScore = itemView.findViewById(R.id.textMaxScore);
-            textMyScore = itemView.findViewById(R.id.textMyScore);
-            firestore = FirebaseFirestore.getInstance();
-            textRespondDate = itemView.findViewById(R.id.textRespondDate);
-            layoutAnsweredAt = itemView.findViewById(R.id.layoutAnsweredAt);
+            textQuestions = itemView.findViewById(R.id.textQuestion);
+            textPoints = itemView.findViewById(R.id.textPoints);
+            textType = itemView.findViewById(R.id.textType);
         }
-        void getQuestion(String studentID,String activityID) {
-            firestore.collection(Constants.CLASSROOM_TABLE)
-                    .document(classroomID)
-                    .collection(Constants.QUESTIONS_TABLE)
-                    .whereEqualTo("activityID",activityID)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            List<Question> questions = task.getResult().toObjects(Question.class);
-                            textMaxScore.setText(String.valueOf(getMaxScore(questions)));
-                            getMyScore(studentID, activityID,questions);
-                        }
-                    });
-        }
-        void getMyScore(String studentID, String activityID,List<Question> question) {
-            firestore.collection(Constants.CLASSROOM_TABLE)
-                    .document(classroomID)
-                    .collection(Constants.RESOPONSES_TABLE)
-                    .whereEqualTo("studentID",studentID)
-                    .whereEqualTo("activityID",activityID)
-                    .orderBy("dateAnswered", Query.Direction.DESCENDING)
-                    .limit(1)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                            Respond respond = task.getResult().toObjects(Respond.class).get(0);
-                            this.respond = respond;
-                            int score = 0;
-                            score += checkIfAnswerCorrect(question,respond);
-                            textMyScore.setText(String.valueOf(score));
-                            Date date = new Date(respond.getDateAnswered());
-                            SimpleDateFormat inFormat = new SimpleDateFormat("MMM dd yyyy hh:mm aa");
-                            textRespondDate.setText(inFormat.format(date));
-                            buttonStart.setVisibility(View.GONE);
-                        } else {
-                            layoutAnsweredAt.setVisibility(View.GONE);
-                            buttonStart.setVisibility(View.VISIBLE);
-                        }
-                    });
-        }
+
     }
     private int getMaxScore(List<Question> questions){
         int count = 0;

@@ -45,7 +45,6 @@ public class ResponsesAdapter extends RecyclerView.Adapter<ResponsesAdapter.Resp
     @Override
     public void onBindViewHolder(@NonNull ResponsesViewHolder holder, int position) {
         Respond respond = responds.get(position);
-        holder.displayActivityInfo(respond.getClassroomID(),respond.getActivityID(),respond);
         holder.cardActivity.setOnClickListener(view -> {
             if (holder.quiz != null) {
                 listener.onResponseClicked(responds.get(position),holder.quiz);
@@ -76,40 +75,6 @@ public class ResponsesAdapter extends RecyclerView.Adapter<ResponsesAdapter.Resp
             textMaxScore = itemView.findViewById(R.id.textMaxScore);
             textMyScore = itemView.findViewById(R.id.textMyScore);
             firestore = FirebaseFirestore.getInstance();
-
-        }
-        void displayActivityInfo(String classroomID,String activityID,Respond respond) {
-            firestore.collection(Constants.CLASSROOM_TABLE)
-                    .document(classroomID)
-                    .collection(Constants.ACTIVITIES_TABLE)
-                    .document(activityID)
-                    .get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        if(documentSnapshot.exists()) {
-                            quiz = documentSnapshot.toObject(Quiz.class);
-                            textTitle.setText(quiz.getName() + "");
-                            textDesc.setText(quiz.getDescription()+ "");
-                            textCreatedAt.setText(Constants.formatDate(quiz.getCreatedAt()));
-                            getQuestion(activityID,respond);
-                        } else {
-                            textTitle.setText("Deleted activity");
-                            textDesc.setText("Deleted activity");
-                        }
-                    });
-        }
-        void getQuestion(String activityID,Respond respond) {
-            firestore.collection(Constants.CLASSROOM_TABLE)
-                    .document(respond.getClassroomID())
-                    .collection(Constants.QUESTIONS_TABLE)
-                    .whereEqualTo("activityID",activityID)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            List<Question> questions = task.getResult().toObjects(Question.class);
-                            textMaxScore.setText(String.valueOf(getMaxScore(questions)));
-                            textMyScore.setText(String.valueOf(checkIfAnswerCorrect(questions,respond)));
-                        }
-                    });
         }
         int getMaxScore(List<Question> questions){
             int count = 0;

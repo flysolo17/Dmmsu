@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.DialogUpdateContentBinding;
 import com.flysolo.dmmsugradelevelapp.model.Content;
+import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
@@ -32,14 +33,18 @@ import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class UpdateContentDialog extends DialogFragment {
 
 
-    private static final String ARG_PARAM1 = "content";
-    private static final String ARG_PARAM2 = "classroomID";
-    private Content content;
-    private String classroomID;
+    private static final String ARG_LESSON = "lesson";
+
+    private static final String ARG_POSITION = "position";
+    private Lesson  lesson;
+    private int position;
     private LessonServiceImpl lessonService;
     private LoadingDialog loadingDialog;
     private ActivityResultLauncher<Intent> galleryLauncher;
@@ -49,11 +54,11 @@ public class UpdateContentDialog extends DialogFragment {
         // Required empty public constructor
     }
 
-    public static UpdateContentDialog newInstance(Content content, String param2) {
+    public static UpdateContentDialog newInstance( int position,Lesson lesson) {
         UpdateContentDialog fragment = new UpdateContentDialog();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_PARAM1, content);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(ARG_LESSON,lesson);
+        args.putInt(ARG_POSITION ,position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,10 +68,9 @@ public class UpdateContentDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NORMAL, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         if (getArguments() != null) {
-            content = getArguments().getParcelable(ARG_PARAM1);
-            classroomID = getArguments().getString(ARG_PARAM2);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
-
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
+            lesson = getArguments().getParcelable(ARG_LESSON);
+            position = getArguments().getInt(ARG_POSITION);
         }
     }
 
@@ -82,8 +86,8 @@ public class UpdateContentDialog extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (content != null) {
-            displayContent(content);
+        if (lesson.getContents().get(position) != null) {
+            displayContent(lesson.getContents().get(position));
         }
         galleryLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             Intent intent = result.getData();
@@ -102,18 +106,19 @@ public class UpdateContentDialog extends DialogFragment {
             if (name.isEmpty()) {
                 binding.inputTitle.setError("This field is required!");
             } else {
-                content.setTitle(name);
-                content.setDescription(desc);
+                lesson.getContents().get(position).setTitle(name);
+                lesson.getContents().get(position).setDescription(desc);
                 if (imageURI != null) {
-                    uploadAttachment(imageURI,content);
+                    uploadAttachment(imageURI,lesson.getContents().get(position));
                 } else {
-                    updateContent(content);
+                    updateContent(lesson.getId(), lesson.getContents());
                 }
             }
         });
-        binding.buttonAttachFile.setOnClickListener(view1 -> {
+        binding.buttonAddImage.setOnClickListener(view1 -> {
             Intent intent =new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             galleryLauncher.launch(intent);
+
         });
     }
     private void uploadAttachment(Uri uri,Content content) {
@@ -128,7 +133,7 @@ public class UpdateContentDialog extends DialogFragment {
                     public void Successful(String data) {
                         loadingDialog.stopLoading();
                         content.setAttachment(data);
-                        updateContent(content);
+                        updateContent(lesson.getId(),lesson.getContents());
                     }
 
                     @Override
@@ -138,8 +143,8 @@ public class UpdateContentDialog extends DialogFragment {
                     }
                 });
     }
-    private void updateContent(Content content) {
-        lessonService.updateContent(content, new UiState<String>() {
+    private void updateContent(String lessonID,List<Content> contents) {
+        lessonService.updateContent(lessonID,contents, new UiState<String>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Updating content...");

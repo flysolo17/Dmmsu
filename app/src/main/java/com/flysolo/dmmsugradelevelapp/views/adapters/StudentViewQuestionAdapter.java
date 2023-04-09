@@ -51,24 +51,13 @@ public class StudentViewQuestionAdapter extends RecyclerView.Adapter<StudentView
     public void onBindViewHolder(@NonNull StudentViewQuestionViewHolder holder,int position) {
         Question question = questions.get(position);
         holder.edtAnswer.setText(question.getAnswer());
-
         holder.textQuestion.setText(question.getQuestion());
-        holder.textDescription.setText(question.getDescription());
-        if (question.getDescription().isEmpty()) {
-            holder.textDescription.setVisibility(View.GONE);
-        }
         if(!question.getImage().isEmpty()) {
             Glide.with(context).load(question.getImage()).into(holder.imageQuestion);
         } else {
             holder.imageQuestion.setVisibility(View.GONE);
         }
-        if (!question.getChoices().isEmpty()) {
-            holder.edtAnswer.setVisibility(View.GONE);
-        } else {
-            holder.edtAnswer.setVisibility(View.VISIBLE);
-            holder.radioGroup.setVisibility(View.GONE);
-        }
-        holder.attachRadioButtons(question,respond);
+
     }
 
     @Override
@@ -91,20 +80,6 @@ public class StudentViewQuestionAdapter extends RecyclerView.Adapter<StudentView
             imageQuestion = itemView.findViewById(R.id.imageQuestion);
             edtAnswer = itemView.findViewById(R.id.edtAnswer);
             textYourAnswer = itemView.findViewById(R.id.textYourAnswer);
-        }
-        void attachRadioButtons(Question question,Respond respond) {
-            rb = new RadioButton[question.getChoices().size()];
-            for (int i = 0; i < question.getChoices().size(); i++) {
-                rb[i]  = new RadioButton(context);
-                rb[i].setText(" " + question.getChoices().get(i));
-                rb[i].setId(i);
-                radioGroup.addView(rb[i]);
-                if (question.getChoices().get(i).equals(question.getAnswer())){
-                    radioGroup.check(i);
-                    rb[i].setTextColor(Color.GREEN);
-                }
-            }
-            checkAnswer(respond,question);
         }
          void checkAnswer(Respond respond,Question question) {
             String ans = "";

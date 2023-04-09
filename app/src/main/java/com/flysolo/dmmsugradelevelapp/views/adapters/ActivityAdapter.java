@@ -9,8 +9,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.DateFormat;
@@ -18,18 +21,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ActivityViewHolder> {
+public class ActivityAdapter extends FirestoreRecyclerAdapter<Quiz, ActivityAdapter.ActivityViewHolder> {
     Context context;
-    List<Quiz> quizzes;
+    FirestoreRecyclerOptions<Quiz>  options;
     ActivityClickListener activityClickListener;
-    public interface ActivityClickListener{
-        void onActivityClicked(Quiz quiz);
+    public ActivityAdapter(@NonNull FirestoreRecyclerOptions<Quiz> options,Context context,ActivityClickListener activityClickListener) {
+        super(options);
+        this.context = context;
+        this.options = options;
+        this.activityClickListener = activityClickListener;
     }
 
-    public ActivityAdapter(Context context, List<Quiz> quizzes,ActivityClickListener activityClickListener) {
-        this.context = context;
-        this.quizzes = quizzes;
-        this.activityClickListener = activityClickListener;
+    public interface ActivityClickListener{
+        void onActivityClicked(Quiz quiz);
     }
 
     @NonNull
@@ -38,33 +42,35 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.Activi
         View view = LayoutInflater.from(context).inflate(R.layout.row_activities,parent,false);
         return new ActivityViewHolder(view);
     }
-
     @Override
-    public void onBindViewHolder(@NonNull ActivityViewHolder holder, int position) {
-
-        Quiz quiz = quizzes.get(position);
-        Date date = new Date(quiz.getCreatedAt());
-        holder.textTitle.setText(quiz.getName());
-        holder.textDesc.setText(quiz.getDescription());
-        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-        holder.textCreatedAt.setText(df.format(date));
-        holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(quiz));
+    protected void onBindViewHolder(@NonNull ActivityViewHolder holder, int position, @NonNull Quiz model) {
+        holder.textTitle.setText(model.getName());
+        holder.textCreatedAt.setText(Constants.formatDate(model.getCreatedAt()));
+        String data = model.getQuestions().size() > 1 ? "Questions" : "Question";
+        holder.textQuestions.setText(model.getQuestions().size() + " " + data);
+        holder.textPoints.setText("+" + Constants.getMaxScore(model.getQuestions()) + " Points");
+        holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(model));
+        holder.textDesc.setText(model.getDescription());
+        holder.textTime.setText(model.getTimer() + " min");
+        holder.textType.setText(model.getQuizType().toString().replace("_" ," "));
     }
 
-    @Override
-    public int getItemCount() {
-        return quizzes.size();
-    }
+
 
     public class ActivityViewHolder extends RecyclerView.ViewHolder {
-        TextView textTitle,textDesc,textCreatedAt;
+        TextView textTitle,textDesc,textCreatedAt,textQuestions,textPoints,textTime,textType;
         MaterialCardView cardActivity;
+
         public ActivityViewHolder(@NonNull View itemView) {
             super(itemView);
             textTitle = itemView.findViewById(R.id.textTitle);
             textDesc = itemView.findViewById(R.id.textDesc);
+            textTime = itemView.findViewById(R.id.textTime);
             textCreatedAt = itemView.findViewById(R.id.textCreatedAt);
             cardActivity = itemView.findViewById(R.id.cardActivity);
+            textQuestions = itemView.findViewById(R.id.textQuestion);
+            textPoints = itemView.findViewById(R.id.textPoints);
+            textType = itemView.findViewById(R.id.textType);
         }
     }
 }

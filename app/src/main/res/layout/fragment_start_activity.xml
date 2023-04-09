@@ -1,76 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/purple_700"
     android:orientation="vertical"
-    android:background="#f7f5f9"
     tools:context=".views.student.components.StartActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:paddingHorizontal="10dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="00:00"
+            android:id="@+id/textTime"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF9800"
+        android:background="@drawable/box3"
+        android:layout_gravity="end|center"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="5dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:src="@drawable/ic_baseline_sports_score_24"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="0"
+            android:id="@+id/textScore"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </LinearLayout>
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:background="@drawable/box2">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginVertical="10dp"
-            android:paddingVertical="10dp"
-            android:background="@color/white"
-            android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title"
-            android:id="@+id/textActivityTitle"
-            android:fontFamily="@font/poppins_semibold"
-            android:textSize="18sp"
-            android:textColor="@color/black"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/description"
-            android:id="@+id/textActivityDesc"
-            android:fontFamily="@font/poppins"
-            android:textSize="16sp" />
+            android:orientation="vertical"
+            android:padding="10dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/imageQuestion"/>
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/layoutAnswer"
+                android:columnCount="5"/>
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recyclerviewQuestions"/>
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="QUESTION"
+                android:textAllCaps="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:id="@+id/textQuestionPosition"
+                android:text="0"
+                android:textAllCaps="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="OF"
+                android:textAllCaps="true" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:id="@+id/textQuestionMax"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="10"
+                android:textAllCaps="true" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Sample Question?"
+            android:textSize="16sp"
+            android:id="@+id/textQuestion"
+            android:textColor="@color/black"
+            />
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            >
-            <Button
+            android:layout_height="match_parent"
+            android:padding="10dp">
+            <GridLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Back"
-                android:id="@+id/buttonBack"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                style="@style/Widget.MaterialComponents.Button.TextButton"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Submit"
-                android:layout_weight="1"
-                android:layout_gravity="end"
-                android:id="@+id/buttonSubmit"
-                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                android:layout_gravity="center"
+                android:id="@+id/layoutLetters"
+                android:columnCount="5"/>
         </FrameLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Goodluck!"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:fontFamily="@font/poppins_black"/>
+
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

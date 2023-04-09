@@ -4,17 +4,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Content implements Parcelable{
-   String id;
-   String lessonID;
+
+
    String title;
    String description;
    String attachment;
    Long createdAt;
    public Content() {}
 
-   public Content(String id, String lessonID, String title, String description, String attachment, Long createdAt) {
-      this.id = id;
-      this.lessonID = lessonID;
+   public Content(String title, String description, String attachment, Long createdAt) {
       this.title = title;
       this.description = description;
       this.attachment = attachment;
@@ -22,8 +20,6 @@ public class Content implements Parcelable{
    }
 
    protected Content(Parcel in) {
-      id = in.readString();
-      lessonID = in.readString();
       title = in.readString();
       description = in.readString();
       attachment = in.readString();
@@ -45,22 +41,6 @@ public class Content implements Parcelable{
          return new Content[size];
       }
    };
-
-   public String getId() {
-      return id;
-   }
-
-   public void setId(String id) {
-      this.id = id;
-   }
-
-   public String getLessonID() {
-      return lessonID;
-   }
-
-   public void setLessonID(String lessonID) {
-      this.lessonID = lessonID;
-   }
 
    public String getTitle() {
       return title;
@@ -101,8 +81,7 @@ public class Content implements Parcelable{
 
    @Override
    public void writeToParcel(Parcel parcel, int i) {
-      parcel.writeString(id);
-      parcel.writeString(lessonID);
+
       parcel.writeString(title);
       parcel.writeString(description);
       parcel.writeString(attachment);

@@ -4,56 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f7f5f9"
     tools:context=".views.teacher.nav.TeacherHomeNav">
-    <!--    android:background="#E5E5E5"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#6A5AE0"
         android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            android:padding="15dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textType"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/teacher"
+                    android:textColor="#FFCCD5"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/juan_dela_cruz"
+                    android:textColor="@color/white"
+                    android:id="@+id/textFullname"
+                    android:textSize="22dp"/>
+
+            </LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/imageProfile"
+                android:src="@drawable/profile_placeholder"
+                />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/box"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Your Classes"
+                android:layout_margin="10dp"
+                android:fontFamily="@font/poppins_semibold "/>
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_marginHorizontal="10dp"
+                android:backgroundTint="@color/black"
+                android:layout_height="40dp"
+                android:id="@+id/buttonCreateClass"
+                android:background="@drawable/ic_add"/>
+        </LinearLayout>
 
             <EditText
                 android:id="@+id/edtSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textColorHint="@color/black"
                 android:background="@drawable/search_bg_2"
-                android:fontFamily="@font/poppins"
-                android:textSize="12sp"
                 android:drawableLeft="@drawable/ic_baseline_search_24"
+                android:fontFamily="@font/poppins"
                 android:hint="@string/search_class_here"
-                android:padding="10dp" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonCreateClass"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:paddingHorizontal="20dp"
-                    android:text="Create"
-                    android:textAllCaps="false"
-                    app:cornerRadius="10dp" />
-            </LinearLayout>
-        </LinearLayout>
-
+                android:padding="10dp"
+                android:textColorHint="@color/black"
+                android:textSize="12sp" />
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <TextView
                 android:id="@+id/textNoClass"
@@ -70,5 +108,6 @@
                 android:orientation="horizontal"
                 tools:listitem="@layout/row_classroom" />
         </FrameLayout>
+        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

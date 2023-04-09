@@ -36,15 +36,10 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
     }
 
     @Override
-    public void submitAnswer(String classroomID,Respond respond, UiState<String> result) {
+    public void submitAnswer(Respond respond, UiState<String> result) {
         result.Loading();
-        respond.setId(firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.RESOPONSES_TABLE)
-                .document().getId());
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.RESOPONSES_TABLE)
+        respond.setId(firestore.collection(Constants.RESOPONSES_TABLE).document().getId());
+        firestore.collection(Constants.RESOPONSES_TABLE)
                 .document(respond.getId())
                 .set(respond)
                 .addOnCompleteListener(task -> {

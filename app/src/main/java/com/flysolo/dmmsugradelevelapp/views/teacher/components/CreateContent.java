@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -28,6 +29,7 @@ import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
+import com.flysolo.dmmsugradelevelapp.views.dialogs.ChooseClassDialog;
 import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.ViewLessonTabArgs;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -37,9 +39,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 
-public class CreateContent extends Fragment {
+public class CreateContent extends DialogFragment {
 
-
+    private static String ARG_CLASSROOM = "classroomID";
+    private static String ARG_LESSON_ID = "lessonID";
     private ActivityResultLauncher<Intent> attachmentPicker;
     private Uri attachmentURI = null;
     private FragmentCreateContentBinding binding;
@@ -47,23 +50,30 @@ public class CreateContent extends Fragment {
     private String classroomID;
     private LessonServiceImpl lessonService;
     private LoadingDialog loadingDialog;
+    public static CreateContent newInstance(String classroomID,String lessonID) {
+        CreateContent fragment = new CreateContent();
+        Bundle args = new Bundle();
+        args.putString(ARG_CLASSROOM, classroomID);
+        args.putString(ARG_LESSON_ID, lessonID);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(STYLE_NORMAL, android.R.style.Theme_Light_NoTitleBar_Fullscreen);
         if (getArguments() != null) {
-            classroomID = CreateContentArgs.fromBundle(
-                    getArguments()
-            ).getClassroomID();
-            lessonID = CreateContentArgs.fromBundle(getArguments())
-                    .getLessonID();
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(),classroomID);
+            classroomID = getArguments().getString(ARG_CLASSROOM);
+            lessonID = getArguments().getString(ARG_LESSON_ID);
+            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         binding = FragmentCreateContentBinding.inflate(inflater,container,false);
         loadingDialog = new LoadingDialog(binding.getRoot().getContext());
         return binding.getRoot();
@@ -72,6 +82,7 @@ public class CreateContent extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.buttonBack.setOnClickListener(view13 -> dismiss());
         attachmentPicker =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             Intent intent = result.getData();
             try {
@@ -93,11 +104,11 @@ public class CreateContent extends Fragment {
             if (name.isEmpty()) {
                 binding.inputTitle.setError("This field is required!");
             } else {
-                Content content = new Content("",lessonID,name,desc,"",System.currentTimeMillis());
+                Content content = new Content(name,desc,"",System.currentTimeMillis());
                 if (attachmentURI != null) {
-                    uploadAttachment(attachmentURI,content);
+                    uploadAttachment(lessonID,attachmentURI,content);
                 } else {
-                    saveContent(content);
+                    saveContent(lessonID,content);
                 }
             }
         });
@@ -115,8 +126,8 @@ public class CreateContent extends Fragment {
         binding.layoutFile.addView(view,0);
     }
 
-    private void saveContent(Content content) {
-        lessonService.addContent(content, new UiState<String>() {
+    private void saveContent(String lessonID,Content content) {
+        lessonService.addContent(lessonID,content, new UiState<String>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Saving content");
@@ -125,8 +136,8 @@ public class CreateContent extends Fragment {
             @Override
             public void Successful(String data) {
                 loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
-                Navigation.findNavController(binding.getRoot()).popBackStack();
+                dismiss();
+
             }
 
             @Override
@@ -136,7 +147,7 @@ public class CreateContent extends Fragment {
             }
         });
     }
-    private void uploadAttachment(Uri uri,Content content) {
+    private void uploadAttachment(String lessonID,Uri uri,Content content) {
         lessonService.uploadAttachment(attachmentURI.getLastPathSegment(),
                 Constants.getFilename(requireActivity().getContentResolver(),
                         attachmentURI), uri, new UiState<String>() {
@@ -148,7 +159,7 @@ public class CreateContent extends Fragment {
             public void Successful(String data) {
                 loadingDialog.stopLoading();
                 content.setAttachment(data);
-                saveContent(content);
+                saveContent(lessonID,content);
             }
 
             @Override

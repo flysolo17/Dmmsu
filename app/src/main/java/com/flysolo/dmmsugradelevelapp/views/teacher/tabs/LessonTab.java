@@ -80,7 +80,7 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
         binding.recyclerviewLessons.setLayoutManager(layoutManager);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.recyclerviewLessons);
-        lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance(), classroom.getId());
+        lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
         getAllLesson();
         binding.recyclerviewLessons.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

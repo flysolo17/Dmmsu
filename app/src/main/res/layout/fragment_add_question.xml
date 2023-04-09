@@ -7,13 +7,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".views.teacher.components.AddQuestionFragment">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:background="@color/purple_700"
+        android:layout_height="?attr/actionBarSize">
+        <ImageButton
+            android:layout_width="32dp"
+            android:id="@+id/buttonBack"
+            android:layout_height="32dp"
+            android:background="@drawable/ic_back"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/add_question"
+            android:layout_gravity="center"
+
+            />
+    </FrameLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="vertical">
 
             <LinearLayout
@@ -33,18 +57,6 @@
                     android:fontFamily="@font/poppins"
                     android:layout_marginVertical="5dp"
                     android:drawableLeft="@drawable/ic_baseline_question_answer_24"
-                    android:inputType="textMultiLine"/>
-                <EditText
-                    android:layout_width="match_parent"
-                    android:hint="@string/description"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/inputDesc"
-                    android:background="@drawable/questions_edt"
-                    android:padding="12dp"
-                    android:drawablePadding="10dp"
-                    android:fontFamily="@font/poppins"
-                    android:layout_marginVertical="5dp"
-                    android:drawableLeft="@drawable/ic_baseline_description_24"
                     android:inputType="textMultiLine"/>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -104,97 +116,29 @@
                     android:id="@+id/inputPoints"
                     android:background="@drawable/questions_edt"
                     android:padding="12dp"
-
                     android:layout_marginVertical="5dp"
                     android:fontFamily="@font/poppins"
                     android:drawablePadding="10dp"
                     android:drawableLeft="@drawable/ic_baseline_sports_score_24"
                     android:inputType="number"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center_vertical"
-                    android:layout_marginVertical="5dp"
-                    android:background="@drawable/questions_edt"
-                    android:layout_height="wrap_content">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:text="Choices"
-
-                            android:fontFamily="@font/poppins"/>
-                        <ImageButton
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_gravity="center"
-                            android:layout_margin="10dp"
-                            android:id="@+id/buttonAddChoice"
-                            android:background="@drawable/ic_baseline_add_24"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/cardAddChoice"
-                        android:visibility="gone"
-                        android:padding="10dp">
-                        <EditText
-                            android:id="@+id/inputChoice"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="@string/choice" />
-                        <ImageButton
-                            android:id="@+id/buttonSaveChoice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/ic_save"
-                            android:backgroundTint="#66BB6A" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:id="@+id/layoutChoices"/>
-                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
+
+
+
+        <com.google.android.material.button.MaterialButton
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            android:id="@+id/buttonBack"
-            android:textColor="@color/black"
-            android:fontFamily="@font/poppins"
-            android:textAllCaps="false"
-            style="@style/Widget.MaterialComponents.Button.TextButton"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:textColor="@color/black"
+            android:layout_height="60dp"
+            android:layout_margin="10dp"
+            android:text="@string/save"
+            android:fontFamily="@font/poppins_semibold"
             android:layout_gravity="end|center_vertical"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:textAllCaps="false"
             android:id="@+id/buttonSaveQuestion"/>
-    </LinearLayout>
+
 </LinearLayout>

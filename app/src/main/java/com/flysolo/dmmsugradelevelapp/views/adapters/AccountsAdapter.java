@@ -57,7 +57,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 head.textType.setText("CLASS STUDENTS");
                 head.textCount.setText(String.valueOf(getStudent().size()));
             } else {
-                head.textType.setText("OTHER");
+                head.textType.setText("COMPETITORS");
                 head.textCount.setText(String.valueOf(getNonStudent().size()));
             }
         } else {

@@ -59,13 +59,13 @@ public class RegisterActivity extends AppCompatActivity {
             String confirmPassword = binding.inputConfirmPassword.getText().toString();
             UserType type = getUserType(binding.radioGroup.getCheckedRadioButtonId());
             if (name.isEmpty() || !validation.isValidName(name)) {
-                binding.layoutName.setError("Invalid name");
+                binding.inputName.setError("Invalid name");
             } else if(!validation.isValidEmail(email) || email.isEmpty()) {
-                binding.layoutEmail.setError("Invalid email");
+                binding.inputEmail.setError("Invalid email");
             } else if (validation.isValidPassword(password) || password.isEmpty()) {
-                binding.layoutPassword.setError("Invalid password");
+                binding.inputPassword.setError("Invalid password");
             } else if (!validation.isPasswordMatch(password,confirmPassword)) {
-                binding.layoutConfirmPassword.setError("Password don't match");
+                binding.inputConfirmPassword.setError("Password don't match");
             } else {
                 Accounts accounts = new Accounts("","",name,type,email);
                 signup(email,password,accounts);

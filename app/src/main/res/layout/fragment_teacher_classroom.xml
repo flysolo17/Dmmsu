@@ -4,15 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/box"
     tools:context=".views.teacher.nav.TeacherClassroomFragment">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/lesson"
-        android:layout_margin="10dp"
-        android:fontFamily="@font/poppins_bold"
-        android:textColor="@color/black"
-        android:id="@+id/textPageName"/>
+
+
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,25 +17,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:icon="@drawable/ic_lessons"
+                android:text="@string/lesson"
                 />
 
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Students"
                 android:icon="@drawable/ic_students"
                 />
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Settings"
                 android:icon="@drawable/ic_baseline_settings_24" />
         </com.google.android.material.tabs.TabLayout>
     <androidx.viewpager2.widget.ViewPager2
        android:id="@+id/viewpager2"
        android:layout_width="match_parent"
        android:layout_height="match_parent"/>
-
-
-
 
 </LinearLayout>

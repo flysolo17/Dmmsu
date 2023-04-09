@@ -13,15 +13,20 @@
         android:orientation="vertical">
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
+            android:background="#6A5AE0"
+            app:theme="@style/ToolbarColoredBackArrow"
+            android:gravity="center"
+            app:titleTextColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/nav_host_fragment_container"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:defaultNavHost="true"
             android:layout_weight="1"
+            app:defaultNavHost="true"
             app:navGraph="@navigation/teacher_navigation" />
     </LinearLayout>
         <com.google.android.material.bottomappbar.BottomAppBar
