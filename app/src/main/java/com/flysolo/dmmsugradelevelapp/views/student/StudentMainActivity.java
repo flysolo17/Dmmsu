@@ -39,9 +39,10 @@ public class StudentMainActivity extends AppCompatActivity {
                 showBottomNav();
             }else if (R.id.navigation_account == navDestination.getId()) {
                 showBottomNav();
-            } else if(R.id.startActivity == navDestination.getId()) {
+            } else if(R.id.startActivity == navDestination.getId() || R.id.startActivity2 == navDestination.getId()) {
                 getSupportActionBar().hide();
-            } else if(R.id.finishActivity == navDestination.getId()) {
+            }
+            else if(R.id.finishActivity == navDestination.getId()) {
                 getSupportActionBar().hide();
             }
             else {

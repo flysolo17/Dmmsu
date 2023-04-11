@@ -138,6 +138,9 @@
         <argument
             android:name="activity"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
+        <action
+            android:id="@+id/action_studentViewActivity_to_startActivity2"
+            app:destination="@id/startActivity2" />
     </fragment>
     <fragment
         android:id="@+id/finishActivity"
@@ -150,6 +153,18 @@
         <argument
             android:name="respond"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Respond" />
+    </fragment>
+    <fragment
+        android:id="@+id/startActivity2"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.components.StartActivity2"
+        android:label="fragment_start_activity2"
+        tools:layout="@layout/fragment_start_activity2" >
+        <action
+            android:id="@+id/action_startActivity2_to_finishActivity"
+            app:destination="@id/finishActivity" />
+        <argument
+            android:name="quiz"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
     </fragment>
 
 

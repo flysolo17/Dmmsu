@@ -8,6 +8,7 @@ import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.net.URI;
+import java.util.List;
 
 public interface AuthService {
         void login(String email , String password, UiState<FirebaseUser> result);
@@ -19,4 +20,5 @@ public interface AuthService {
         void changePassword(FirebaseUser user,String password,UiState<String> result);
         void uploadProfile(String uid , Uri uri,String type, UiState<String> result);
         void updateProfile(String uid,String name ,String profile,UiState<String> result);
+        void getAllStudentAccount(UiState<List<Accounts>> result);
 }

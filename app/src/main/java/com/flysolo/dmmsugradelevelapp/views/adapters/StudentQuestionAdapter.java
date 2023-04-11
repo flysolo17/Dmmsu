@@ -48,12 +48,12 @@ public class StudentQuestionAdapter extends RecyclerView.Adapter<StudentQuestion
     public void onBindViewHolder(@NonNull StudentQuestionViewHolder holder,int position) {
         Question question = questions.get(position);
         holder.textQuestion.setText(question.getQuestion());
-        holder.textMaxScore.setText(String.valueOf(question.getPoints()));
         if(!question.getImage().isEmpty()) {
             Glide.with(context).load(question.getImage()).into(holder.imageQuestion);
         } else {
             holder.imageQuestion.setVisibility(View.GONE);
         }
+        holder.textPosition.setText(String.valueOf(position + 1));
         holder.edtAnswer.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -69,7 +69,6 @@ public class StudentQuestionAdapter extends RecyclerView.Adapter<StudentQuestion
             public void afterTextChanged(Editable editable) {
                 if (editable != null) {
                     answers.get(position).setAnswer(editable.toString());
-
                 }
             }
         });
@@ -81,20 +80,16 @@ public class StudentQuestionAdapter extends RecyclerView.Adapter<StudentQuestion
     }
 
     public class StudentQuestionViewHolder extends RecyclerView.ViewHolder{
-        TextView textQuestion,textDescription,textMaxScore;
+        TextView textQuestion,textPosition;
         ImageView imageQuestion;
-        RadioGroup radioGroup;
         EditText edtAnswer;
-        RadioButton[] rb;
+
         public StudentQuestionViewHolder(@NonNull View itemView) {
             super(itemView);
             textQuestion = itemView.findViewById(R.id.textQuestion);
-            textDescription = itemView.findViewById(R.id.textDesc);
-            textMaxScore = itemView.findViewById(R.id.textMaxScore);
-            radioGroup = itemView.findViewById(R.id.radioGroup);
             imageQuestion = itemView.findViewById(R.id.imageQuestion);
             edtAnswer = itemView.findViewById(R.id.edtAnswer);
-
+            textPosition = itemView.findViewById(R.id.textPosition);
         }
 
 

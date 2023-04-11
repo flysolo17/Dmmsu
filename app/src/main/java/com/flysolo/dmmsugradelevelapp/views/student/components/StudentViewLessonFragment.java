@@ -79,6 +79,7 @@ public class StudentViewLessonFragment extends Fragment implements StudentActivi
 
     }
     private void displayLesson(Lesson lesson) {
+        binding.textActivityCount.setText(String.valueOf(quizzes.length));
         binding.textTitle.setText(lesson.getTitle());
         binding.textDesc.setText(lesson.getDescription());
         contentAdapter = new StudentContentAdapter(binding.getRoot().getContext(), lesson.getContents());
@@ -89,13 +90,8 @@ public class StudentViewLessonFragment extends Fragment implements StudentActivi
 
     @Override
     public void onActivityClicked(Quiz quiz) {
-        if (quiz.getQuizType() == QuizType.WORD_HUNT) {
-            NavDirections directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToStudentViewActivity(quiz);
-            Navigation.findNavController(binding.getRoot()).navigate(directions);
-        } else {
-            Toast.makeText(binding.getRoot().getContext(), "Fill in the blank page is under construction", Toast.LENGTH_LONG).show();
-        }
-
+        NavDirections directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToStudentViewActivity(quiz);
+        Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 
 }

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentStudentViewActivityBinding;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
+import com.flysolo.dmmsugradelevelapp.model.QuizType;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.views.student.components.StudentViewLessonFragmentDirections;
 
@@ -57,8 +58,14 @@ public class StudentViewActivity extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.buttonPlay.setOnClickListener(view1 -> {
             if (quiz.getQuestions().size() > 0) {
-                NavDirections directions = StudentViewActivityDirections.actionStudentViewActivityToStartActivity(quiz);
+                NavDirections directions;
+                if (quiz.getQuizType() == QuizType.WORD_HUNT) {
+                    directions = StudentViewActivityDirections.actionStudentViewActivityToStartActivity(quiz);
+                } else {
+                    directions = StudentViewActivityDirections.actionStudentViewActivityToStartActivity2(quiz);
+                }
                 Navigation.findNavController(view).navigate(directions);
+
             } else {
                 Toast.makeText(view.getContext(), "No questions yet!", Toast.LENGTH_SHORT).show();
             }

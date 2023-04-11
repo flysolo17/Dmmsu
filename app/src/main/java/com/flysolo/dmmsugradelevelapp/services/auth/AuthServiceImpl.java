@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.UserType;
@@ -21,8 +22,11 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.CredentialsProvider;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -30,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.security.AuthProvider;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class AuthServiceImpl implements AuthService {
@@ -171,6 +176,21 @@ public class AuthServiceImpl implements AuthService {
                         result.Failed("Failed to update account!");
                     }
                 }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+    }
+
+    @Override
+    public void getAllStudentAccount(UiState<List<Accounts>> result) {
+        result.Loading();
+        firestore.collection(Constants.ACCOUNTS_TABLE)
+                .whereEqualTo("type",UserType.STUDENT.toString())
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        result.Failed(error.getMessage());
+                    }
+                    if (value  != null) {
+                        result.Successful(value.toObjects(Accounts.class));
+                    }
+                });
     }
 
 

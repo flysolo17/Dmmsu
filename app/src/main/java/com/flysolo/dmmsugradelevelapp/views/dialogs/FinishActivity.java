@@ -71,6 +71,7 @@ public class FinishActivity extends Fragment {
         if (user != null) {
             respond.setStudentID(user.getUid());
             respond.setDateAnswered(System.currentTimeMillis());
+            respond.setTotal(Constants.getMyScore(quiz.getQuestions(),respond));
             saveResponse(respond);
         }
         displayData(quiz,respond);

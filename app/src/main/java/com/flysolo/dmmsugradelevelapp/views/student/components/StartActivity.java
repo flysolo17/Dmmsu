@@ -74,7 +74,7 @@ public class StartActivity extends Fragment {
             quiz = StartActivityArgs.fromBundle(getArguments()).getActivity();
             START_TIME_IN_MILLIS = quiz.getTimer() * 60000L;
             mTimeLeftInMillis = START_TIME_IN_MILLIS;
-            respond = new Respond("",quiz.getId(),"",answerList,0L);
+            respond = new Respond("",quiz.getId(),"",answerList,0,0L);
         }
     }
 
@@ -109,12 +109,7 @@ public class StartActivity extends Fragment {
                 new MaterialAlertDialogBuilder(view.getContext())
                         .setTitle("Exit Game")
                         .setMessage("Are you sure you want to quit the game?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Navigation.findNavController(view).popBackStack();
-                            }
-                        }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                        .setPositiveButton("Yes", (dialogInterface, i) -> Navigation.findNavController(view).popBackStack()).setNegativeButton("Cancel", (dialogInterface, i) -> {
                             startTimer();
                             dialogInterface.dismiss();
                         })

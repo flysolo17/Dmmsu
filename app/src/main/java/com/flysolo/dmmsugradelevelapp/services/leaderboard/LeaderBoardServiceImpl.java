@@ -53,28 +53,18 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
     }
 
     @Override
-    public void getAllResponse(List<Classroom> classroomList,String uid, UiState<List<Respond>> result) {
-            List<Respond> respondArrayList = new ArrayList<>();
+    public void getAllResponse(UiState<List<Respond>> result) {
             result.Loading();
-            for (Classroom classroom: classroomList) {
-                firestore.collection(Constants.CLASSROOM_TABLE)
-                        .document(classroom.getId())
-                        .collection(Constants.RESOPONSES_TABLE)
-                        .whereEqualTo("studentID",uid)
-                        .orderBy("dateAnswered", Query.Direction.DESCENDING)
-                        .get()
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot snap: task.getResult()) {
-                                    Respond respond = snap.toObject(Respond.class);
-                                    respondArrayList.add(respond);
-                                }
-                                result.Successful(respondArrayList);
-                            } else {
-                                result.Failed("Failed getting activities");
-                            }
-                        }).addOnFailureListener(e -> result.Failed(e.getMessage()));
-        }
+            firestore.collection(Constants.RESOPONSES_TABLE)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            result.Successful(task.getResult().toObjects(Respond.class));
+                        } else  {
+                            result.Failed("error getting responses");
+                        }
+                    }).addOnFailureListener(e -> result.Failed(e.getMessage()));
+
     }
 
     @Override

@@ -18,11 +18,6 @@
             app:destination="@id/teacherClassroomFragment" />
     </fragment>
     <fragment
-        android:id="@+id/navigation_scoreboard"
-        android:name="com.flysolo.dmmsugradelevelapp.views.teacher.nav.TeacherScoreboardNav"
-        android:label="Scoreboard"
-        tools:layout="@layout/teacher_scoreboard_nav" />
-    <fragment
         android:id="@+id/navigation_account"
         android:name="com.flysolo.dmmsugradelevelapp.views.auth.AccountsFragment"
         android:label="Account"
@@ -153,4 +148,9 @@
             android:name="lessonID"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_scoreboard"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.nav.StudentScoreboardNav"
+        android:label="student_scoreboard_nav"
+        tools:layout="@layout/student_scoreboard_nav" />
 </navigation>
