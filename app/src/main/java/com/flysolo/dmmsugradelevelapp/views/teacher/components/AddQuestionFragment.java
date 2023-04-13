@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class AddQuestionFragment extends DialogFragment {
@@ -98,7 +99,7 @@ public class AddQuestionFragment extends DialogFragment {
                 binding.inputPoints.setError("this field is required");
             }
             else {
-                Question q = new Question("",question,"",answer,Integer.parseInt(points));
+                Question q = new Question("",question,"",answer.toLowerCase(Locale.ROOT),Integer.parseInt(points));
                 if (imageURI != null) {
                     uploadAttachment(imageURI,q);
                 } else {

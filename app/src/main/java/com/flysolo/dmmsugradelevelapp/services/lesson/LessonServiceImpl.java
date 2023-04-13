@@ -108,10 +108,11 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public void getAllLesson(UiState<List<Lesson>> result) {
+    public void getAllLesson(String classroomID,UiState<List<Lesson>> result) {
         result.Loading();
         firestore
                 .collection(Constants.LESSONS_TABLE)
+                .whereEqualTo("classroomID",classroomID)
                 .orderBy("createdAt", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
                     if (error != null) {

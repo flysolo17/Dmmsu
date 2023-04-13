@@ -50,7 +50,6 @@ public class ResponsesAdapter extends RecyclerView.Adapter<ResponsesAdapter.Resp
 
     @Override
     public void onBindViewHolder(@NonNull ResponsesViewHolder holder, int position) {
-
         Scores score = scores.get(position);
         holder.textFullname.setText(score.getStudentName() != null ? score.getStudentName() : "User not found!");
         holder.textScore.setText(score.getStudentScore()+ " Points");

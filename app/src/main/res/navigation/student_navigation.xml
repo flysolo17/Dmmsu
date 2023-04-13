@@ -86,6 +86,12 @@
         <action
             android:id="@+id/action_studentViewLessonFragment_to_studentViewActivity"
             app:destination="@id/studentViewActivity" />
+        <action
+            android:id="@+id/action_studentViewLessonFragment_to_studentActivities"
+            app:destination="@id/studentActivities" />
+        <action
+            android:id="@+id/action_studentViewLessonFragment_to_studentLessonContent"
+            app:destination="@id/studentLessonContent" />
 
     </fragment>
     <fragment
@@ -166,6 +172,25 @@
             android:name="quiz"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
     </fragment>
-
-
+    <fragment
+        android:id="@+id/studentActivities"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.tabs.StudentActivities"
+        android:label=""
+        tools:layout="@layout/fragment_student_activities" >
+        <argument
+            android:name="activities"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz[]" />
+        <action
+            android:id="@+id/action_studentActivities_to_studentViewActivity"
+            app:destination="@id/studentViewActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentLessonContent"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.tabs.StudentLessonContent"
+        android:label=""
+        tools:layout="@layout/fragment_student_lesson_content" >
+        <argument
+            android:name="lesson"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Lesson" />
+    </fragment>
 </navigation>

@@ -68,13 +68,9 @@ public class StudentScoreboardNav extends Fragment {
         authService = new AuthServiceImpl(FirebaseAuth.getInstance(),firestore,storage);
         leaderBoardService = new LeaderBoardServiceImpl(firestore);
         binding.recyclerviewScoreboard.setLayoutManager(new LinearLayoutManager(view.getContext()));
-
-        responsesAdapter = new ResponsesAdapter(view.getContext(),scoresList);
-        binding.recyclerviewScoreboard.setAdapter(responsesAdapter);
         getAllScore();
     }
     private void getAllStudents(List<Respond> respondList) {
-
         authService.getAllStudentAccount(new UiState<List<Accounts>>() {
             @Override
             public void Loading() {
@@ -86,19 +82,26 @@ public class StudentScoreboardNav extends Fragment {
                 scoresList.clear();
                 for (int i = 0; i < data.size() ; i++) {
                     scoresList.add(new Scores(data.get(i).getId(),data.get(i).getProfile(),data.get(i).getName(),getMyResponses(data.get(i).getId(),respondList)));
-                    Collections.sort(scoresList, new Comparator<Scores>() {
-                        @Override
-                        public int compare(Scores lhs, Scores rhs) {
-                            return Integer.compare( rhs.getStudentScore(),lhs.getStudentScore());
-                        }
-                        @Override
-                        public Comparator<Scores> reversed() {
-                            return Comparator.super.reversed();
-                        }
-                    });
-                    responsesAdapter.notifyItemChanged(i);
                 }
-                display(scoresList.get(0),scoresList.get(1),scoresList.get(2));
+                Collections.sort(scoresList, new Comparator<Scores>() {
+                    @Override
+                    public int compare(Scores lhs, Scores rhs) {
+                        return Integer.compare( rhs.getStudentScore(),lhs.getStudentScore());
+                    }
+                    @Override
+                    public Comparator<Scores> reversed() {
+                        return Comparator.super.reversed();
+                    }
+                });
+                if (scoresList.size() > 3) {
+                    display(scoresList.get(0),scoresList.get(1),scoresList.get(2));
+                }
+                for (int i = 0; i < 3; i++) {
+                    scoresList.remove(i);
+                }
+                responsesAdapter = new ResponsesAdapter(binding.getRoot().getContext(),scoresList);
+                binding.recyclerviewScoreboard.setAdapter(responsesAdapter);
+
             }
             @Override
             public void Failed(String message) {
@@ -135,12 +138,6 @@ public class StudentScoreboardNav extends Fragment {
         return count;
     }
     private void display(Scores score1,Scores score2 ,Scores score3) {
-        scoresList.remove(0);
-        scoresList.remove(1);
-        scoresList.remove(2);
-        responsesAdapter.notifyItemRemoved(0);
-        responsesAdapter.notifyItemRemoved(1);
-        responsesAdapter.notifyItemRemoved(2);
         binding.textFullname1.setText(score1.getStudentName());
         binding.textFullname2.setText(score2.getStudentName());
         binding.textFullname3.setText(score3.getStudentName());

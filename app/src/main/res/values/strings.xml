@@ -100,4 +100,6 @@
     <string name="fill_in_the_blank">FILL IN THE BLANK</string>
     <string name="add_timer_here">add timer here</string>
     <string name="_1_min">1 min</string>
+    <string name="attemps">Attemps: </string>
+    <string name="highest">Highest Score: </string>
 </resources>

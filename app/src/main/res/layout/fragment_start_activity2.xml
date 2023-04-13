@@ -43,39 +43,34 @@
                 android:layout_margin="10dp"
                 android:textSize="16sp"
                 android:layout_gravity="center"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:text="Description: "
-                    android:layout_marginEnd="5dp"/>
+
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_medium"
                     android:text="@string/description"
+                    android:layout_margin="10dp"
                     android:id="@+id/textDesc"
                     android:layout_marginEnd="5dp"/>
-            </LinearLayout>
+
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                android:padding="5dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:clickable="false">
-                <GridLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
                     android:layout_gravity="center"
                     android:id="@+id/layoutAnswer"
-                    android:rowCount="3"
-                    android:padding="20dp"/>
+                    android:orientation="vertical"
+                    />
             </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView

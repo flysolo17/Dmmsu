@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
@@ -63,6 +64,9 @@ public class AccountsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         } else {
             AccountsViewHolder accountsViewHolder = (AccountsViewHolder) holder;
             Accounts account = accounts.get(position);
+            if (!account.getProfile().isEmpty()) {
+                Glide.with(context).load(account.getProfile()).into(accountsViewHolder.imageProfile);
+            }
             accountsViewHolder.textFullname.setText(account.getName());
             if (classroom.getStudents().contains(account.id)) {
                 accountsViewHolder.buttonAdd.setVisibility(View.GONE);

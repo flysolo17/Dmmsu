@@ -16,11 +16,15 @@ import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentRespondentsTabBinding;
+import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Question;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.model.Respond;
+import com.flysolo.dmmsugradelevelapp.model.Scores;
+import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.leaderboard.LeaderBoardServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
+import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.RespondentsAdapter;
@@ -28,10 +32,12 @@ import com.flysolo.dmmsugradelevelapp.views.teacher.nav.ViewActivityFragmentDire
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
-public class RespondentsTab extends Fragment implements RespondentsAdapter.RespondentsClickListener {
+public class RespondentsTab extends Fragment {
 
 
     private static final String ARG_CLASSROOM_ID = "classroomID";
@@ -43,13 +49,14 @@ public class RespondentsTab extends Fragment implements RespondentsAdapter.Respo
     private FragmentRespondentsTabBinding binding;
     private LeaderBoardServiceImpl leaderBoardService;
     private LoadingDialog loadingDialog;
+    private ClassroomServiceImpl classroomService;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             classroomID = getArguments().getString(ARG_CLASSROOM_ID);
             quiz = getArguments().getParcelable(ARG_ACTIVITY_ID);
-
         }
     }
 
@@ -67,40 +74,41 @@ public class RespondentsTab extends Fragment implements RespondentsAdapter.Respo
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         leaderBoardService = new LeaderBoardServiceImpl(FirebaseFirestore.getInstance());
-        getResponses(quiz.getId());
+        classroomService = new ClassroomServiceImpl(FirebaseFirestore.getInstance(),FirebaseStorage.getInstance());
+        if (quiz != null) {
+            getClassroom(quiz.getId(),classroomID);
+        }
     }
-    private void getResponses(String activityID) {
-        leaderBoardService.getRespondents(classroomID, activityID, new UiState<List<Respond>>() {
+    private void getClassroom(String activityID,String classroomID) {
+        classroomService.getClassroom(classroomID, new UiState<Classroom>() {
             @Override
             public void Loading() {
-                loadingDialog.showLoadingDialog("Getting Respondents...");
+                loadingDialog.showLoadingDialog("Getting classroom...");
+            }
+            @Override
+            public void Successful(Classroom data) {
+                loadingDialog.stopLoading();
+                getResponses(activityID,data.getStudents());
             }
 
+            @Override
+            public void Failed(String message) {
+                loadingDialog.stopLoading();
+            }
+        });
+    }
+
+    private void getResponses(String quizID,List<String> students) {
+        leaderBoardService.getRespondents(quizID, new UiState<List<Respond>>() {
+            @Override
+            public void Loading() {
+                loadingDialog.showLoadingDialog("Getting all responses....");
+            }
             @Override
             public void Successful(List<Respond> data) {
                 loadingDialog.stopLoading();
-               getQuestions(data);
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-    private void getQuestions(List<Respond> respondList) {
-        leaderBoardService.getQuestions(classroomID, quiz.getId(), new UiState<List<Question>>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Getting Questions...");
-            }
-
-            @Override
-            public void Successful(List<Question> data) {
-                loadingDialog.stopLoading();
-                RespondentsAdapter adapter = new RespondentsAdapter(binding.getRoot().getContext(),respondList,data,RespondentsTab.this);
-                binding.recyclerviewResponses.setAdapter(adapter);
+                RespondentsAdapter respondentsAdapter = new RespondentsAdapter(binding.getRoot().getContext(),students,data);
+                binding.recyclerviewResponses.setAdapter(respondentsAdapter);
             }
 
             @Override
@@ -111,9 +119,5 @@ public class RespondentsTab extends Fragment implements RespondentsAdapter.Respo
         });
     }
 
-    @Override
-    public void onRespondentClicked(Respond respond) {
-        NavDirections directions = ViewActivityFragmentDirections.actionViewActivityFragmentToViewScore(respond,quiz);
-        Navigation.findNavController(binding.getRoot()).navigate(directions);
-    }
+
 }

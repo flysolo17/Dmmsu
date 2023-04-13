@@ -29,6 +29,7 @@ import com.flysolo.dmmsugradelevelapp.views.student.components.StudentViewLesson
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -36,22 +37,17 @@ public class StudentActivities extends Fragment implements StudentActivityAdapte
 
 
     private static final String ARG_PARAM1 = "classroom";
-    private static final String LESSON_ID = "lesson";
 
-    private Classroom classroom;
-    private Lesson lesson;
+    private Quiz[] quizzes;
 
     private FragmentStudentActivitiesBinding binding;
-    private LoadingDialog loadingDialog;
-    private LessonServiceImpl lessonService;
+    private StudentActivityAdapter activityAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            classroom = getArguments().getParcelable(ARG_PARAM1);
-            lesson = getArguments().getParcelable(LESSON_ID);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
+            quizzes = StudentActivitiesArgs.fromBundle(getArguments()).getActivities();
         }
     }
 
@@ -60,7 +56,6 @@ public class StudentActivities extends Fragment implements StudentActivityAdapte
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentStudentActivitiesBinding.inflate(inflater,container,false);
-        loadingDialog = new LoadingDialog(binding.getRoot().getContext());
         binding.recyclerviewActivities.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         return binding.getRoot();
     }
@@ -68,15 +63,15 @@ public class StudentActivities extends Fragment implements StudentActivityAdapte
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (lesson.getId() != null) {
-
-        }
+        activityAdapter = new StudentActivityAdapter(view.getContext(), Arrays.asList(quizzes), this);
+        binding.recyclerviewActivities.setAdapter(activityAdapter);
     }
 
 
     @Override
     public void onActivityClicked(Quiz quiz) {
-
+        NavDirections directions = StudentActivitiesDirections.actionStudentActivitiesToStudentViewActivity(quiz);
+        Navigation.findNavController(binding.getRoot()).navigate(directions);
     }
 
 }

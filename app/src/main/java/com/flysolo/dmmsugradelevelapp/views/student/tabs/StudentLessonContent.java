@@ -21,6 +21,7 @@ import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 
+import com.flysolo.dmmsugradelevelapp.views.adapters.ContentAdapter;
 import com.flysolo.dmmsugradelevelapp.views.adapters.StudentContentAdapter;
 import com.flysolo.dmmsugradelevelapp.views.adapters.StudentLessonAdapter;
 
@@ -30,27 +31,20 @@ import java.util.List;
 
 
 public class StudentLessonContent extends Fragment {
-    private static final String CLASSROOM = "classroom";
-    private static final String LESSON_ID = "lesson";
-    private Classroom classroom;
+
     private Lesson lesson;
     private FragmentStudentLessonContentBinding binding;
-    private LessonServiceImpl lessonService;
-    private LoadingDialog loadingDialog;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            classroom = getArguments().getParcelable(CLASSROOM);
-            lesson = getArguments().getParcelable(LESSON_ID);
-            lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
+            lesson = StudentLessonContentArgs.fromBundle(getArguments()).getLesson();
         }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentStudentLessonContentBinding.inflate(inflater,container,false);
         binding.recyclerviewContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        loadingDialog = new LoadingDialog(binding.getRoot().getContext());
         binding.textTitle.setText(lesson.getTitle());
         binding.textDesc.setText(lesson.getDescription());
         return binding.getRoot();
@@ -59,7 +53,8 @@ public class StudentLessonContent extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        StudentContentAdapter contentAdapter  = new StudentContentAdapter(view.getContext(),lesson.getContents());
+        binding.recyclerviewContent.setAdapter(contentAdapter);
     }
 
 }

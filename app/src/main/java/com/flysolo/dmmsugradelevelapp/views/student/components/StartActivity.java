@@ -15,6 +15,7 @@ import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,8 +92,7 @@ public class StartActivity extends Fragment {
         binding.textQuestionMax.setText(String.valueOf(quiz.getQuestions().size()));
         binding.textScore.setText(String.valueOf(score));
         displayQuestion(quiz.getQuestions().get(position));
-        binding.textQuestionPosition.setText(String.valueOf(position));
-        binding.textQuestionPosition.addTextChangedListener(positionWatcher);
+
         view.setOnKeyListener((view1, i, keyEvent) -> {
             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                 if (i == KeyEvent.KEYCODE_BACK) {
@@ -128,6 +128,7 @@ public class StartActivity extends Fragment {
         if (question.getQuestion().isEmpty()) {
             binding.textQuestion.setVisibility(View.GONE);
         }
+        binding.textQuestionPosition.setText(String.valueOf(position + 1));
         binding.textQuestion.setText(question.getQuestion());
         binding.layoutLetters.removeAllViews();
         binding.layoutAnswer.removeAllViews();
@@ -150,7 +151,7 @@ public class StartActivity extends Fragment {
         binding.layoutAnswer.addView(view);
     }
 
-    private void displayChoices(String letter,String answer) {
+    private void displayChoices(String letter,String answer) {;
         View view = LayoutInflater.from(binding.layoutAnswer.getContext()).inflate(R.layout.layout_letters,binding.layoutLetters,false);
         TextView text = view.findViewById(R.id.textLetter);
         MaterialCardView cardLetter = view.findViewById(R.id.cardLetter);
@@ -161,20 +162,18 @@ public class StartActivity extends Fragment {
             displayAnswer(letter,ans.length() - 1);
             binding.layoutLetters.removeView(view);
             if (ans.length() == answer.length()) {
+                answerList.add(new Answer(quiz.getQuestions().get(position).getId(),answer));
+                displayToast(answer,ans);
                 if (ans.equals(answer)) {
                     score += quiz.getQuestions().get(position).getPoints();
-                    answerList.add(new Answer(quiz.getQuestions().get(position).getId(),answer));
-                    ans = "";
-                    position += 1;
                     binding.textScore.setText(String.valueOf(score));
-                    binding.textQuestionPosition.setText(String.valueOf(position));
+                }
+                ans = "";
+                position += 1;
+                if (quiz.getQuestions().size() > position) {
+                    displayQuestion(quiz.getQuestions().get(position));
                 } else {
-                    binding.layoutAnswer.removeAllViews();
-                    ans = "";
-                    String result = Constants.shuffle(answer);
-                    for (String s: result.split("")) {
-                        displayChoices(s,answer);
-                    }
+                    openCongratsDialog(quiz,respond);
                 }
             }
         });
@@ -193,26 +192,26 @@ public class StartActivity extends Fragment {
         }
     }
 
-    private TextWatcher positionWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            if (position == quiz.getQuestions().size()) {
-                openCongratsDialog(quiz,respond);
-            } else {
-                displayQuestion(quiz.getQuestions().get(position));
-            }
-        }
-    };
+//    private TextWatcher positionWatcher = new TextWatcher() {
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable editable) {
+//            if (position == quiz.getQuestions().size()) {
+//                openCongratsDialog(quiz,respond);
+//            } else {
+//                displayQuestion(quiz.getQuestions().get(position));
+//            }
+//        }
+//    };
 
 
 
@@ -244,7 +243,6 @@ public class StartActivity extends Fragment {
     private void resetTimer() {
         mTimeLeftInMillis = START_TIME_IN_MILLIS;
         updateCountDownText();
-
     }
 
     private void updateCountDownText() {
@@ -257,5 +255,16 @@ public class StartActivity extends Fragment {
         pauseTimer();
         NavDirections directions = StartActivityDirections.actionStartActivityToFinishActivity(quiz,respond);
         Navigation.findNavController(binding.getRoot()).navigate(directions);
+    }
+    private void displayToast(String answer ,String yourAnswer) {
+        Toast toast = new Toast(binding.getRoot().getContext());
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        if (answer.equals(yourAnswer)) {
+            toast.setView(LayoutInflater.from(binding.getRoot().getContext()).inflate(R.layout.layout_answer_correct,binding.getRoot(),false));
+        } else {
+            toast.setView(LayoutInflater.from(binding.getRoot().getContext()).inflate(R.layout.layout_answer_wrong,binding.getRoot(),false));
+        }
+        toast.show();
     }
 }

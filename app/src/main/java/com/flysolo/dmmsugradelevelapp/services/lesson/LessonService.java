@@ -16,7 +16,7 @@ public interface LessonService {
     void deleteLesson(String lessonID ,UiState<String> result);
     void updateLesson(Lesson lesson,UiState<String> result);
     void getLesson(String lessonID,UiState<Lesson> result);
-    void getAllLesson(UiState<List<Lesson>> result);
+    void getAllLesson(String classroomID,UiState<List<Lesson>> result);
     void addContent(String lessonID,Content content,UiState<String> result);
     void deleteContent(String lessonID,Content content,UiState<String> result);
     void updateContent(String lessonID,List<Content> contents,UiState<String> result);

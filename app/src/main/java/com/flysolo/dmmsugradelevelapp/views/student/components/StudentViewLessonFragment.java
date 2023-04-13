@@ -76,7 +76,14 @@ public class StudentViewLessonFragment extends Fragment implements StudentActivi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         displayLesson(lesson);
-
+        binding.buttonLessons.setOnClickListener(view1 -> {
+            NavDirections directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToStudentLessonContent(lesson);
+            Navigation.findNavController(view).navigate(directions);
+        });
+        binding.buttonActivities.setOnClickListener(view1 -> {
+            NavDirections directions = StudentViewLessonFragmentDirections.actionStudentViewLessonFragmentToStudentActivities(quizzes);
+            Navigation.findNavController(view).navigate(directions);
+        });
     }
     private void displayLesson(Lesson lesson) {
         binding.textActivityCount.setText(String.valueOf(quizzes.length));

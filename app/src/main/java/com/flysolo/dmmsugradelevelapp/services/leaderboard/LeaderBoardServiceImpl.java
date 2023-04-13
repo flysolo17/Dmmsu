@@ -92,11 +92,9 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
     }
 
     @Override
-    public void getActivity(String classroomID, String quizID, UiState<Quiz> result) {
+    public void getActivity( String quizID, UiState<Quiz> result) {
         result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.ACTIVITIES_TABLE)
+        firestore.collection(Constants.ACTIVITIES_TABLE)
                 .document(quizID)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -144,21 +142,19 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
     }
 
     @Override
-    public void getRespondents(String classroomID, String activityID, UiState<List<Respond>> result) {
+    public void getRespondents(String activityID, UiState<List<Respond>> result) {
         result.Loading();
-        firestore.collection(Constants.CLASSROOM_TABLE)
-                .document(classroomID)
-                .collection(Constants.RESOPONSES_TABLE)
+        firestore.collection(Constants.RESOPONSES_TABLE)
                 .whereEqualTo("activityID",activityID)
                 .orderBy("dateAnswered", Query.Direction.DESCENDING)
-                .addSnapshotListener((value, error) -> {
-                    if (error != null) {
-                        result.Failed(error.getMessage());
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        result.Successful(task.getResult().toObjects(Respond.class));
+                    } else  {
+                        result.Failed("Failed getting responses");
                     }
-                    if (value != null) {
-                        result.Successful(value.toObjects(Respond.class));
-                    }
-                });
+                }).addOnFailureListener(e -> result.Failed(e.getMessage()));
     }
 
     @Override

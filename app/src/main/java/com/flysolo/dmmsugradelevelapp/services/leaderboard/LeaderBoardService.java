@@ -13,9 +13,9 @@ public interface LeaderBoardService {
     void submitAnswer(Respond respond, UiState<String> result);
     void getAllResponse(UiState<List<Respond>> result);
     void getTeacherResponses(List<Classroom> classroomList, UiState<List<Respond>> result);
-    void getActivity(String classroomID,String quizID, UiState<Quiz> result);
+    void getActivity(String quizID, UiState<Quiz> result);
     void getQuestions(String classroomID, String quizID, UiState<List<Question>> result);
     void getStudentInfo(String studentID, UiState<Accounts> result);
-    void getRespondents(String classroomID,String activityID,UiState<List<Respond>> result);
+    void getRespondents(String activityID,UiState<List<Respond>> result);
     void getAllActivities(List<Classroom> classroomList,UiState<List<Quiz>> result);
 }

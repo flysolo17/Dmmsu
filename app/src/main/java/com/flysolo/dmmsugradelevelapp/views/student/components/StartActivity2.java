@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentStartActivity2Binding;
@@ -76,10 +77,11 @@ public class StartActivity2 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         user = FirebaseAuth.getInstance().getCurrentUser();
         for (Question question: quiz.getQuestions()) {
+
             displayAnswers(question.getAnswer());
         }
         binding.textTitle.setText(quiz.getName());
-        binding.textDesc.setText(quiz.getDescription());
+        binding.textDesc.setText(String.format("Description: %s",quiz.getDescription()));
         questionAdapter = new StudentQuestionAdapter(view.getContext(),quiz.getQuestions());
         binding.recyclerviewQuestions.setAdapter(questionAdapter);
         binding.buttonSubmit.setOnClickListener(view1 -> {
@@ -114,12 +116,8 @@ public class StartActivity2 extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
     }
     private void displayAnswers(String ans) {
-        View view= LayoutInflater.from(binding.getRoot().getContext()).inflate(R.layout.layout_letters,binding.layoutAnswer,false);
-        TextView text = view.findViewById(R.id.textLetter);
-        text.setAllCaps(false);
-        MaterialCardView cardView = view.findViewById(R.id.cardLetter);
-        cardView.setCardBackgroundColor(Color.WHITE);
-        text.setTextSize(12);
+        View view= LayoutInflater.from(binding.getRoot().getContext()).inflate(R.layout.layout_answers,binding.layoutAnswer,false);
+        TextView text = view.findViewById(R.id.textAnswer);
         text.setText(ans);
         binding.layoutAnswer.addView(view);
     }

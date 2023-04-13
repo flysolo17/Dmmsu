@@ -7,16 +7,16 @@ import java.util.List;
 
 public class Respond implements Parcelable {
     String id;
-    String lessonID;
+    String activityID;
     String studentID;
     List<Answer> answers;
     int total;
     Long dateAnswered;
     public Respond(){}
 
-    public Respond(String id, String lessonID, String studentID, List<Answer> answers, int total, Long dateAnswered) {
+    public Respond(String id, String activityID, String studentID, List<Answer> answers, int total, Long dateAnswered) {
         this.id = id;
-        this.lessonID = lessonID;
+        this.activityID = activityID;
         this.studentID = studentID;
         this.answers = answers;
         this.total = total;
@@ -25,7 +25,7 @@ public class Respond implements Parcelable {
 
     protected Respond(Parcel in) {
         id = in.readString();
-        lessonID = in.readString();
+        activityID = in.readString();
         studentID = in.readString();
         total = in.readInt();
         if (in.readByte() == 0) {
@@ -33,25 +33,6 @@ public class Respond implements Parcelable {
         } else {
             dateAnswered = in.readLong();
         }
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(lessonID);
-        dest.writeString(studentID);
-        dest.writeInt(total);
-        if (dateAnswered == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeLong(dateAnswered);
-        }
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
     }
 
     public static final Creator<Respond> CREATOR = new Creator<Respond>() {
@@ -74,12 +55,12 @@ public class Respond implements Parcelable {
         this.id = id;
     }
 
-    public String getLessonID() {
-        return lessonID;
+    public String getActivityID() {
+        return activityID;
     }
 
-    public void setLessonID(String lessonID) {
-        this.lessonID = lessonID;
+    public void setActivityID(String activityID) {
+        this.activityID = activityID;
     }
 
     public String getStudentID() {
@@ -112,5 +93,24 @@ public class Respond implements Parcelable {
 
     public void setDateAnswered(Long dateAnswered) {
         this.dateAnswered = dateAnswered;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(activityID);
+        parcel.writeString(studentID);
+        parcel.writeInt(total);
+        if (dateAnswered == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(dateAnswered);
+        }
     }
 }

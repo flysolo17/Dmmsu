@@ -34,6 +34,23 @@
             android:fontFamily="@font/poppins_medium"
             android:textColor="@color/white"
             android:id="@+id/textDesc"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lessons"
+                android:layout_margin="5dp"
+                android:id="@+id/buttonLessons"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Activities"
+                android:layout_margin="5dp"
+                android:id="@+id/buttonActivities"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

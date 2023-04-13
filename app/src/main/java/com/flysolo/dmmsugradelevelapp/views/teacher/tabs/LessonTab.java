@@ -81,7 +81,7 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(binding.recyclerviewLessons);
         lessonService = new LessonServiceImpl(FirebaseFirestore.getInstance(), FirebaseStorage.getInstance());
-        getAllLesson();
+        getAllLesson(classroom.getId());
         binding.recyclerviewLessons.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -100,9 +100,9 @@ public class LessonTab extends Fragment implements LessonAdapter.LessonClickList
             Navigation.findNavController(view1).navigate(directions);
         });
     }
-    private void getAllLesson(){
+    private void getAllLesson(String classroomID){
         lessons = new ArrayList<>();
-        lessonService.getAllLesson(new UiState<List<Lesson>>() {
+        lessonService.getAllLesson(classroomID,new UiState<List<Lesson>>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Getting all lessons");

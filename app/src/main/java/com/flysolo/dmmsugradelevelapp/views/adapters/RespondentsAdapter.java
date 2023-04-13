@@ -14,28 +14,39 @@ import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Question;
 import com.flysolo.dmmsugradelevelapp.model.Respond;
+import com.flysolo.dmmsugradelevelapp.model.Scores;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.color.utilities.Score;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RespondentsAdapter extends RecyclerView.Adapter<RespondentsAdapter.RespondentsViewHolder> {
     Context context;
-    List<Respond> responses;
-    List<Question> questions;
-    RespondentsClickListener listener;
-    public interface RespondentsClickListener {
-        void onRespondentClicked(Respond respond);
-    }
-    public RespondentsAdapter(Context context, List<Respond> responds,List<Question> questions,RespondentsClickListener listener) {
+    List<String> students;
+    List<Respond> respondList;
+    public RespondentsAdapter(Context context, List<String> students,List<Respond> respondList) {
         this.context = context;
-        this.responses = responds;
-        this.questions = questions;
-        this.listener = listener;
+        this.students = students;
+        Collections.sort(respondList, new Comparator<Respond>() {
+            @Override
+            public int compare(Respond respond, Respond t1) {
+                return Integer.compare(respond.getTotal(),t1.getTotal());
+            }
+
+            @Override
+            public Comparator<Respond> reversed() {
+                return Comparator.super.reversed();
+            }
+        });
+        this.respondList = respondList;
     }
 
     @NonNull
@@ -47,37 +58,26 @@ public class RespondentsAdapter extends RecyclerView.Adapter<RespondentsAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull RespondentsViewHolder holder, int position) {
-        Respond respond = responses.get(position);
-        holder.textMaxScore.setText(String.valueOf(Constants.getMaxScore(questions)));
-        holder.textAnswered.setText(Constants.formatDate(respond.getDateAnswered()));
-        holder.textScore.setText(String.valueOf(Constants.getMyScore(questions,respond)));
-        holder.displayStudentInfo(respond.getStudentID());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listener.onRespondentClicked(respond);
-            }
-        });
+        holder.displayStudentInfo(students.get(position));
+        holder.getHighest(getMyResponses(respondList,students.get(position)));
     }
 
     @Override
     public int getItemCount() {
-        return responses.size();
+        return students.size();
     }
 
     public class RespondentsViewHolder  extends RecyclerView.ViewHolder{
-        TextView textStudentName;
+        TextView textStudentName,textAttemps;
         CircleImageView studentImage;
-        TextView textAnswered;
-        TextView textScore,textMaxScore;
+        TextView textScore;
         FirebaseFirestore firestore;
         public RespondentsViewHolder(@NonNull View itemView) {
             super(itemView);
-            textScore = itemView.findViewById(R.id.textScore);
-            textMaxScore = itemView.findViewById(R.id.textMaxScore);
-            textAnswered = itemView.findViewById(R.id.textDateAnswered);
-            textStudentName = itemView.findViewById(R.id.textStudentName);
-            studentImage = itemView.findViewById(R.id.imageStudent);
+            textAttemps = itemView.findViewById(R.id.textAttemps);
+            textScore = itemView.findViewById(R.id.textPoints);
+            textStudentName = itemView.findViewById(R.id.textFullname);
+            studentImage = itemView.findViewById(R.id.imageProfile);
             firestore = FirebaseFirestore.getInstance();
         }
         void displayStudentInfo(String studentID) {
@@ -98,5 +98,20 @@ public class RespondentsAdapter extends RecyclerView.Adapter<RespondentsAdapter.
                         }
                     });
         }
+        void getHighest(List<Respond> respondList) {
+            int highest = respondList.size() != 0 ? respondList.get(0).getTotal() : 0;
+            textAttemps.setText(String.format("Matches : %s", respondList.size()));
+            textScore.setText(String.format("Highest Score : %s", highest));
+        }
+    }
+
+    List<Respond> getMyResponses(List<Respond> respondList, String studentID) {
+        List<Respond> responds = new ArrayList<>();
+        for (Respond respond: respondList) {
+            if (respond.getStudentID().equals(studentID)) {
+                responds.add(respond);
+            }
+        }
+        return responds;
     }
 }

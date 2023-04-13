@@ -70,7 +70,7 @@ public class StudentLessonFragment extends Fragment implements StudentLessonAdap
         getAllLessons();
     }
     private void getAllLessons() {
-        lessonService.getAllLesson(new UiState<List<Lesson>>() {
+        lessonService.getAllLesson(classroom.getId(),new UiState<List<Lesson>>() {
             @Override
             public void Loading() {
                 loadingDialog.showLoadingDialog("Getting all lessons...");
