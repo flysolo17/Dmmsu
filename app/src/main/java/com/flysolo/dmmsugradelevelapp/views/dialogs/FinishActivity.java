@@ -112,7 +112,6 @@ public class FinishActivity extends Fragment {
     private void displayData(Quiz quiz,Respond respond) {
         binding.textCorrect.setText(Constants.getCorrectAnswer(quiz.getQuestions(),respond) + " Questions");
         binding.textPoints.setText("+" + Constants.getMyScore(quiz.getQuestions(),respond));
-        binding.textIncorrect.setText(String.valueOf(Constants.getIncorrectQuestions(quiz.getQuestions(),respond)));
         binding.textCompletion.setText(Constants.getCompletion(Constants.getCorrectAnswer(quiz.getQuestions(),respond),quiz.getQuestions().size()) + "%");
     }
 

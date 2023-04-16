@@ -34,6 +34,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,7 +52,7 @@ public class StartActivity2 extends Fragment {
     private boolean mTimerRunning;
     private long mTimeLeftInMillis;
     private CountDownTimer mCountDownTimer;
-    private List<Answer> answerList = new ArrayList<>();
+    private List<String> answerList = new ArrayList<>();
     private  StudentQuestionAdapter questionAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,11 @@ public class StartActivity2 extends Fragment {
             quiz = StartActivity2Args.fromBundle(getArguments()).getQuiz();
             START_TIME_IN_MILLIS = quiz.getTimer() * 60000L;
             mTimeLeftInMillis = START_TIME_IN_MILLIS;
-
+            for (Question question: quiz.getQuestions()) {
+                answerList.add(question.getAnswer());
+            }
+            Collections.shuffle(answerList);
+            Collections.shuffle(answerList);
         }
     }
 
@@ -76,9 +82,8 @@ public class StartActivity2 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        for (Question question: quiz.getQuestions()) {
-
-            displayAnswers(question.getAnswer());
+        for (String ans: answerList) {
+            displayAnswers(ans);
         }
         binding.textTitle.setText(quiz.getName());
         binding.textDesc.setText(String.format("Description: %s",quiz.getDescription()));

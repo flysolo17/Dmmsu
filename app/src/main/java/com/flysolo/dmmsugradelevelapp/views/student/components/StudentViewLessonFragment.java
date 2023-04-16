@@ -39,14 +39,11 @@ import java.util.List;
 public class StudentViewLessonFragment extends Fragment implements StudentActivityAdapter.StudentActivityClickListener {
 
 
-    private static final String CLASSROOM = "classroom";
-    private static final String LESSON = "lesson";
 
     private Quiz[] quizzes;
     private Lesson lesson;
     private FragmentStudentViewLessonBinding binding;
-    private StudentContentAdapter contentAdapter;
-    private StudentActivityAdapter activityAdapter;
+
     public StudentViewLessonFragment() {
         // Required empty public constructor
     }
@@ -67,8 +64,7 @@ public class StudentViewLessonFragment extends Fragment implements StudentActivi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentStudentViewLessonBinding.inflate(inflater,container,false);
-        binding.recyclerviewContent.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        binding.recyclerviewActivities.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+
         return binding.getRoot();
     }
 
@@ -86,13 +82,9 @@ public class StudentViewLessonFragment extends Fragment implements StudentActivi
         });
     }
     private void displayLesson(Lesson lesson) {
-        binding.textActivityCount.setText(String.valueOf(quizzes.length));
         binding.textTitle.setText(lesson.getTitle());
         binding.textDesc.setText(lesson.getDescription());
-        contentAdapter = new StudentContentAdapter(binding.getRoot().getContext(), lesson.getContents());
-        activityAdapter = new StudentActivityAdapter(binding.getRoot().getContext(), Arrays.asList(quizzes),StudentViewLessonFragment.this);
-        binding.recyclerviewContent.setAdapter(contentAdapter);
-        binding.recyclerviewActivities.setAdapter(activityAdapter);
+
     }
 
     @Override

@@ -128,6 +128,7 @@ public class StartActivity extends Fragment {
         if (question.getQuestion().isEmpty()) {
             binding.textQuestion.setVisibility(View.GONE);
         }
+        binding.textPoints.setText(String.format("+%s",question.getPoints()));
         binding.textQuestionPosition.setText(String.valueOf(position + 1));
         binding.textQuestion.setText(question.getQuestion());
         binding.layoutLetters.removeAllViews();
@@ -162,7 +163,7 @@ public class StartActivity extends Fragment {
             displayAnswer(letter,ans.length() - 1);
             binding.layoutLetters.removeView(view);
             if (ans.length() == answer.length()) {
-                answerList.add(new Answer(quiz.getQuestions().get(position).getId(),answer));
+                answerList.add(new Answer(quiz.getQuestions().get(position).getId(),ans));
                 displayToast(answer,ans);
                 if (ans.equals(answer)) {
                     score += quiz.getQuestions().get(position).getPoints();

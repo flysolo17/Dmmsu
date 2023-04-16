@@ -74,7 +74,6 @@ public class StudentViewActivity extends Fragment {
     }
 
     private void display(Quiz quiz) {
-        binding.textType.setText(quiz.getQuizType().toString().replace("_"," "));
         binding.textTitle.setText(quiz.getName());
         binding.textDesc.setText(quiz.getDescription());
         int count = quiz.getQuestions() != null ? quiz.getQuestions().size() : 0;

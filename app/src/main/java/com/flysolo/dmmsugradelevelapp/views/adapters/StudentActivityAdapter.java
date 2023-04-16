@@ -58,7 +58,6 @@ public class StudentActivityAdapter extends RecyclerView.Adapter<StudentActivity
     public void onBindViewHolder(@NonNull StudentActivityViewHolder holder, int position) {
         Quiz quiz = quizzes.get(position);
         holder.textTitle.setText(quiz.getName());
-        holder.textCreatedAt.setText(Constants.formatDate(quiz.getCreatedAt()));
         String data = quiz.getQuestions().size() > 1 ? "Questions" : "Question";
         holder.textQuestions.setText(quiz.getQuestions().size() + " " + data);
         holder.textPoints.setText("+" + Constants.getMaxScore(quiz.getQuestions()) + " Points");
@@ -81,7 +80,6 @@ public class StudentActivityAdapter extends RecyclerView.Adapter<StudentActivity
             textTitle = itemView.findViewById(R.id.textTitle);
             textDesc = itemView.findViewById(R.id.textDesc);
             textTime = itemView.findViewById(R.id.textTime);
-            textCreatedAt = itemView.findViewById(R.id.textCreatedAt);
             cardActivity = itemView.findViewById(R.id.cardActivity);
             textQuestions = itemView.findViewById(R.id.textQuestion);
             textPoints = itemView.findViewById(R.id.textPoints);

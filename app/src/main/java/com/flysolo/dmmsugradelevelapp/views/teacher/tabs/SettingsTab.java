@@ -69,16 +69,7 @@ public class SettingsTab extends Fragment {
             NavDirections directions = TeacherClassroomFragmentDirections.actionTeacherClassroomFragmentToEditClassroom(classroom);
             Navigation.findNavController(view12).navigate(directions);
         });
-        binding.buttonShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT,"Share class code");
-                intent.putExtra(Intent.EXTRA_TEXT,classroom.getCode());
-                startActivity(Intent.createChooser(intent,"Share to"));
-            }
-        });
+
     }
     private void deleteClassroom(String classroomID) {
         classroomService.deleteClassroom(classroomID, new UiState<String>() {
@@ -102,25 +93,8 @@ public class SettingsTab extends Fragment {
         });
     }
     private void displayInfo(Classroom classroom) {
-        binding.textCreatedAt.setText(Constants.formatDate(classroom.getCreatedAt()));
         binding.textClassroomName.setText(classroom.getName());
         binding.textStudents.setText(String.valueOf(classroom.getStudents().size()));
-        binding.textActiveStudents.setText(String.valueOf(classroom.getActiveStudents().size()));
-        binding.textTime.setText(classroom.getStartTime());
-        binding.textSched.setText(String.join(", " , classroom.getSchedule()));
-        String status = classroom.getStatus() ? "OPEN" : "CLOSED";
-        int color = classroom.getStatus() ? Color.GREEN : Color.RED;
-        binding.textStatus.setText(status);
-        binding.textStatus.setTextColor(color);
-        if (classroom.getStatus()) {
-            binding.textCode.setText(classroom.getCode());
-            binding.openDivider.setVisibility(View.VISIBLE);
-            binding.layoutCode.setVisibility(View.VISIBLE);
-
-        } else  {
-            binding.layoutCode.setVisibility(View.GONE);
-            binding.openDivider.setVisibility(View.GONE);
-        }
     }
     private void getClassroom(String classroomID ) {
         classroomService.getClassroom(classroomID, new UiState<Classroom>() {

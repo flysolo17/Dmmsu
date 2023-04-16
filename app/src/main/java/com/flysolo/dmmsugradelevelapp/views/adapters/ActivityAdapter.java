@@ -45,20 +45,18 @@ public class ActivityAdapter extends FirestoreRecyclerAdapter<Quiz, ActivityAdap
     @Override
     protected void onBindViewHolder(@NonNull ActivityViewHolder holder, int position, @NonNull Quiz model) {
         holder.textTitle.setText(model.getName());
-        holder.textCreatedAt.setText(Constants.formatDate(model.getCreatedAt()));
         String data = model.getQuestions().size() > 1 ? "Questions" : "Question";
         holder.textQuestions.setText(model.getQuestions().size() + " " + data);
         holder.textPoints.setText("+" + Constants.getMaxScore(model.getQuestions()) + " Points");
         holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(model));
         holder.textDesc.setText(model.getDescription());
         holder.textTime.setText(model.getTimer() + " min");
-        holder.textType.setText(model.getQuizType().toString().replace("_" ," "));
     }
 
 
 
     public class ActivityViewHolder extends RecyclerView.ViewHolder {
-        TextView textTitle,textDesc,textCreatedAt,textQuestions,textPoints,textTime,textType;
+        TextView textTitle,textDesc,textQuestions,textPoints,textTime;
         MaterialCardView cardActivity;
 
         public ActivityViewHolder(@NonNull View itemView) {
@@ -66,11 +64,9 @@ public class ActivityAdapter extends FirestoreRecyclerAdapter<Quiz, ActivityAdap
             textTitle = itemView.findViewById(R.id.textTitle);
             textDesc = itemView.findViewById(R.id.textDesc);
             textTime = itemView.findViewById(R.id.textTime);
-            textCreatedAt = itemView.findViewById(R.id.textCreatedAt);
             cardActivity = itemView.findViewById(R.id.cardActivity);
             textQuestions = itemView.findViewById(R.id.textQuestion);
             textPoints = itemView.findViewById(R.id.textPoints);
-            textType = itemView.findViewById(R.id.textType);
         }
     }
 }

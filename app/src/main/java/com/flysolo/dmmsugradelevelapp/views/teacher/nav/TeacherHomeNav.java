@@ -142,63 +142,6 @@ public class TeacherHomeNav extends Fragment implements ClassroomAdapter.Classro
     public void onStartClassroom(int position) {
         Toast.makeText(binding.getRoot().getContext(), "Class starting", Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void startClass(int position) {
-        Classroom classroom = classrooms.get(position);
-        classroomService.startClass(classroom.getId(), new UiState<String>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Loading...");
-            }
-
-            @Override
-            public void Successful(String data) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
-                classroomAdapter.notifyItemChanged(position);
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public void endClass(int position) {
-        Classroom classroom = classrooms.get(position);
-        classroomService.endClass(classroom.getId(), new UiState<String>() {
-            @Override
-            public void Loading() {
-                loadingDialog.showLoadingDialog("Loading...");
-            }
-
-            @Override
-            public void Successful(String data) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), data, Toast.LENGTH_SHORT).show();
-                classroomAdapter.notifyItemChanged(position);
-            }
-
-            @Override
-            public void Failed(String message) {
-                loadingDialog.stopLoading();
-                Toast.makeText(binding.getRoot().getContext(), message, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    @Override
-    public void shareCode(int position) {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_SUBJECT,"Share class code");
-        intent.putExtra(Intent.EXTRA_TEXT,classrooms.get(position).getCode());
-        startActivity(Intent.createChooser(intent,"Share to"));
-    }
     private void displayInfo(String uid) {
         authService.getAccount(uid, new UiState<Accounts>() {
             @Override

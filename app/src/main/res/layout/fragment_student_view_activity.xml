@@ -33,14 +33,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/word_hunt"
-                    android:id="@+id/textType"
-                    android:textAllCaps="true" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="Sample Title"
                     android:id="@+id/textTitle"
                     android:textSize="18sp"

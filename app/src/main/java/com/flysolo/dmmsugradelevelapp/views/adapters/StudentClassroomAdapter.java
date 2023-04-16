@@ -99,7 +99,6 @@ public class StudentClassroomAdapter extends RecyclerView.Adapter<StudentClassro
             materialCardView = itemView.findViewById(R.id.card);
             textSched = itemView.findViewById(R.id.textSched);
             textTime = itemView.findViewById(R.id.textTime);
-            layoutStudents = itemView.findViewById(R.id.layoutStudents);
             firestore = FirebaseFirestore.getInstance();
             textActive = itemView.findViewById(R.id.textActive);
             buttonJoinClass = itemView.findViewById(R.id.buttonJoinClass);

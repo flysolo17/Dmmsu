@@ -95,6 +95,10 @@ public class StudentScoreboardNav extends Fragment {
                 });
                 if (scoresList.size() > 3) {
                     display(scoresList.get(0),scoresList.get(1),scoresList.get(2));
+
+//                    scoresList.remove(0);
+//                    scoresList.remove(1);
+//                    scoresList.remove(2);
                 }
                 for (int i = 0; i < 3; i++) {
                     scoresList.remove(i);
