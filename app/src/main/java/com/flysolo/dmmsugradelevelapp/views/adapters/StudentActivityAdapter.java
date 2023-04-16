@@ -64,7 +64,7 @@ public class StudentActivityAdapter extends RecyclerView.Adapter<StudentActivity
         holder.cardActivity.setOnClickListener(view -> activityClickListener.onActivityClicked(quiz));
         holder.textDesc.setText(quiz.getDescription());
         holder.textTime.setText(quiz.getTimer() + " min");
-        holder.textType.setText(quiz.getQuizType().toString().replace("_" ," "));
+        holder.textType.setText(quiz.getQuizType().getType());
     }
 
     @Override
