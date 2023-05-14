@@ -1,11 +1,13 @@
 package com.flysolo.dmmsugradelevelapp.services.activity;
 
+import android.app.Activity;
 import android.net.Uri;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.flysolo.dmmsugradelevelapp.model.Question;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
+import com.google.firebase.storage.StorageReference;
 
 import org.checkerframework.checker.guieffect.qual.UI;
 
@@ -21,5 +23,8 @@ public interface ActivityService {
     void deleteQuestion(String quizID,Question question,UiState<String> result);
     void getQuestion(String quizID,UiState<Quiz> result);
     void updateQuestion(String quizID, List<Question> questions,UiState<String> result);
+    void uploadMultipleImages(Activity activity,String quizID, Uri[] uriList, UiState<List<String>> result);
+
+    void updateQuestion(String quizID,List<String> images,String answer,UiState<String> result);
 
 }

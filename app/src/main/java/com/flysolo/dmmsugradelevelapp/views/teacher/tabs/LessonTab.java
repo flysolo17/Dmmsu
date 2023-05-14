@@ -7,23 +7,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentLessonTabBinding;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
+import com.flysolo.dmmsugradelevelapp.views.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.LessonAdapter;

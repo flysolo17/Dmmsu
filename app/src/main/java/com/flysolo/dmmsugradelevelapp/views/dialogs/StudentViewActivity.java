@@ -61,8 +61,10 @@ public class StudentViewActivity extends Fragment {
                 NavDirections directions;
                 if (quiz.getQuizType() == QuizType.WORD_HUNT) {
                     directions = StudentViewActivityDirections.actionStudentViewActivityToStartActivity(quiz);
-                } else {
+                } else if (quiz.getQuizType() == QuizType.FILL_IN_THE_BLANK){
                     directions = StudentViewActivityDirections.actionStudentViewActivityToStartActivity2(quiz);
+                } else  {
+                    directions = StudentViewActivityDirections.actionStudentViewActivityToStartActivity3(quiz);
                 }
                 Navigation.findNavController(view).navigate(directions);
 

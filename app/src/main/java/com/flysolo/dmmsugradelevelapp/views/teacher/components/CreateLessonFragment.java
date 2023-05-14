@@ -13,9 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentCreateLessonBinding;
-import com.flysolo.dmmsugradelevelapp.model.Content;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
+import com.flysolo.dmmsugradelevelapp.views.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.google.firebase.firestore.FirebaseFirestore;

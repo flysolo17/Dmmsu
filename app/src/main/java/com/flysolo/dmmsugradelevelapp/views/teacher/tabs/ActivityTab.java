@@ -18,19 +18,16 @@ import android.widget.Toast;
 
 
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentActivityTabBinding;
-import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.services.activity.ActivityServiceImpl;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
+import com.flysolo.dmmsugradelevelapp.views.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.ActivityAdapter;
-import com.flysolo.dmmsugradelevelapp.views.teacher.nav.TeacherClassroomFragmentArgs;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

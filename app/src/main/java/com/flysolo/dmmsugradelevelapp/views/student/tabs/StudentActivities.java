@@ -12,25 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentStudentActivitiesBinding;
-import com.flysolo.dmmsugradelevelapp.model.Classroom;
-import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
-import com.flysolo.dmmsugradelevelapp.model.Respond;
-import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
-import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
-import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.StudentActivityAdapter;
-import com.flysolo.dmmsugradelevelapp.views.student.components.StudentViewLessonFragmentDirections;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Arrays;
-import java.util.List;
 
 
 public class StudentActivities extends Fragment implements StudentActivityAdapter.StudentActivityClickListener {

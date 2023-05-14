@@ -10,23 +10,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentViewActivityBinding;
-import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
-import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
-import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
-import com.flysolo.dmmsugradelevelapp.utils.UiState;
-import com.flysolo.dmmsugradelevelapp.views.adapters.LessonTabAdapter;
 import com.flysolo.dmmsugradelevelapp.views.adapters.QuestionTabAdapter;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-
-import java.util.List;
 
 
 public class ViewActivityFragment extends Fragment {

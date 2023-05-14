@@ -9,8 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -22,21 +20,13 @@ import android.widget.Toast;
 
 import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentCreateContentBinding;
-import com.flysolo.dmmsugradelevelapp.databinding.ViewLessonTabBinding;
 import com.flysolo.dmmsugradelevelapp.model.Content;
-import com.flysolo.dmmsugradelevelapp.model.Lesson;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
+import com.flysolo.dmmsugradelevelapp.views.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
-import com.flysolo.dmmsugradelevelapp.views.dialogs.ChooseClassDialog;
-import com.flysolo.dmmsugradelevelapp.views.teacher.tabs.ViewLessonTabArgs;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-
-import java.io.File;
-import java.io.InputStream;
-import java.nio.file.Files;
 
 
 public class CreateContent extends DialogFragment {

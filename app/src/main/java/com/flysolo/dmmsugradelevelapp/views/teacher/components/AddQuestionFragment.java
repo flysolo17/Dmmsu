@@ -99,7 +99,7 @@ public class AddQuestionFragment extends DialogFragment {
                 binding.inputPoints.setError("this field is required");
             }
             else {
-                Question q = new Question("",question,"",answer.toLowerCase(Locale.ROOT),Integer.parseInt(points));
+                Question q = new Question("",question,"",answer.toLowerCase(Locale.ROOT),choices,Integer.parseInt(points));
                 if (imageURI != null) {
                     uploadAttachment(imageURI,q);
                 } else {

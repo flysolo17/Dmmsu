@@ -14,15 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentStudentLessonBinding;
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Lesson;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.services.auth.AuthServiceImpl;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
+import com.flysolo.dmmsugradelevelapp.views.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.StudentLessonAdapter;
@@ -30,7 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

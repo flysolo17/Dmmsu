@@ -1,46 +1,26 @@
 package com.flysolo.dmmsugradelevelapp.views.teacher.components;
 
-import android.os.Build;
+import static com.flysolo.dmmsugradelevelapp.model.QuizType.IMAGE_MULTIPLE_CHOICE;
+import static com.flysolo.dmmsugradelevelapp.model.QuizType.WORD_HUNT;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.view.MenuHost;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flysolo.dmmsugradelevelapp.R;
-
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentCreateActivityBinding;
-import com.flysolo.dmmsugradelevelapp.model.Question;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.model.QuizType;
 import com.flysolo.dmmsugradelevelapp.services.activity.ActivityServiceImpl;
-import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonService;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
-import com.flysolo.dmmsugradelevelapp.viewmodels.QuestionViewModel;
-import com.flysolo.dmmsugradelevelapp.views.teacher.nav.TeacherClassroomFragmentArgs;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -109,11 +89,11 @@ public class CreateActivityFragment extends Fragment {
         });
     }
     private QuizType getQuizType(int selected) {
-        QuizType type ;
+        QuizType type = WORD_HUNT;
         if (binding.radioButton1.getId() == selected) {
-            type = QuizType.WORD_HUNT;
-        } else {
-            type = QuizType.FILL_IN_THE_BLANK;
+            type = WORD_HUNT;
+        } else if (binding.radioButton3.getId() == selected){
+            type = IMAGE_MULTIPLE_CHOICE;
         }
         return type;
     }

@@ -102,4 +102,5 @@
     <string name="_1_min">1 min</string>
     <string name="attemps">Attemps: </string>
     <string name="highest">Highest Score: </string>
+    <string name="image_multiple_choice">IMAGE MULTIPLE CHOICE</string>
 </resources>

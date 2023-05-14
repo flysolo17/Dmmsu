@@ -1,4 +1,4 @@
-package com.flysolo.dmmsugradelevelapp.services.lesson;
+package com.flysolo.dmmsugradelevelapp.views.lesson;
 
 import android.net.Uri;
 

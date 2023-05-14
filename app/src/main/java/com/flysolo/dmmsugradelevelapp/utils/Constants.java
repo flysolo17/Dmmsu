@@ -100,6 +100,16 @@ public interface Constants {
         }
         return output.toString();
     }
+    static String shuffleChoices(List<String> choices) {
+        List<String> choicesList = new ArrayList<>();
+        while(choices.size()!=0){
+            int randPicker = (int)(Math.random()*choices.size());
+            choicesList.add(choices.get(randPicker));
+            choicesList.remove(randPicker);
+        }
+        return choicesList.toString();
+    }
+
     static String deleteCharAt(String str ,int position) {
         StringBuilder sb = new StringBuilder();
         sb.append(str);

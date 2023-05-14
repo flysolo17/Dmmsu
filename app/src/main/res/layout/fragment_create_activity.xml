@@ -100,6 +100,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/fill_in_the_blank"/>
+                <RadioButton
+                    android:id="@+id/radio_button_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/image_multiple_choice"/>
             </RadioGroup>
 
     </LinearLayout>

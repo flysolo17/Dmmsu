@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public enum QuizType implements Parcelable {
-    WORD_HUNT("GUESS THE PICTURE + WORD"),FILL_IN_THE_BLANK("FILL IN THE BLANK");
+    WORD_HUNT("GUESS THE PICTURE + WORD"),FILL_IN_THE_BLANK("FILL IN THE BLANK"),IMAGE_MULTIPLE_CHOICE("IMAGE MULTIPLE CHOICE");
 
     private String type;
 

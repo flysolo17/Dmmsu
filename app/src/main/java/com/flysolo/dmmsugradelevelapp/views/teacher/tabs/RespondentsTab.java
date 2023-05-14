@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -14,26 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.flysolo.dmmsugradelevelapp.R;
 import com.flysolo.dmmsugradelevelapp.databinding.FragmentRespondentsTabBinding;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
-import com.flysolo.dmmsugradelevelapp.model.Question;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.model.Respond;
-import com.flysolo.dmmsugradelevelapp.model.Scores;
 import com.flysolo.dmmsugradelevelapp.services.classroom.ClassroomServiceImpl;
 import com.flysolo.dmmsugradelevelapp.services.leaderboard.LeaderBoardServiceImpl;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
-import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.LoadingDialog;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
 import com.flysolo.dmmsugradelevelapp.views.adapters.RespondentsAdapter;
-import com.flysolo.dmmsugradelevelapp.views.teacher.nav.ViewActivityFragmentDirections;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 

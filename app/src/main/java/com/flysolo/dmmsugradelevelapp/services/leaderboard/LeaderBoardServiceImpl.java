@@ -1,29 +1,15 @@
 package com.flysolo.dmmsugradelevelapp.services.leaderboard;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.flysolo.dmmsugradelevelapp.model.Accounts;
 import com.flysolo.dmmsugradelevelapp.model.Classroom;
 import com.flysolo.dmmsugradelevelapp.model.Question;
 import com.flysolo.dmmsugradelevelapp.model.Quiz;
 import com.flysolo.dmmsugradelevelapp.model.Respond;
-import com.flysolo.dmmsugradelevelapp.services.lesson.LessonServiceImpl;
 import com.flysolo.dmmsugradelevelapp.utils.Constants;
 import com.flysolo.dmmsugradelevelapp.utils.UiState;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.List;

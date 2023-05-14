@@ -147,6 +147,9 @@
         <action
             android:id="@+id/action_studentViewActivity_to_startActivity2"
             app:destination="@id/startActivity2" />
+        <action
+            android:id="@+id/action_studentViewActivity_to_startActivity3"
+            app:destination="@id/startActivity3" />
     </fragment>
     <fragment
         android:id="@+id/finishActivity"
@@ -192,5 +195,17 @@
         <argument
             android:name="lesson"
             app:argType="com.flysolo.dmmsugradelevelapp.model.Lesson" />
+    </fragment>
+    <fragment
+        android:id="@+id/startActivity3"
+        android:name="com.flysolo.dmmsugradelevelapp.views.student.components.StartActivity3"
+        android:label="fragment_start_activity3"
+        tools:layout="@layout/fragment_start_activity3" >
+        <action
+            android:id="@+id/action_startActivity3_to_finishActivity"
+            app:destination="@id/finishActivity" />
+        <argument
+            android:name="quiz"
+            app:argType="com.flysolo.dmmsugradelevelapp.model.Quiz" />
     </fragment>
 </navigation>
